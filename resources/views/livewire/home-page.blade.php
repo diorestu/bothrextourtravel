@@ -19,20 +19,20 @@
                 </p>
 
                 <!-- Quick Search Bar -->
-                <div class="bg-white p-3 rounded-2xl shadow-2xl shadow-black/40 flex flex-col md:flex-row gap-3 items-center border border-white/20 backdrop-blur-md">
+                <form wire:submit.prevent="performSearch" class="bg-white p-3 rounded-2xl shadow-2xl shadow-black/40 flex flex-col md:flex-row gap-3 items-center border border-white/20 backdrop-blur-md">
                     <div class="flex-grow w-full relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                         <input type="text" 
-                               wire:model.live.debounce.300ms="search" 
+                               wire:model="search" 
                                placeholder="Cari paket (cth: Nusa Penida, Ubud, Jeep Batur)..." 
                                class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                     </div>
                     <div class="w-full md:w-auto">
-                        <a href="/paket" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg transition-all hover:scale-105 active:scale-95 text-sm whitespace-nowrap">
+                        <button type="submit" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg transition-all hover:scale-105 active:scale-95 text-sm whitespace-nowrap">
                             <i class="fa-solid fa-compass"></i> Temukan Paket
-                        </a>
+                        </button>
                     </div>
-                </div>
+                </form>
 
                 <!-- Trust Badges -->
                 <div class="mt-8 flex flex-wrap gap-6 text-xs sm:text-sm text-slate-300 font-medium">
@@ -294,21 +294,30 @@
         </div>
     </section>
 
-    <!-- Call to Action WhatsApp Banner -->
-    <section class="py-16 bg-gradient-brand text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row items-center justify-between gap-8 bg-white/10 p-8 sm:p-12 rounded-3xl backdrop-blur-md border border-white/20">
+    <!-- Call to Action WhatsApp Banner (Parallax with Dark Overlay) -->
+    <section class="relative py-24 bg-fixed bg-cover bg-center text-white overflow-hidden" 
+             style="background-image: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=2000&q=80');">
+        <!-- Dark Overlay Filter for High Contrast -->
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-[2px]"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-8 bg-white/10 p-8 sm:p-12 rounded-3xl backdrop-blur-md border border-white/20 shadow-2xl">
                 <div class="space-y-3 text-center lg:text-left">
-                    <h2 class="text-3xl sm:text-4xl font-extrabold font-serif-heading">Ingin Paket Custom Atau Tanya Promo Liburan?</h2>
-                    <p class="text-emerald-100 text-sm sm:text-base max-w-xl">
+                    <span class="inline-block bg-emerald-500/20 text-emerald-400 text-xs font-extrabold uppercase tracking-widest px-3 py-1 rounded-full border border-emerald-500/30">
+                        <i class="fa-solid fa-headset mr-1"></i> Layanan 24/7 Konsultasi Gratis
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold font-serif-heading text-white drop-shadow-md leading-tight">
+                        Ingin Paket Custom Atau Tanya Promo Liburan?
+                    </h2>
+                    <p class="text-slate-200 text-sm sm:text-base max-w-xl font-medium leading-relaxed drop-shadow">
                         Konsultasikan rencana liburan Bali Anda secara gratis dengan customer service kami. Kami bantu racik itinerary terbaik sesuai budget Anda!
                     </p>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Bothrex%20Bali%20Tour,%20saya%20mau%20konsultasi%20paket%20tour%20custom" 
+                <div class="flex flex-col sm:flex-row gap-4 shrink-0">
+                    <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281234567890' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20mau%20konsultasi%20paket%20tour%20custom" 
                        target="_blank" 
-                       class="inline-flex items-center justify-center gap-3 bg-white text-emerald-800 hover:bg-emerald-50 font-extrabold px-8 py-4 rounded-2xl shadow-xl transition-all hover:scale-105 active:scale-95 text-base">
-                        <i class="fa-brands fa-whatsapp text-2xl text-emerald-600"></i>
+                       class="inline-flex items-center justify-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-8 py-4 rounded-2xl shadow-2xl shadow-emerald-500/40 transition-all hover:scale-105 active:scale-95 text-base border border-emerald-400/40">
+                        <i class="fa-brands fa-whatsapp text-2xl"></i>
                         <span>Chat WhatsApp Sekarang</span>
                     </a>
                 </div>

@@ -15,7 +15,9 @@ class DestinationDetailPage extends Component
     public function mount($slug)
     {
         $this->slug = $slug;
-        $this->destination = Destination::with('packages')->where('slug', $slug)->firstOrFail();
+        $this->destination = Destination::where('is_active', true)->with(['packages' => function($q) {
+            $q->where('is_active', true);
+        }])->where('slug', $slug)->firstOrFail();
     }
 
     public function render()

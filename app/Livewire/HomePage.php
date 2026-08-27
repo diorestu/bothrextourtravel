@@ -13,11 +13,18 @@ class HomePage extends Component
     public $search = '';
     public $selectedCategory = 'all';
 
+    public function performSearch()
+    {
+        return redirect()->route('packages.index', [
+            'search' => $this->search,
+        ]);
+    }
+
     public function render()
     {
-        $destinations = Destination::where('is_popular', true)->get();
+        $destinations = Destination::where('is_active', true)->where('is_popular', true)->get();
 
-        $query = TourPackage::with('destination');
+        $query = TourPackage::where('is_active', true)->with('destination');
 
         if ($this->selectedCategory !== 'all') {
             $query->where('category', $this->selectedCategory);

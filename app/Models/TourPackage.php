@@ -24,6 +24,7 @@ class TourPackage extends Model
         'inclusions',
         'exclusions',
         'is_featured',
+        'is_active',
     ];
 
     protected $casts = [
@@ -32,6 +33,7 @@ class TourPackage extends Model
         'inclusions' => 'array',
         'exclusions' => 'array',
         'is_featured' => 'boolean',
+        'is_active' => 'boolean',
         'price' => 'float',
         'original_price' => 'float',
     ];

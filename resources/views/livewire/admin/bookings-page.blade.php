@@ -11,8 +11,14 @@
             </div>
             <div class="flex items-center gap-3">
                 <a href="/" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl border border-slate-700 transition">
-                    <i class="fa-solid fa-globe mr-1"></i> Lihat Web Publik
+                    <i class="fa-solid fa-globe mr-1"></i> Web Utama
                 </a>
+                <form action="{{ route('admin.logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow">
+                        <i class="fa-solid fa-right-from-bracket"></i> Keluar
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -20,11 +26,17 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
         <!-- Admin Navigation Tabs -->
-        <div class="flex border-b border-slate-200 mb-8 space-x-4">
-            <a href="/admin/bookings" class="py-3 px-5 text-xs font-bold text-emerald-700 border-b-2 border-emerald-600 flex items-center gap-2">
+        <div class="flex flex-wrap border-b border-slate-200 mb-8 gap-2">
+            <a href="/admin/bookings" class="py-3 px-5 text-xs font-bold transition flex items-center gap-2 border-b-2 {{ request()->is('admin/bookings*') ? 'text-emerald-700 border-emerald-600' : 'text-slate-500 hover:text-emerald-600 border-transparent' }}">
                 <i class="fa-solid fa-receipt"></i> Data Reservasi & Booking
             </a>
-            <a href="/admin/company" class="py-3 px-5 text-xs font-bold text-slate-500 hover:text-emerald-600 transition flex items-center gap-2 border-b-2 border-transparent">
+            <a href="/admin/packages" class="py-3 px-5 text-xs font-bold transition flex items-center gap-2 border-b-2 {{ request()->is('admin/packages*') ? 'text-emerald-700 border-emerald-600' : 'text-slate-500 hover:text-emerald-600 border-transparent' }}">
+                <i class="fa-solid fa-compass"></i> Kelola Paket Wisata
+            </a>
+            <a href="/admin/destinations" class="py-3 px-5 text-xs font-bold transition flex items-center gap-2 border-b-2 {{ request()->is('admin/destinations*') ? 'text-emerald-700 border-emerald-600' : 'text-slate-500 hover:text-emerald-600 border-transparent' }}">
+                <i class="fa-solid fa-map-location-dot"></i> Kelola Destinasi
+            </a>
+            <a href="/admin/company" class="py-3 px-5 text-xs font-bold transition flex items-center gap-2 border-b-2 {{ request()->is('admin/company*') ? 'text-emerald-700 border-emerald-600' : 'text-slate-500 hover:text-emerald-600 border-transparent' }}">
                 <i class="fa-solid fa-sliders"></i> Profil & Kontak Perusahaan
             </a>
         </div>

@@ -4,22 +4,30 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Url;
 use App\Models\TourPackage;
 use App\Models\Destination;
 
 #[Layout('layouts.app')]
 class TourPackagesPage extends Component
 {
+    #[Url]
     public $search = '';
+
+    #[Url]
     public $destinationId = 'all';
+
+    #[Url]
     public $category = 'all';
+
+    #[Url]
     public $sortBy = 'popular';
 
     public function render()
     {
-        $destinations = Destination::all();
+        $destinations = Destination::where('is_active', true)->get();
 
-        $query = TourPackage::with('destination');
+        $query = TourPackage::where('is_active', true)->with('destination');
 
         if ($this->search) {
             $query->where(function($q) {

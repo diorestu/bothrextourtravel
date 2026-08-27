@@ -15,11 +15,13 @@ class Destination extends Model
         'description',
         'highlights',
         'is_popular',
+        'is_active',
     ];
 
     protected $casts = [
         'highlights' => 'array',
         'is_popular' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     public function packages()

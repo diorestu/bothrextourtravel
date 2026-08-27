@@ -51,9 +51,6 @@
             </div>
             <div class="flex items-center space-x-3">
                 <span class="text-amber-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-star"></i> 4.9/5 (1.500+ Traveler Satisfied)</span>
-                <a href="/admin/bookings" class="text-emerald-400 hover:text-emerald-300 underline font-medium ml-3">
-                    <i class="fa-solid fa-user-shield"></i> Admin Panel
-                </a>
             </div>
         </div>
     </div>
@@ -82,11 +79,6 @@
                     <a href="/destinasi" class="hover:text-emerald-600 transition-colors {{ request()->is('destinasi*') ? 'text-emerald-600 font-bold border-b-2 border-emerald-600 py-1' : '' }}">Tujuan Wisata</a>
                     <a href="/#tentang-kami" class="hover:text-emerald-600 transition-colors">Mengapa Kami</a>
                     <a href="/#testimoni" class="hover:text-emerald-600 transition-colors">Testimoni</a>
-                    <a href="/admin/bookings" class="hover:text-emerald-600 transition-colors {{ request()->is('admin*') ? 'text-emerald-600 font-bold' : '' }}">
-                        <span class="bg-emerald-50 text-emerald-700 text-xs px-2.5 py-1 rounded-full border border-emerald-200">
-                            <i class="fa-solid fa-list-check mr-1"></i> Admin Panel
-                        </span>
-                    </a>
                 </nav>
 
                 <!-- CTA WhatsApp Button -->
@@ -141,10 +133,6 @@
             <a href="/#testimoni" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
                 <i class="fa-solid fa-comments text-emerald-500 w-5"></i>
                 <span>Testimoni</span>
-            </a>
-            <a href="/admin/bookings" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-emerald-800 font-bold bg-emerald-50 hover:bg-emerald-100 transition-all border border-emerald-200">
-                <i class="fa-solid fa-list-check text-emerald-600 w-5"></i>
-                <span>Admin Panel</span>
             </a>
             <div class="pt-2">
                 <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281234567890' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }}" 
@@ -211,7 +199,7 @@
                         <li><a href="/" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-angle-right text-emerald-500 mr-2 text-xs"></i> Beranda Utama</a></li>
                         <li><a href="/paket" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-angle-right text-emerald-500 mr-2 text-xs"></i> Semua Paket Tour Bali</a></li>
                         <li><a href="/destinasi" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-angle-right text-emerald-500 mr-2 text-xs"></i> Destinasi Wisata Populer</a></li>
-                        <li><a href="/admin/bookings" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-angle-right text-emerald-500 mr-2 text-xs"></i> Dashboard Admin Pesanan</a></li>
+                        <li><a href="/#tentang-kami" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-angle-right text-emerald-500 mr-2 text-xs"></i> Mengapa Memilih Kami</a></li>
                     </ul>
                 </div>
 

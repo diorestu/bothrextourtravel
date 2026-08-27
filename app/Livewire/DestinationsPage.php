@@ -13,7 +13,9 @@ class DestinationsPage extends Component
 
     public function render()
     {
-        $query = Destination::with('packages');
+        $query = Destination::where('is_active', true)->with(['packages' => function($q) {
+            $q->where('is_active', true);
+        }]);
 
         if ($this->search) {
             $query->where(function($q) {
