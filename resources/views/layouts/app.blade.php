@@ -38,14 +38,14 @@
     <!-- Schema.org JSON-LD Structured Data for Google Rich Snippets -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "TravelAgency",
+      "{{ '@' }}context": "https://schema.org",
+      "{{ '@' }}type": "TravelAgency",
       "name": "{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}",
       "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80",
       "telephone": "{{ $company->phone ?? '+62 812-3456-7890' }}",
       "email": "{{ $company->email ?? 'info@bothrexbalitour.com' }}",
       "address": {
-        "@type": "PostalAddress",
+        "{{ '@' }}type": "PostalAddress",
         "streetAddress": "{{ $company->address ?? 'Jl. Raya Kuta No. 88' }}",
         "addressLocality": "Badung",
         "addressRegion": "Bali",
@@ -55,7 +55,7 @@
       "url": "{{ url('/') }}",
       "priceRange": "Rp 350.000 - Rp 1.500.000",
       "aggregateRating": {
-        "@type": "AggregateRating",
+        "{{ '@' }}type": "AggregateRating",
         "ratingValue": "4.9",
         "reviewCount": "1520"
       }
@@ -227,18 +227,18 @@
                         {{ $company->about_text ?? 'Agen Tour & Travel resmi spesialis liburan Pulau Bali. Kami siap memberikan pengalaman liburan tak terlupakan dengan layanan kendaraan privat, supir lokal berpengalaman, dan harga transparan terbaik.' }}
                     </p>
                     <div class="flex items-center space-x-3 pt-2">
-                        @unless(empty($company->instagram_url))
+                        @if(!empty($company->instagram_url))
                         <a href="{{ $company->instagram_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-instagram"></i></a>
-                        @endunless
-                        @unless(empty($company->facebook_url))
+                        @endif
+                        @if(!empty($company->facebook_url))
                         <a href="{{ $company->facebook_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-                        @endunless
-                        @unless(empty($company->tiktok_url))
+                        @endif
+                        @if(!empty($company->tiktok_url))
                         <a href="{{ $company->tiktok_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-tiktok"></i></a>
-                        @endunless
-                        @unless(empty($company->youtube_url))
+                        @endif
+                        @if(!empty($company->youtube_url))
                         <a href="{{ $company->youtube_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-youtube"></i></a>
-                        @endunless
+                        @endif
                     </div>
                 </div>
 
