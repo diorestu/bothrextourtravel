@@ -19,6 +19,16 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
+        <!-- Admin Navigation Tabs -->
+        <div class="flex border-b border-slate-200 mb-8 space-x-4">
+            <a href="/admin/bookings" class="py-3 px-5 text-xs font-bold text-emerald-700 border-b-2 border-emerald-600 flex items-center gap-2">
+                <i class="fa-solid fa-receipt"></i> Data Reservasi & Booking
+            </a>
+            <a href="/admin/company" class="py-3 px-5 text-xs font-bold text-slate-500 hover:text-emerald-600 transition flex items-center gap-2 border-b-2 border-transparent">
+                <i class="fa-solid fa-sliders"></i> Profil & Kontak Perusahaan
+            </a>
+        </div>
+
         <!-- Flash Message Notification -->
         @if (session()->has('message'))
         <div class="mb-6 bg-emerald-50 text-emerald-800 p-4 rounded-2xl border border-emerald-200 text-xs font-bold flex items-center justify-between">

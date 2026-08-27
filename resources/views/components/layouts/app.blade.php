@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Bothrex Bali Tour & Travel - Jelajahi Keindahan Surga Dewata' }}</title>
+    <title>{{ $title ?? ($company->company_name ?? 'Bothrex Bali Tour & Travel') . ' - ' . ($company->tagline ?? 'Jelajahi Keindahan Surga Dewata') }}</title>
     <meta name="description" content="Agen Tour & Travel Bali terpercaya. Paket liburan Bali murah, nusa penida, ubud, kintamani, jeep batur, water sports, private car supir ramah.">
 
     <!-- Google Fonts -->
@@ -16,7 +16,7 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Alpine.js (included with Livewire) -->
+    <!-- Alpine.js & Tailwind -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 
@@ -43,11 +43,11 @@
 
     <!-- Top Bar Contact Info -->
     <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
-        <div class="max-w-7xl mx-mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-2">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-2">
             <div class="flex items-center space-x-4">
-                <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-emerald-400"></i> +62 812-3456-7890</span>
-                <span class="flex items-center gap-1.5"><i class="fa-solid fa-envelope text-emerald-400"></i> info@bothrexbalitour.com</span>
-                <span class="hidden md:inline-flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-emerald-400"></i> Jl. Raya Kuta No. 88, Badung, Bali</span>
+                <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-emerald-400"></i> {{ $company->phone ?? '+62 812-3456-7890' }}</span>
+                <span class="flex items-center gap-1.5"><i class="fa-solid fa-envelope text-emerald-400"></i> {{ $company->email ?? 'info@bothrexbalitour.com' }}</span>
+                <span class="hidden md:inline-flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-emerald-400"></i> {{ $company->address ?? 'Jl. Raya Kuta No. 88, Badung, Bali' }}</span>
             </div>
             <div class="flex items-center space-x-3">
                 <span class="text-amber-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-star"></i> 4.9/5 (1.500+ Traveler Satisfied)</span>
@@ -59,7 +59,7 @@
     </div>
 
     <!-- Main Navigation Bar -->
-    <header x-data="{ open: false }" class="sticky top-0 z-50 glass-header border-b border-slate-200/80 transition-all shadow-sm">
+    <header x-data="{ open: false }" @click.away="open = false" class="sticky top-0 z-50 glass-header border-b border-slate-200/80 transition-all shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Brand Logo -->
@@ -68,7 +68,9 @@
                         <i class="fa-solid fa-umbrella-beach text-xl"></i>
                     </div>
                     <div>
-                        <span class="text-2xl font-extrabold text-slate-900 tracking-tight font-serif-heading block leading-none">Bothrex <span class="text-emerald-600">Bali</span></span>
+                        <span class="text-2xl font-extrabold text-slate-900 tracking-tight font-serif-heading block leading-none">
+                            {{ Str::words($company->company_name ?? 'Bothrex Bali Tour', 2, '') }}
+                        </span>
                         <span class="text-[10px] font-bold tracking-widest text-slate-500 uppercase">Tour & Travel Agency</span>
                     </div>
                 </a>
@@ -82,40 +84,76 @@
                     <a href="/#testimoni" class="hover:text-emerald-600 transition-colors">Testimoni</a>
                     <a href="/admin/bookings" class="hover:text-emerald-600 transition-colors {{ request()->is('admin*') ? 'text-emerald-600 font-bold' : '' }}">
                         <span class="bg-emerald-50 text-emerald-700 text-xs px-2.5 py-1 rounded-full border border-emerald-200">
-                            <i class="fa-solid fa-list-check mr-1"></i> Cek Pesanan
+                            <i class="fa-solid fa-list-check mr-1"></i> Admin Panel
                         </span>
                     </a>
                 </nav>
 
                 <!-- CTA WhatsApp Button -->
                 <div class="hidden md:flex items-center gap-3">
-                    <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Bothrex%20Bali%20Tour,%20saya%20ingin%20tanya%20informasi%20paket%20wisata%20Bali" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 rounded-full shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95 text-sm">
+                    <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281234567890' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20ingin%20tanya%20informasi%20paket%20wisata%20Bali" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 rounded-full shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95 text-sm">
                         <i class="fa-brands fa-whatsapp text-lg"></i>
                         <span>Hubungi WA</span>
                     </a>
                 </div>
 
-                <!-- Mobile Hamburger Button -->
-                <div class="flex md:hidden">
-                    <button @click="open = !open" type="button" class="text-slate-700 hover:text-emerald-600 p-2 rounded-lg focus:outline-none">
-                        <i class="fa-solid" :class="open ? 'fa-xmark text-2xl' : 'fa-bars text-2xl'"></i>
+                <!-- Mobile Hamburger Button (Sisi Kanan Header) -->
+                <div class="flex md:hidden items-center">
+                    <button @click="open = !open" 
+                            type="button" 
+                            aria-label="Toggle navigation menu"
+                            class="relative w-11 h-11 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-600 flex items-center justify-center transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+                        <div class="w-6 h-5 relative flex flex-col justify-between">
+                            <span class="w-full h-0.5 bg-current rounded-full transition-all duration-300 origin-left" :class="open ? 'rotate-45 translate-x-1 -translate-y-0.5' : ''"></span>
+                            <span class="w-full h-0.5 bg-current rounded-full transition-all duration-300" :class="open ? 'opacity-0 scale-x-0' : 'opacity-100'"></span>
+                            <span class="w-full h-0.5 bg-current rounded-full transition-all duration-300 origin-left" :class="open ? '-rotate-45 translate-x-1 translate-y-0.5' : ''"></span>
+                        </div>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Dropdown Navigation -->
-        <div x-show="open" x-transition class="md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3">
-            <a href="/" class="block px-3 py-2 rounded-lg text-slate-800 font-medium hover:bg-emerald-50 hover:text-emerald-600">Beranda</a>
-            <a href="/paket" class="block px-3 py-2 rounded-lg text-slate-800 font-medium hover:bg-emerald-50 hover:text-emerald-600">Paket Wisata</a>
-            <a href="/destinasi" class="block px-3 py-2 rounded-lg text-slate-800 font-medium hover:bg-emerald-50 hover:text-emerald-600">Tujuan Wisata</a>
-            <a href="/#tentang-kami" class="block px-3 py-2 rounded-lg text-slate-800 font-medium hover:bg-emerald-50 hover:text-emerald-600">Mengapa Kami</a>
-            <a href="/admin/bookings" class="block px-3 py-2 rounded-lg text-emerald-700 font-bold bg-emerald-50">
-                <i class="fa-solid fa-list-check mr-1"></i> Admin Cek Pesanan
+        <!-- Mobile Animated Dropdown Navigation -->
+        <div x-show="open" 
+             x-transition:enter="transition ease-out duration-300 transform"
+             x-transition:enter-start="opacity-0 -translate-y-4 scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+             x-transition:leave="transition ease-in duration-200 transform"
+             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+             x-transition:leave-end="opacity-0 -translate-y-4 scale-95"
+             class="md:hidden bg-white/95 backdrop-blur-lg border-b border-slate-200 shadow-xl px-4 pt-3 pb-6 space-y-2">
+            <a href="/" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all {{ request()->is('/') ? 'bg-emerald-50 text-emerald-600 font-bold' : '' }}">
+                <i class="fa-solid fa-house text-emerald-500 w-5"></i>
+                <span>Beranda</span>
             </a>
-            <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Bothrex%20Bali%20Tour" target="_blank" class="block text-center bg-emerald-600 text-white font-semibold py-2.5 rounded-xl shadow">
-                <i class="fa-brands fa-whatsapp text-lg mr-2"></i> Chat WhatsApp
+            <a href="/paket" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all {{ request()->is('paket*') ? 'bg-emerald-50 text-emerald-600 font-bold' : '' }}">
+                <i class="fa-solid fa-compass text-emerald-500 w-5"></i>
+                <span>Paket Wisata</span>
             </a>
+            <a href="/destinasi" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all {{ request()->is('destinasi*') ? 'bg-emerald-50 text-emerald-600 font-bold' : '' }}">
+                <i class="fa-solid fa-map-location-dot text-emerald-500 w-5"></i>
+                <span>Tujuan Wisata</span>
+            </a>
+            <a href="/#tentang-kami" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
+                <i class="fa-solid fa-award text-emerald-500 w-5"></i>
+                <span>Mengapa Kami</span>
+            </a>
+            <a href="/#testimoni" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
+                <i class="fa-solid fa-comments text-emerald-500 w-5"></i>
+                <span>Testimoni</span>
+            </a>
+            <a href="/admin/bookings" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-emerald-800 font-bold bg-emerald-50 hover:bg-emerald-100 transition-all border border-emerald-200">
+                <i class="fa-solid fa-list-check text-emerald-600 w-5"></i>
+                <span>Admin Panel</span>
+            </a>
+            <div class="pt-2">
+                <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281234567890' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }}" 
+                   target="_blank" 
+                   class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 rounded-xl shadow-lg shadow-emerald-600/30 transition-all text-sm">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span>Chat WhatsApp CS</span>
+                </a>
+            </div>
         </div>
     </header>
 
@@ -125,9 +163,9 @@
     </main>
 
     <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Bothrex%20Bali%20Tour,%20saya%20tertarik%20dengan%20paket%20liburan%20di%20Bali" 
+    <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281234567890' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20tertarik%20dengan%20paket%20liburan%20di%20Bali" 
        target="_blank" 
-       title="Chat WhatsApp CS Bothrex Bali Tour"
+       title="Chat WhatsApp CS {{ $company->company_name ?? 'Bothrex Bali Tour' }}"
        class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-2xl shadow-emerald-600/50 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group">
         <i class="fa-brands fa-whatsapp text-3xl animate-bounce"></i>
         <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-500 ease-in-out font-bold text-sm ml-0 group-hover:ml-2">
@@ -145,16 +183,24 @@
                         <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold">
                             <i class="fa-solid fa-umbrella-beach text-lg"></i>
                         </div>
-                        <span class="text-xl font-extrabold text-white tracking-tight font-serif-heading">Bothrex <span class="text-emerald-400">Bali</span> Tour</span>
+                        <span class="text-xl font-extrabold text-white tracking-tight font-serif-heading">{{ $company->company_name ?? 'Bothrex Bali Tour' }}</span>
                     </div>
                     <p class="text-sm text-slate-400 leading-relaxed">
-                        Agen Tour & Travel resmi spesialis liburan Pulau Bali. Kami siap memberikan pengalaman liburan tak terlupakan dengan layanan kendaraan privat, supir lokal berpengalaman, dan harga transparan terbaik.
+                        {{ $company->about_text ?? 'Agen Tour & Travel resmi spesialis liburan Pulau Bali. Kami siap memberikan pengalaman liburan tak terlupakan dengan layanan kendaraan privat, supir lokal berpengalaman, dan harga transparan terbaik.' }}
                     </p>
                     <div class="flex items-center space-x-3 pt-2">
-                        <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-tiktok"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-youtube"></i></a>
+                        @if(!empty($company->instagram_url))
+                        <a href="{{ $company->instagram_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        @endif
+                        @if(!empty($company->facebook_url))
+                        <a href="{{ $company->facebook_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+                        @endif
+                        @if(!empty($company->tiktok_url))
+                        <a href="{{ $company->tiktok_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+                        @endif
+                        @if(!empty($company->youtube_url))
+                        <a href="{{ $company->youtube_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-youtube"></i></a>
+                        @endif
                     </div>
                 </div>
 
@@ -186,30 +232,23 @@
                     <ul class="space-y-3 text-sm">
                         <li class="flex items-start gap-3">
                             <i class="fa-solid fa-map-pin text-emerald-400 mt-1"></i>
-                            <span>Jl. Raya Kuta No. 88, Kuta, Kabupaten Badung, Bali 80361</span>
+                            <span>{{ $company->address ?? 'Jl. Raya Kuta No. 88, Kuta, Kabupaten Badung, Bali 80361' }}</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="fa-brands fa-whatsapp text-emerald-400"></i>
-                            <span>+62 812-3456-7890 (24 Jam)</span>
+                            <span>{{ $company->phone ?? '+62 812-3456-7890' }}</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="fa-solid fa-clock text-emerald-400"></i>
-                            <span>Senin - Minggu: 07:00 - 22:00 WITA</span>
+                            <span>{{ $company->operating_hours ?? 'Senin - Minggu: 07:00 - 22:00 WITA' }}</span>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Footer Bottom Bar -->
+            <!-- Footer Bottom Bar (No payment methods section) -->
             <div class="pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500 gap-4">
-                <p>&copy; {{ date('Y') }} Bothrex Bali Tour & Travel. Hak Cipta Dilindungi Undang-Undang.</p>
-                <div class="flex items-center space-x-4">
-                    <span class="text-slate-400">Metode Pembayaran Transfer & WA:</span>
-                    <span class="bg-slate-800 text-slate-300 px-2 py-1 rounded font-mono font-bold">BCA</span>
-                    <span class="bg-slate-800 text-slate-300 px-2 py-1 rounded font-mono font-bold">MANDIRI</span>
-                    <span class="bg-slate-800 text-slate-300 px-2 py-1 rounded font-mono font-bold">BRI</span>
-                    <span class="bg-slate-800 text-slate-300 px-2 py-1 rounded font-mono font-bold">QRIS</span>
-                </div>
+                <p>&copy; {{ date('Y') }} {{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}. Hak Cipta Dilindungi Undang-Undang.</p>
             </div>
         </div>
     </footer>

@@ -19,6 +19,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (!app()->runningInConsole() || app()->runningUnitTests()) {
+            try {
+                \Illuminate\Support\Facades\View::share('company', \App\Models\CompanySetting::getSettings());
+            } catch (\Exception $e) {
+                // fallback if DB not migrated yet
+            }
+        }
     }
 }

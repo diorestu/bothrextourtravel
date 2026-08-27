@@ -7,6 +7,7 @@ use App\Livewire\TourPackageDetailPage;
 use App\Livewire\DestinationsPage;
 use App\Livewire\DestinationDetailPage;
 use App\Livewire\Admin\BookingsPage;
+use App\Livewire\Admin\CompanySettingsPage;
 
 // Public Routes
 Route::get('/', HomePage::class)->name('home');
@@ -17,3 +18,4 @@ Route::get('/destinasi/{slug}', DestinationDetailPage::class)->name('destination
 
 // Admin Dashboard Routes
 Route::get('/admin/bookings', BookingsPage::class)->name('admin.bookings');
+Route::get('/admin/company', CompanySettingsPage::class)->name('admin.company');
