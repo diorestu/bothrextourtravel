@@ -113,11 +113,21 @@
 
                 <!-- Desktop Menu -->
                 <nav class="hidden md:flex items-center space-x-8 font-medium">
-                    <a href="/" :class="scrolled ? 'text-slate-700 hover:text-emerald-600 {{ request()->is('/') ? 'text-emerald-600 font-bold border-b-2 border-emerald-600 py-1' : '' }}' : 'text-slate-100 hover:text-emerald-400 {{ request()->is('/') ? 'text-emerald-400 font-bold border-b-2 border-emerald-400 py-1' : '' }}'" class="transition-colors">Beranda</a>
-                    <a href="/paket" :class="scrolled ? 'text-slate-700 hover:text-emerald-600 {{ request()->is('paket*') ? 'text-emerald-600 font-bold border-b-2 border-emerald-600 py-1' : '' }}' : 'text-slate-100 hover:text-emerald-400 {{ request()->is('paket*') ? 'text-emerald-400 font-bold border-b-2 border-emerald-400 py-1' : '' }}'" class="transition-colors">Paket Wisata</a>
-                    <a href="/destinasi" :class="scrolled ? 'text-slate-700 hover:text-emerald-600 {{ request()->is('destinasi*') ? 'text-emerald-600 font-bold border-b-2 border-emerald-600 py-1' : '' }}' : 'text-slate-100 hover:text-emerald-400 {{ request()->is('destinasi*') ? 'text-emerald-400 font-bold border-b-2 border-emerald-400 py-1' : '' }}'" class="transition-colors">Tujuan Wisata</a>
-                    <a href="/#tentang-kami" :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" class="transition-colors">Mengapa Kami</a>
-                    <a href="/#testimoni" :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" class="transition-colors">Testimoni</a>
+                    <a href="/" 
+                       :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" 
+                       class="transition-colors py-1">Beranda</a>
+                    <a href="/paket" 
+                       :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" 
+                       class="transition-colors py-1">Paket Wisata</a>
+                    <a href="/destinasi" 
+                       :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" 
+                       class="transition-colors py-1">Tujuan Wisata</a>
+                    <a href="/#tentang-kami" 
+                       :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" 
+                       class="transition-colors py-1">Mengapa Kami</a>
+                    <a href="/#testimoni" 
+                       :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" 
+                       class="transition-colors py-1">Testimoni</a>
                 </nav>
 
                 <!-- CTA WhatsApp Button -->
@@ -154,15 +164,15 @@
              x-transition:leave-start="opacity-100 translate-y-0 scale-100"
              x-transition:leave-end="opacity-0 -translate-y-4 scale-95"
              class="md:hidden bg-white/95 backdrop-blur-lg border-b border-slate-200 shadow-xl px-4 pt-3 pb-6 space-y-2">
-            <a href="/" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all {{ request()->is('/') ? 'bg-emerald-50 text-emerald-600 font-bold' : '' }}">
+            <a href="/" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
                 <i class="fa-solid fa-house text-emerald-500 w-5"></i>
                 <span>Beranda</span>
             </a>
-            <a href="/paket" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all {{ request()->is('paket*') ? 'bg-emerald-50 text-emerald-600 font-bold' : '' }}">
+            <a href="/paket" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
                 <i class="fa-solid fa-compass text-emerald-500 w-5"></i>
                 <span>Paket Wisata</span>
             </a>
-            <a href="/destinasi" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all {{ request()->is('destinasi*') ? 'bg-emerald-50 text-emerald-600 font-bold' : '' }}">
+            <a href="/destinasi" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
                 <i class="fa-solid fa-map-location-dot text-emerald-500 w-5"></i>
                 <span>Tujuan Wisata</span>
             </a>
@@ -217,18 +227,18 @@
                         {{ $company->about_text ?? 'Agen Tour & Travel resmi spesialis liburan Pulau Bali. Kami siap memberikan pengalaman liburan tak terlupakan dengan layanan kendaraan privat, supir lokal berpengalaman, dan harga transparan terbaik.' }}
                     </p>
                     <div class="flex items-center space-x-3 pt-2">
-                        @if(!empty($company->instagram_url))
+                        @unless(empty($company->instagram_url))
                         <a href="{{ $company->instagram_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-instagram"></i></a>
-                        @endif
-                        @if(!empty($company->facebook_url))
+                        @endunless
+                        @unless(empty($company->facebook_url))
                         <a href="{{ $company->facebook_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-                        @endif
-                        @if(!empty($company->tiktok_url))
+                        @endunless
+                        @unless(empty($company->tiktok_url))
                         <a href="{{ $company->tiktok_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-tiktok"></i></a>
-                        @endif
-                        @if(!empty($company->youtube_url))
+                        @endunless
+                        @unless(empty($company->youtube_url))
                         <a href="{{ $company->youtube_url }}" target="_blank" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-youtube"></i></a>
-                        @endif
+                        @endunless
                     </div>
                 </div>
 
