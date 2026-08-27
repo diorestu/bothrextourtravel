@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ6VCG23P9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-MQ6VCG23P9');
+    </script>
+
     <!-- SEO Meta Title & Description -->
     <title>{{ $title ?? ($company->company_name ?? 'Bothrex Bali Tour & Travel') . ' - ' . ($company->tagline ?? 'Paket Wisata Bali Murah & Terpercaya #1') }}</title>
     <meta name="description" content="{{ $metaDescription ?? 'Agen Tour & Travel resmi spesialis liburan Pulau Bali. Menyediakan paket tour Nusa Penida 1 hari, Jeep Kintamani Sunrise, Ubud Swing, Uluwatu Kecak, & Sewa Mobil Privat supir ramah. Pesan mudah via WA!' }}">
