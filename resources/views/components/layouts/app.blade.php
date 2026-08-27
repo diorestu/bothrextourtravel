@@ -5,8 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? ($company->company_name ?? 'Bothrex Bali Tour & Travel') . ' - ' . ($company->tagline ?? 'Jelajahi Keindahan Surga Dewata') }}</title>
-    <meta name="description" content="Agen Tour & Travel Bali terpercaya. Paket liburan Bali murah, nusa penida, ubud, kintamani, jeep batur, water sports, private car supir ramah.">
+    <!-- SEO Meta Title & Description -->
+    <title>{{ $title ?? ($company->company_name ?? 'Bothrex Bali Tour & Travel') . ' - ' . ($company->tagline ?? 'Paket Wisata Bali Murah & Terpercaya #1') }}</title>
+    <meta name="description" content="{{ $metaDescription ?? 'Agen Tour & Travel resmi spesialis liburan Pulau Bali. Menyediakan paket tour Nusa Penida 1 hari, Jeep Kintamani Sunrise, Ubud Swing, Uluwatu Kecak, & Sewa Mobil Privat supir ramah. Pesan mudah via WA!' }}">
+    <meta name="keywords" content="paket tour bali murah, agen travel bali terpercaya, tour nusa penida 1 hari, jeep batur sunrise tour, sewa mobil bali dengan supir, paket liburan bali keluarga, paket honeymoon bali romantis, wisata ubud gianyar, kecak dance uluwatu, bothrex bali tour">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph (OG) Meta Tags for WhatsApp & Social Media Preview -->
+    <meta property="og:site_name" content="{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $title ?? ($company->company_name ?? 'Bothrex Bali Tour & Travel') . ' - Paket Wisata Bali Murah' }}">
+    <meta property="og:description" content="{{ $metaDescription ?? 'Nikmati liburan seru di Bali dengan mobil privat AC, supir ramah, itinerary hemat, & layanan 24/7. Hubungi WA kami!' }}">
+    <meta property="og:image" content="{{ $ogImage ?? 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80' }}">
+    <meta property="og:locale" content="id_ID">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $title ?? ($company->company_name ?? 'Bothrex Bali Tour & Travel') }}">
+    <meta name="twitter:description" content="{{ $metaDescription ?? 'Agen Tour & Travel resmi spesialis paket liburan Bali murah & terpercaya.' }}">
+    <meta name="twitter:image" content="{{ $ogImage ?? 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80' }}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +34,33 @@
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Schema.org JSON-LD Structured Data for Google Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TravelAgency",
+      "name": "{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}",
+      "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80",
+      "telephone": "{{ $company->phone ?? '+62 812-3456-7890' }}",
+      "email": "{{ $company->email ?? 'info@bothrexbalitour.com' }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ $company->address ?? 'Jl. Raya Kuta No. 88' }}",
+        "addressLocality": "Badung",
+        "addressRegion": "Bali",
+        "postalCode": "80361",
+        "addressCountry": "ID"
+      },
+      "url": "{{ url('/') }}",
+      "priceRange": "Rp 350.000 - Rp 1.500.000",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "1520"
+      }
+    }
+    </script>
 
     <!-- Alpine.js & Tailwind -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -26,16 +72,6 @@
         }
         .font-serif-heading {
             font-family: 'Playfair Display', serif;
-        }
-        .glass-header {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(12px);
-        }
-        .gradient-brand {
-            background: linear-gradient(135deg, #0d9488 0%, #059669 50%, #047857 100%);
-        }
-        .gradient-gold {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
         }
     </style>
 </head>
@@ -55,8 +91,11 @@
         </div>
     </div>
 
-    <!-- Main Navigation Bar -->
-    <header x-data="{ open: false }" @click.away="open = false" class="sticky top-0 z-50 glass-header border-b border-slate-200/80 transition-all shadow-sm">
+    <!-- Main Navigation Bar with Dynamic Scroll Parallax Header Effect -->
+    <header x-data="{ open: false, scrolled: false }" 
+            @scroll.window="scrolled = (window.pageYOffset > 60)" 
+            :class="scrolled ? 'bg-white shadow-md border-b border-slate-200 text-slate-800' : 'bg-slate-950/60 backdrop-blur-md border-b border-white/10 text-white'" 
+            class="sticky top-0 z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Brand Logo -->
@@ -65,20 +104,20 @@
                         <i class="fa-solid fa-umbrella-beach text-xl"></i>
                     </div>
                     <div>
-                        <span class="text-2xl font-extrabold text-slate-900 tracking-tight font-serif-heading block leading-none">
+                        <span :class="scrolled ? 'text-slate-900' : 'text-white'" class="text-2xl font-extrabold tracking-tight font-serif-heading block leading-none transition-colors">
                             {{ Str::words($company->company_name ?? 'Bothrex Bali Tour', 2, '') }}
                         </span>
-                        <span class="text-[10px] font-bold tracking-widest text-slate-500 uppercase">Tour & Travel Agency</span>
+                        <span :class="scrolled ? 'text-slate-500' : 'text-slate-300'" class="text-[10px] font-bold tracking-widest uppercase transition-colors">Tour & Travel Agency</span>
                     </div>
                 </a>
 
                 <!-- Desktop Menu -->
-                <nav class="hidden md:flex items-center space-x-8 font-medium text-slate-700">
-                    <a href="/" class="hover:text-emerald-600 transition-colors {{ request()->is('/') ? 'text-emerald-600 font-bold border-b-2 border-emerald-600 py-1' : '' }}">Beranda</a>
-                    <a href="/paket" class="hover:text-emerald-600 transition-colors {{ request()->is('paket*') ? 'text-emerald-600 font-bold border-b-2 border-emerald-600 py-1' : '' }}">Paket Wisata</a>
-                    <a href="/destinasi" class="hover:text-emerald-600 transition-colors {{ request()->is('destinasi*') ? 'text-emerald-600 font-bold border-b-2 border-emerald-600 py-1' : '' }}">Tujuan Wisata</a>
-                    <a href="/#tentang-kami" class="hover:text-emerald-600 transition-colors">Mengapa Kami</a>
-                    <a href="/#testimoni" class="hover:text-emerald-600 transition-colors">Testimoni</a>
+                <nav class="hidden md:flex items-center space-x-8 font-medium">
+                    <a href="/" :class="scrolled ? 'text-slate-700 hover:text-emerald-600 {{ request()->is('/') ? 'text-emerald-600 font-bold border-b-2 border-emerald-600 py-1' : '' }}' : 'text-slate-100 hover:text-emerald-400 {{ request()->is('/') ? 'text-emerald-400 font-bold border-b-2 border-emerald-400 py-1' : '' }}'" class="transition-colors">Beranda</a>
+                    <a href="/paket" :class="scrolled ? 'text-slate-700 hover:text-emerald-600 {{ request()->is('paket*') ? 'text-emerald-600 font-bold border-b-2 border-emerald-600 py-1' : '' }}' : 'text-slate-100 hover:text-emerald-400 {{ request()->is('paket*') ? 'text-emerald-400 font-bold border-b-2 border-emerald-400 py-1' : '' }}'" class="transition-colors">Paket Wisata</a>
+                    <a href="/destinasi" :class="scrolled ? 'text-slate-700 hover:text-emerald-600 {{ request()->is('destinasi*') ? 'text-emerald-600 font-bold border-b-2 border-emerald-600 py-1' : '' }}' : 'text-slate-100 hover:text-emerald-400 {{ request()->is('destinasi*') ? 'text-emerald-400 font-bold border-b-2 border-emerald-400 py-1' : '' }}'" class="transition-colors">Tujuan Wisata</a>
+                    <a href="/#tentang-kami" :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" class="transition-colors">Mengapa Kami</a>
+                    <a href="/#testimoni" :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" class="transition-colors">Testimoni</a>
                 </nav>
 
                 <!-- CTA WhatsApp Button -->
@@ -94,7 +133,8 @@
                     <button @click="open = !open" 
                             type="button" 
                             aria-label="Toggle navigation menu"
-                            class="relative w-11 h-11 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-600 flex items-center justify-center transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+                            :class="scrolled ? 'bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-600' : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md'"
+                            class="relative w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 focus:outline-none">
                         <div class="w-6 h-5 relative flex flex-col justify-between">
                             <span class="w-full h-0.5 bg-current rounded-full transition-all duration-300 origin-left" :class="open ? 'rotate-45 translate-x-1 -translate-y-0.5' : ''"></span>
                             <span class="w-full h-0.5 bg-current rounded-full transition-all duration-300" :class="open ? 'opacity-0 scale-x-0' : 'opacity-100'"></span>

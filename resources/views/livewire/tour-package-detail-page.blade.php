@@ -209,6 +209,22 @@
                             <i class="fa-solid fa-lock text-emerald-500"></i> Data tersimpan aman & langsung terhubung ke WA CS
                         </span>
                     </div>
+
+                    <!-- Share Package to Social Media Widget -->
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                        <span class="text-xs font-bold text-slate-500">Bagikan Paket Ini:</span>
+                        <div class="flex items-center gap-2">
+                            <a href="https://api.whatsapp.com/send?text={{ urlencode('Cek paket liburan Bali keren ini: ' . $package->title . ' - ' . url()->current()) }}" 
+                               target="_blank" 
+                               class="bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+                                <i class="fa-brands fa-whatsapp text-emerald-600"></i> Share WA
+                            </a>
+                            <button onclick="navigator.clipboard.writeText('{{ url()->current() }}'); alert('Link paket berhasil disalin!')" 
+                                    class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-copy"></i> Salin Link
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -58,7 +58,33 @@ class TourPackageDetailPage extends Component
             'number_of_guests.min' => 'Jumlah peserta minimal 1 orang.',
         ]);
 
-        $bookingCode = 'BALI-' . date('Ym') . '-' . strtoupper(Str::random(4));
+        // Generate Location Category Prefix Code (NUSA, UBUD, KTMN, ULWT, BDGL, BENOA, BALI)
+        $destName = $this->package->destination->name ?? $this->package->category ?? 'BALI';
+        $destNameLower = strtolower($destName);
+
+        if (str_contains($destNameLower, 'nusa')) {
+            $locCode = 'NUSA';
+        } elseif (str_contains($destNameLower, 'ubud')) {
+            $locCode = 'UBUD';
+        } elseif (str_contains($destNameLower, 'kintamani') || str_contains($destNameLower, 'batur')) {
+            $locCode = 'KTMN';
+        } elseif (str_contains($destNameLower, 'uluwatu')) {
+            $locCode = 'ULWT';
+        } elseif (str_contains($destNameLower, 'bedugul')) {
+            $locCode = 'BDGL';
+        } elseif (str_contains($destNameLower, 'benoa')) {
+            $locCode = 'BNOA';
+        } else {
+            $words = explode(' ', preg_replace('/[^A-Za-z0-9 ]/', '', $destName));
+            $locCode = strtoupper(substr($words[0] ?? 'BALI', 0, 4));
+        }
+
+        // Format Date Number from Travel Date (YYYYMMDD) and Random 4-digit ID
+        $dateNum = date('Ymd', strtotime($this->travel_date));
+        $randomNum = rand(1000, 9999);
+
+        // Resulting Code Format: E.g. NUSA-20260915-8391
+        $bookingCode = $locCode . '-' . $dateNum . '-' . $randomNum;
         $totalPrice = $this->calculateTotal();
 
         $booking = Booking::create([

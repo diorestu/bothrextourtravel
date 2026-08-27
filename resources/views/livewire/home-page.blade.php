@@ -1,10 +1,10 @@
 <div>
-    <!-- Hero Banner Section -->
-    <section class="relative bg-slate-900 text-white overflow-hidden py-20 lg:py-32">
-        <div class="absolute inset-0 z-0 opacity-40">
-            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=2000&q=80" alt="Bali Beach" class="w-full h-full object-cover">
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent z-0"></div>
+    <!-- Hero Banner Section (Parallax Background) -->
+    <section class="relative bg-fixed bg-cover bg-center text-white overflow-hidden pt-36 pb-24 lg:pt-44 lg:pb-36 -mt-20"
+             style="background-image: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=2000&q=80');">
+        <!-- Dark Overlay Filter for Maximum Readability -->
+        <div class="absolute inset-0 bg-slate-950/65 backdrop-blur-[1px] z-0"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40 z-0"></div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl">
