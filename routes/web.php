@@ -65,11 +65,14 @@ Route::get('/robots.txt', function() {
 // Admin Guest Route
 Route::get('/admin/login', LoginPage::class)->name('admin.login');
 
+use App\Livewire\Admin\AttractionsManagementPage;
+
 // Admin Protected Routes
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/bookings', BookingsPage::class)->name('admin.bookings');
     Route::get('/packages', PackagesManagementPage::class)->name('admin.packages');
     Route::get('/destinations', DestinationsManagementPage::class)->name('admin.destinations');
+    Route::get('/attractions', AttractionsManagementPage::class)->name('admin.attractions');
     Route::get('/company', CompanySettingsPage::class)->name('admin.company');
 
     Route::post('/logout', function() {

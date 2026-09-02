@@ -36,8 +36,8 @@
                 <!-- Gallery Image -->
                 <div class="rounded-3xl overflow-hidden shadow-xl border border-slate-200 h-96 relative">
                     <img src="{{ $package->image_url }}" alt="{{ $package->title }}" class="w-full h-full object-cover">
-                    <div class="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white text-xs px-4 py-2 rounded-full flex items-center gap-2">
-                        <i class="fa-solid fa-clock text-emerald-400"></i> Durasi: <strong>{{ $package->duration }}</strong>
+                    <div class="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white text-xs px-4 py-2 rounded-full flex items-center gap-2 border border-white/20">
+                        <i class="fa-solid fa-person-walking-luggage text-emerald-400"></i> Durasi: <strong>{{ $package->duration }}</strong>
                     </div>
                 </div>
 
@@ -51,21 +51,32 @@
                     </p>
                 </div>
 
-                <!-- Itinerary Timeline -->
+                <!-- Rangkaian Tujuan Wisata & Flexi Itinerary -->
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
-                    <h2 class="text-xl font-bold text-slate-900 font-serif-heading mb-6 pb-3 border-b border-slate-100 flex items-center gap-2">
-                        <i class="fa-solid fa-route text-emerald-600"></i> Rencana Perjalanan (Itinerary)
-                    </h2>
-                    <div class="space-y-6 relative before:absolute before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-emerald-200">
-                        @foreach($package->itinerary ?? [] as $item)
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900 font-serif-heading flex items-center gap-2">
+                                <i class="fa-solid fa-map-location-dot text-emerald-600"></i> Rangkaian Tujuan Wisata
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-1">Layanan kendaraan privat & waktu tour santai fleksibel tanpa terburu-buru jam.</p>
+                        </div>
+                        <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1.5 rounded-full border border-emerald-300 shrink-0">
+                            <i class="fa-solid fa-car-side"></i> Privat Jemput-Antar Hotel
+                        </span>
+                    </div>
+
+                    <div class="space-y-5 relative before:absolute before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-emerald-200">
+                        @foreach($package->itinerary ?? [] as $index => $item)
                         <div class="relative pl-10">
-                            <div class="absolute left-1.5 top-1.5 w-5 h-5 rounded-full bg-emerald-600 border-4 border-white shadow flex items-center justify-center text-[10px] text-white font-bold"></div>
-                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                                <span class="bg-emerald-100 text-emerald-800 text-[11px] font-extrabold px-2.5 py-0.5 rounded shadow-sm inline-block mb-1">
-                                    {{ $item['time'] }} WITA
-                                </span>
-                                <h3 class="text-sm font-bold text-slate-900 mt-1">{{ $item['title'] }}</h3>
-                                <p class="text-xs text-slate-600 mt-1 leading-relaxed">{{ $item['description'] }}</p>
+                            <div class="absolute left-1.5 top-2 w-5 h-5 rounded-full bg-emerald-600 border-4 border-white shadow flex items-center justify-center text-[10px] text-white font-bold"></div>
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 hover:border-emerald-300 transition">
+                                <div class="flex items-center gap-2">
+                                    <span class="bg-emerald-600 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                                        Rute #{{ $index + 1 }}
+                                    </span>
+                                    <h3 class="text-sm font-bold text-slate-900">{{ $item['title'] }}</h3>
+                                </div>
+                                <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">{{ $item['description'] }}</p>
                             </div>
                         </div>
                         @endforeach

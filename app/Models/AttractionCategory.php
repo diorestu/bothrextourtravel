@@ -4,30 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Destination extends Model
+class AttractionCategory extends Model
 {
     protected $fillable = [
         'name',
         'slug',
-        'category',
-        'location',
-        'image_url',
+        'icon',
         'description',
-        'highlights',
-        'is_popular',
         'is_active',
     ];
 
     protected $casts = [
-        'highlights' => 'array',
-        'is_popular' => 'boolean',
         'is_active' => 'boolean',
     ];
-
-    public function packages()
-    {
-        return $this->hasMany(TourPackage::class);
-    }
 
     public function attractions()
     {
