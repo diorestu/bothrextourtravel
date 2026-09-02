@@ -76,3 +76,49 @@
         </div>
     </div>
 </div>
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "{{ '@' }}context": "https://schema.org",
+  "{{ '@' }}graph": [
+    {
+      "{{ '@' }}type": "ItemList",
+      "{{ '@' }}id": "{{ url('/destinasi') }}#itemlist",
+      "name": "Daftar Destinasi Wisata Bali",
+      "description": "Spot dan kawasan wisata populer di Pulau Dewata Bali.",
+      "numberOfItems": {{ count($destinations) }},
+      "itemListElement": [
+        @foreach($destinations as $idx => $dest)
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": {{ $idx + 1 }},
+          "name": "Wisata {{ addslashes($dest->name) }}",
+          "url": "{{ url('/destinasi/' . $dest->slug) }}",
+          "image": "{{ $dest->image_url }}"
+        }@if(!$loop->last),@endif
+        @endforeach
+      ]
+    },
+    {
+      "{{ '@' }}type": "BreadcrumbList",
+      "{{ '@' }}id": "{{ url('/destinasi') }}#breadcrumbs",
+      "itemListElement": [
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": 1,
+          "name": "Beranda",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": 2,
+          "name": "Destinasi Wisata",
+          "item": "{{ url('/destinasi') }}"
+        }
+      ]
+    }
+  ]
+}
+</script>
+@endpush

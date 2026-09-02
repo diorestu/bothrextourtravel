@@ -87,3 +87,59 @@
         </div>
     </div>
 </div>
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "{{ '@' }}context": "https://schema.org",
+  "{{ '@' }}graph": [
+    {
+      "{{ '@' }}type": ["TouristDestination", "Place"],
+      "{{ '@' }}id": "{{ url('/destinasi/' . $destination->slug) }}#destination",
+      "name": "Wisata {{ addslashes($destination->name) }}",
+      "description": "{{ addslashes(Str::limit(strip_tags($destination->description), 200)) }}",
+      "image": "{{ $destination->image_url }}",
+      "url": "{{ url('/destinasi/' . $destination->slug) }}",
+      "address": {
+        "{{ '@' }}type": "PostalAddress",
+        "addressRegion": "Bali",
+        "addressCountry": "ID"
+      },
+      "touristType": ["Family", "Sightseeing", "Adventure", "Nature", "Culture"],
+      "includesAttraction": [
+        @foreach($destination->highlights ?? [] as $hl)
+        {
+          "{{ '@' }}type": "TouristAttraction",
+          "name": "{{ addslashes($hl) }}"
+        }@if(!$loop->last),@endif
+        @endforeach
+      ]
+    },
+    {
+      "{{ '@' }}type": "BreadcrumbList",
+      "{{ '@' }}id": "{{ url('/destinasi/' . $destination->slug) }}#breadcrumbs",
+      "itemListElement": [
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": 1,
+          "name": "Beranda",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": 2,
+          "name": "Destinasi Bali",
+          "item": "{{ url('/destinasi') }}"
+        },
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": 3,
+          "name": "{{ addslashes($destination->name) }}",
+          "item": "{{ url('/destinasi/' . $destination->slug) }}"
+        }
+      ]
+    }
+  ]
+}
+</script>
+@endpush

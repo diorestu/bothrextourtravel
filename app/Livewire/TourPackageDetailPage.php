@@ -107,6 +107,19 @@ class TourPackageDetailPage extends Component
 
     public function render()
     {
-        return view('livewire.tour-package-detail-page');
+        $destName = $this->package->destination->name ?? 'Bali';
+        $formattedPrice = number_format($this->package->price, 0, ',', '.');
+        $title = "Paket {$this->package->title} (All-In Private Tour) | Bothrex Bali Tour";
+        $metaDescription = "Pesan paket {$this->package->title} mulai Rp {$formattedPrice}/orang. Termasuk mobil privat AC, supir ramah, tiket masuk & jemput-antar hotel. Booking via WA!";
+        $metaKeywords = "paket {$this->package->title}, tour {$destName}, wisata {$destName}, private tour {$destName}, paket liburan bali murah, sewa mobil bali supir, bothrex bali tour";
+
+        return view('livewire.tour-package-detail-page')->layout('layouts.app', [
+            'title' => $title,
+            'metaDescription' => $metaDescription,
+            'metaKeywords' => $metaKeywords,
+            'ogImage' => $this->package->image_url,
+            'ogType' => 'product',
+            'canonical' => url('/paket/' . $this->package->slug),
+        ]);
     }
 }

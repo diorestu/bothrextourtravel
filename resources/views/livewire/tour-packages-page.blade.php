@@ -154,3 +154,49 @@
         </div>
     </div>
 </div>
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "{{ '@' }}context": "https://schema.org",
+  "{{ '@' }}graph": [
+    {
+      "{{ '@' }}type": "ItemList",
+      "{{ '@' }}id": "{{ url('/paket') }}#itemlist",
+      "name": "Daftar Paket Wisata Bali",
+      "description": "Koleksi paket wisata Bali private tour hemat dan fleksibel.",
+      "numberOfItems": {{ count($packages) }},
+      "itemListElement": [
+        @foreach($packages as $idx => $pkg)
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": {{ $idx + 1 }},
+          "name": "{{ addslashes($pkg->title) }}",
+          "url": "{{ url('/paket/' . $pkg->slug) }}",
+          "image": "{{ $pkg->image_url }}"
+        }@if(!$loop->last),@endif
+        @endforeach
+      ]
+    },
+    {
+      "{{ '@' }}type": "BreadcrumbList",
+      "{{ '@' }}id": "{{ url('/paket') }}#breadcrumbs",
+      "itemListElement": [
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": 1,
+          "name": "Beranda",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": 2,
+          "name": "Paket Wisata Bali",
+          "item": "{{ url('/paket') }}"
+        }
+      ]
+    }
+  ]
+}
+</script>
+@endpush

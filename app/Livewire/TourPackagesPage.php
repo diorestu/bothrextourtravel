@@ -56,9 +56,31 @@ class TourPackagesPage extends Component
 
         $packages = $query->get();
 
+        $title = 'Daftar Paket Wisata Bali Murah & Lengkap 2026 | Bothrex Bali Tour';
+        $metaDescription = 'Katalog lengkap paket liburan Bali murah & hemat 2026. Pilihan tour Nusa Penida, Ubud, Jeep Sunrise Batur, & Uluwatu dengan mobil privat + supir ramah.';
+
+        if ($this->destinationId !== 'all') {
+            $selectedDest = $destinations->firstWhere('id', $this->destinationId);
+            if ($selectedDest) {
+                $title = "Paket Tour Wisata {$selectedDest->name} Bali Murah | Bothrex Bali Tour";
+                $metaDescription = "Pilihan paket private tour {$selectedDest->name} Bali terlengkap. Termasuk mobil ber-AC, driver lokal ramah, dan penjemputan hotel. Pesan via WA!";
+            }
+        } elseif (!empty($this->search)) {
+            $title = "Cari Paket Tour: \"{$this->search}\" | Bothrex Bali Tour";
+        }
+
+        $metaKeywords = 'katalog paket tour bali, paket wisata bali murah 2026, harga tour bali 1 hari, private tour bali dengan supir, paket liburan bali keluarga, paket tour nusa penida, jeep sunrise batur, tour ubud murah, paket uluwatu kecak';
+
         return view('livewire.tour-packages-page', [
             'packages' => $packages,
             'destinations' => $destinations,
+        ])->layout('layouts.app', [
+            'title' => $title,
+            'metaDescription' => $metaDescription,
+            'metaKeywords' => $metaKeywords,
+            'ogImage' => 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80',
+            'ogType' => 'website',
+            'canonical' => url('/paket'),
         ]);
     }
 }

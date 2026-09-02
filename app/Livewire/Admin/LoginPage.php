@@ -37,6 +37,9 @@ class LoginPage extends Component
             return redirect()->route('admin.bookings');
         }
 
-        return view('livewire.admin.login-page');
+        return view('livewire.admin.login-page')->layout('layouts.app', [
+            'title' => 'Login Admin Panel - Bothrex Bali Tour',
+            'robots' => 'noindex, nofollow',
+        ]);
     }
 }

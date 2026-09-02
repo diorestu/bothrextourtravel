@@ -16,19 +16,28 @@
     </script>
 
     <!-- SEO Meta Title & Description -->
-    <title>{{ $title ?? ($company->company_name ?? 'Bothrex Bali Tour & Travel') . ' - ' . ($company->tagline ?? 'Paket Wisata Bali Murah & Terpercaya #1') }}</title>
+    <title>{{ $title ?? (($company->company_name ?? 'Bothrex Bali Tour & Travel') . ' - ' . ($company->tagline ?? 'Paket Wisata Bali Murah & Terpercaya #1')) }}</title>
     <meta name="description" content="{{ $metaDescription ?? 'Agen Tour & Travel resmi spesialis liburan Pulau Bali. Menyediakan paket tour Nusa Penida 1 hari, Jeep Kintamani Sunrise, Ubud Swing, Uluwatu Kecak, & Sewa Mobil Privat supir ramah. Pesan mudah via WA!' }}">
-    <meta name="keywords" content="paket tour bali murah, agen travel bali terpercaya, tour nusa penida 1 hari, jeep batur sunrise tour, sewa mobil bali dengan supir, paket liburan bali keluarga, paket honeymoon bali romantis, wisata ubud gianyar, kecak dance uluwatu, bothrex bali tour">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{{ url()->current() }}">
+    <meta name="keywords" content="{{ $metaKeywords ?? 'paket tour bali murah, agen travel bali terpercaya, tour nusa penida 1 hari, jeep batur sunrise tour, sewa mobil bali dengan supir, paket liburan bali keluarga, paket honeymoon bali romantis, wisata ubud gianyar, kecak dance uluwatu, bothrex bali tour' }}">
+    <meta name="robots" content="{{ $robots ?? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' }}">
+    <meta name="author" content="{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}">
+    <meta name="theme-color" content="#059669">
+    <link rel="canonical" href="{{ $canonical ?? url()->current() }}">
 
-    <!-- Open Graph (OG) Meta Tags for WhatsApp & Social Media Preview -->
+    <!-- Local Bali SEO Geo Meta Tags -->
+    <meta name="geo.region" content="ID-BA">
+    <meta name="geo.placename" content="Bali, Indonesia">
+    <meta name="geo.position" content="-8.409518;115.188916">
+    <meta name="ICBM" content="-8.409518, 115.188916">
+
+    <!-- Open Graph (OG) Meta Tags for WhatsApp, Facebook & Social Media Preview -->
     <meta property="og:site_name" content="{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="{{ $title ?? ($company->company_name ?? 'Bothrex Bali Tour & Travel') . ' - Paket Wisata Bali Murah' }}">
+    <meta property="og:type" content="{{ $ogType ?? 'website' }}">
+    <meta property="og:url" content="{{ $canonical ?? url()->current() }}">
+    <meta property="og:title" content="{{ $title ?? (($company->company_name ?? 'Bothrex Bali Tour & Travel') . ' - Paket Wisata Bali Murah') }}">
     <meta property="og:description" content="{{ $metaDescription ?? 'Nikmati liburan seru di Bali dengan mobil privat AC, supir ramah, itinerary hemat, & layanan 24/7. Hubungi WA kami!' }}">
     <meta property="og:image" content="{{ $ogImage ?? 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80' }}">
+    <meta property="og:image:alt" content="{{ $title ?? 'Bothrex Bali Tour & Travel' }}">
     <meta property="og:locale" content="id_ID">
 
     <!-- Twitter Card Meta Tags -->
@@ -45,32 +54,76 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Schema.org JSON-LD Structured Data for Google Rich Snippets -->
+    <!-- Global Schema.org JSON-LD (TravelAgency & WebSite SearchAction) -->
     <script type="application/ld+json">
     {
       "{{ '@' }}context": "https://schema.org",
-      "{{ '@' }}type": "TravelAgency",
-      "name": "{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}",
-      "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80",
-      "telephone": "{{ $company->phone ?? '+62 812-3456-7890' }}",
-      "email": "{{ $company->email ?? 'info@bothrexbalitour.com' }}",
-      "address": {
-        "{{ '@' }}type": "PostalAddress",
-        "streetAddress": "{{ $company->address ?? 'Jl. Raya Kuta No. 88' }}",
-        "addressLocality": "Badung",
-        "addressRegion": "Bali",
-        "postalCode": "80361",
-        "addressCountry": "ID"
-      },
-      "url": "{{ url('/') }}",
-      "priceRange": "Rp 350.000 - Rp 1.500.000",
-      "aggregateRating": {
-        "{{ '@' }}type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "1520"
-      }
+      "{{ '@' }}graph": [
+        {
+          "{{ '@' }}type": "TravelAgency",
+          "{{ '@' }}id": "{{ url('/') }}#agency",
+          "name": "{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}",
+          "url": "{{ url('/') }}",
+          "logo": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80",
+          "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80",
+          "description": "{{ $company->about_text ?? 'Agen Tour & Travel resmi spesialis liburan Pulau Bali dengan paket all-in mobil privat dan supir ramah.' }}",
+          "telephone": "{{ $company->phone ?? '+62 812-3456-7890' }}",
+          "email": "{{ $company->email ?? 'info@bothrexbalitour.com' }}",
+          "priceRange": "Rp 350.000 - Rp 1.500.000",
+          "currenciesAccepted": "IDR",
+          "paymentAccepted": "Cash, Bank Transfer",
+          "address": {
+            "{{ '@' }}type": "PostalAddress",
+            "streetAddress": "{{ $company->address ?? 'Jl. Raya Kuta No. 88' }}",
+            "addressLocality": "Badung",
+            "addressRegion": "Bali",
+            "postalCode": "80361",
+            "addressCountry": "ID"
+          },
+          "geo": {
+            "{{ '@' }}type": "GeoCoordinates",
+            "latitude": -8.7230,
+            "longitude": 115.1768
+          },
+          "openingHoursSpecification": {
+            "{{ '@' }}type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "opens": "07:00",
+            "closes": "22:00"
+          },
+          "aggregateRating": {
+            "{{ '@' }}type": "AggregateRating",
+            "ratingValue": "4.9",
+            "bestRating": "5",
+            "worstRating": "1",
+            "reviewCount": "1520"
+          }
+        },
+        {
+          "{{ '@' }}type": "WebSite",
+          "{{ '@' }}id": "{{ url('/') }}#website",
+          "url": "{{ url('/') }}",
+          "name": "{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}",
+          "description": "{{ $company->tagline ?? 'Paket Wisata Bali Murah & Terpercaya #1' }}",
+          "publisher": {
+            "{{ '@' }}id": "{{ url('/') }}#agency"
+          },
+          "potentialAction": {
+            "{{ '@' }}type": "SearchAction",
+            "target": {
+              "{{ '@' }}type": "EntryPoint",
+              "urlTemplate": "{{ url('/paket') }}?search={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          },
+          "inLanguage": "id-ID"
+        }
+      ]
     }
     </script>
+
+    <!-- Page Specific Structured Data (Schema Stack) -->
+    @stack('schema')
 
     <!-- Alpine.js & Tailwind -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

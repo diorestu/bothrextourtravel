@@ -294,6 +294,74 @@
         </div>
     </section>
 
+    <!-- FAQ Section for Google Rich Snippets & Trust -->
+    <section class="py-20 bg-slate-100/70 border-t border-slate-200" id="faq">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">FAQ / Tanya Jawab</span>
+                <h2 class="text-3xl font-extrabold text-slate-900 font-serif-heading mt-3">Pertanyaan yang Sering Diajukan</h2>
+                <p class="text-slate-600 text-sm mt-2">Semua hal yang perlu Anda ketahui tentang layanan paket liburan Bali bersama {{ $company->company_name ?? 'Bothrex Bali Tour' }}.</p>
+            </div>
+
+            <div class="space-y-4" x-data="{ active: null }">
+                <!-- FAQ Item 1 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition">
+                    <button @click="active = (active === 1 ? null : 1)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex items-center justify-between gap-4 hover:text-emerald-600 transition text-sm sm:text-base">
+                        <span>Apa saja paket wisata Bali yang paling populer di {{ $company->company_name ?? 'Bothrex Bali Tour' }}?</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300" :class="active === 1 ? 'rotate-180 text-emerald-600' : 'text-slate-400'"></i>
+                    </button>
+                    <div x-show="active === 1" x-collapse class="px-6 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        Paket paling diminati traveler kami antara lain: <strong>One Day Tour Nusa Penida Barat (Kelingking & Diamond Beach)</strong>, <strong>Jeep Sunrise Gunung Batur 4WD Kintamani</strong>, <strong>Ubud Swing & Monkey Forest Waterfall</strong>, serta <strong>Uluwatu Sunset & Pertunjukan Tari Kecak Jimbaran</strong>.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition">
+                    <button @click="active = (active === 2 ? null : 2)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex items-center justify-between gap-4 hover:text-emerald-600 transition text-sm sm:text-base">
+                        <span>Apakah tour ini bersifat Private atau digabung dengan peserta lain?</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300" :class="active === 2 ? 'rotate-180 text-emerald-600' : 'text-slate-400'"></i>
+                    </button>
+                    <div x-show="active === 2" x-collapse class="px-6 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        Semua paket kami adalah <strong>Private Tour (Mobil Privat AC)</strong>. Anda dan keluarga/rombongan tidak akan digabung dengan orang asing, sehingga liburan lebih intim, leluasa, dan santai.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition">
+                    <button @click="active = (active === 3 ? null : 3)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex items-center justify-between gap-4 hover:text-emerald-600 transition text-sm sm:text-base">
+                        <span>Apakah paket tour sudah termasuk penjemputan dan pengantaran ke hotel?</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300" :class="active === 3 ? 'rotate-180 text-emerald-600' : 'text-slate-400'"></i>
+                    </button>
+                    <div x-show="active === 3" x-collapse class="px-6 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        <strong>Ya, 100% Termasuk!</strong> Supir ramah kami akan menjemput langsung di lobi hotel/villa Anda di area Kuta, Seminyak, Legian, Canggu, Jimbaran, Nusa Dua, Sanur, Ubud, maupun Bandara Internasional I Gusti Ngurah Rai.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition">
+                    <button @click="active = (active === 4 ? null : 4)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex items-center justify-between gap-4 hover:text-emerald-600 transition text-sm sm:text-base">
+                        <span>Bagaimana mekanisme pemesanan paket wisata?</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300" :class="active === 4 ? 'rotate-180 text-emerald-600' : 'text-slate-400'"></i>
+                    </button>
+                    <div x-show="active === 4" x-collapse class="px-6 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        Pilih paket tour yang diinginkan di website, lengkapi tanggal dan jumlah tamu pada formulir booking, lalu klik tombol pesan. Sistem akan membuat kode booking resmi dan menghubungkan Anda langsung ke WhatsApp Customer Service kami untuk konfirmasi instan.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition">
+                    <button @click="active = (active === 5 ? null : 5)" class="w-full px-6 py-4 text-left font-bold text-slate-800 flex items-center justify-between gap-4 hover:text-emerald-600 transition text-sm sm:text-base">
+                        <span>Apakah jadwal waktu tour fleksibel?</span>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300" :class="active === 5 ? 'rotate-180 text-emerald-600' : 'text-slate-400'"></i>
+                    </button>
+                    <div x-show="active === 5" x-collapse class="px-6 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        Sangat fleksibel! Waktu penjemputan dan durasi singgah di tiap destinasi wisata dapat disesuaikan dengan kenyamanan liburan Anda. Driver kami siap menemani dengan ramah dan penuh kesabaran.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Call to Action WhatsApp Banner (Parallax with Dark Overlay) -->
     <section class="relative py-24 bg-fixed bg-cover bg-center text-white overflow-hidden" 
              style="background-image: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=2000&q=80');">
@@ -325,3 +393,54 @@
         </div>
     </section>
 </div>
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "{{ '@' }}context": "https://schema.org",
+  "{{ '@' }}type": "FAQPage",
+  "mainEntity": [
+    {
+      "{{ '@' }}type": "Question",
+      "name": "Apa saja paket wisata Bali yang paling populer di {{ addslashes($company->company_name ?? 'Bothrex Bali Tour') }}?",
+      "acceptedAnswer": {
+        "{{ '@' }}type": "Answer",
+        "text": "Paket paling diminati traveler kami antara lain: One Day Tour Nusa Penida Barat (Kelingking & Diamond Beach), Jeep Sunrise Gunung Batur 4WD Kintamani, Ubud Swing & Monkey Forest Waterfall, serta Uluwatu Sunset & Pertunjukan Tari Kecak Jimbaran."
+      }
+    },
+    {
+      "{{ '@' }}type": "Question",
+      "name": "Apakah tour ini bersifat Private atau digabung dengan peserta lain?",
+      "acceptedAnswer": {
+        "{{ '@' }}type": "Answer",
+        "text": "Semua paket kami adalah Private Tour (Mobil Privat AC). Anda dan rombongan tidak akan digabung dengan orang asing, sehingga liburan lebih intim, leluasa, dan santai."
+      }
+    },
+    {
+      "{{ '@' }}type": "Question",
+      "name": "Apakah paket tour sudah termasuk penjemputan dan pengantaran ke hotel?",
+      "acceptedAnswer": {
+        "{{ '@' }}type": "Answer",
+        "text": "Ya, 100% Termasuk! Supir ramah kami akan menjemput langsung di lobi hotel/villa Anda di area Kuta, Seminyak, Legian, Canggu, Jimbaran, Nusa Dua, Sanur, Ubud, maupun Bandara Ngurah Rai."
+      }
+    },
+    {
+      "{{ '@' }}type": "Question",
+      "name": "Bagaimana mekanisme pemesanan paket wisata?",
+      "acceptedAnswer": {
+        "{{ '@' }}type": "Answer",
+        "text": "Pilih paket tour yang diinginkan di website, lengkapi tanggal dan jumlah tamu pada formulir booking, lalu klik tombol pesan. Sistem akan membuat kode booking resmi dan menghubungkan Anda langsung ke WhatsApp Customer Service kami untuk konfirmasi instan."
+      }
+    },
+    {
+      "{{ '@' }}type": "Question",
+      "name": "Apakah jadwal waktu tour fleksibel?",
+      "acceptedAnswer": {
+        "{{ '@' }}type": "Answer",
+        "text": "Sangat fleksibel! Waktu penjemputan dan durasi singgah di tiap destinasi wisata dapat disesuaikan dengan kenyamanan liburan Anda tanpa terburu-buru oleh jam kaku."
+      }
+    }
+  ]
+}
+</script>
+@endpush

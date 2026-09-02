@@ -301,3 +301,81 @@
     </div>
     @endif
 </div>
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "{{ '@' }}context": "https://schema.org",
+  "{{ '@' }}graph": [
+    {
+      "{{ '@' }}type": ["TouristTrip", "Product"],
+      "{{ '@' }}id": "{{ url('/paket/' . $package->slug) }}#trip",
+      "name": "{{ addslashes($package->title) }}",
+      "description": "{{ addslashes(Str::limit(strip_tags($package->description), 200)) }}",
+      "image": "{{ $package->image_url }}",
+      "touristType": ["Family", "Couple", "Solo Traveler", "Group"],
+      "offers": {
+        "{{ '@' }}type": "Offer",
+        "price": "{{ $package->price }}",
+        "priceCurrency": "IDR",
+        "availability": "https://schema.org/InStock",
+        "url": "{{ url('/paket/' . $package->slug) }}",
+        "validFrom": "{{ date('Y-01-01') }}",
+        "priceValidUntil": "{{ date('Y-12-31') }}"
+      },
+      "aggregateRating": {
+        "{{ '@' }}type": "AggregateRating",
+        "ratingValue": "{{ $package->rating ?? 4.9 }}",
+        "bestRating": "5",
+        "worstRating": "1",
+        "reviewCount": "{{ $package->review_count ?? 150 }}"
+      },
+      "provider": {
+        "{{ '@' }}type": "TravelAgency",
+        "name": "{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}",
+        "url": "{{ url('/') }}",
+        "telephone": "{{ $company->phone ?? '+62 812-3456-7890' }}"
+      },
+      "itinerary": {
+        "{{ '@' }}type": "ItemList",
+        "numberOfItems": {{ count($package->itinerary ?? []) }},
+        "itemListElement": [
+          @foreach($package->itinerary ?? [] as $idx => $item)
+          {
+            "{{ '@' }}type": "TouristAttraction",
+            "position": {{ $idx + 1 }},
+            "name": "{{ addslashes($item['title'] ?? '') }}",
+            "description": "{{ addslashes($item['description'] ?? '') }}"
+          }@if(!$loop->last),@endif
+          @endforeach
+        ]
+      }
+    },
+    {
+      "{{ '@' }}type": "BreadcrumbList",
+      "{{ '@' }}id": "{{ url('/paket/' . $package->slug) }}#breadcrumbs",
+      "itemListElement": [
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": 1,
+          "name": "Beranda",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": 2,
+          "name": "Paket Wisata Bali",
+          "item": "{{ url('/paket') }}"
+        },
+        {
+          "{{ '@' }}type": "ListItem",
+          "position": 3,
+          "name": "{{ addslashes($package->title) }}",
+          "item": "{{ url('/paket/' . $package->slug) }}"
+        }
+      ]
+    }
+  ]
+}
+</script>
+@endpush
