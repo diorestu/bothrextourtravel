@@ -9,13 +9,13 @@
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl">
                 <span class="inline-flex items-center gap-2 bg-emerald-500/20 backdrop-blur-md text-emerald-300 text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full border border-emerald-400/30 mb-6">
-                    <i class="fa-solid fa-sparkles text-amber-400"></i> Agen Tour & Travel Resmi Bali #1
+                    <i class="fa-solid fa-car-side text-amber-400"></i> Bothrex Driver — Sahabat Liburan Anda di Bali
                 </span>
                 <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight font-serif-heading leading-tight mb-6">
-                    Jelajahi Keajaiban & Keindahan <span class="text-emerald-400 underline decoration-amber-400 underline-offset-8">Surga Dewata Bali</span>
+                    Layanan Liburan & Private Tour <span class="text-emerald-400 underline decoration-amber-400 underline-offset-8">Terbaik di Bali</span>
                 </h1>
                 <p class="text-lg sm:text-xl text-slate-200 mb-8 leading-relaxed font-light">
-                    Nikmati pengalaman liburan tanpa ribet. Layanan kendaraan privat, supir berpengalaman, tiket destinasi lengkap, dan reservasi instan via WhatsApp.
+                    Bothrex Driver melayani segala kebutuhan holiday Anda di Bali. Mobil privat bersih ber-AC, supir ramah & berpengalaman, jadwal fleksibel santai, serta siap mengantar Anda ke destinasi favorit Ubud, Kintamani, Bedugul, dan Uluwatu.
                 </p>
 
                 <!-- Quick Search Bar -->
@@ -24,7 +24,7 @@
                         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                         <input type="text" 
                                wire:model="search" 
-                               placeholder="Cari paket (cth: Nusa Penida, Ubud, Jeep Batur)..." 
+                               placeholder="Cari rute tour (cth: Ubud, Kintamani, Bedugul, Uluwatu, Watersport)..." 
                                class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                     </div>
                     <div class="w-full md:w-auto">
@@ -36,44 +36,46 @@
 
                 <!-- Trust Badges -->
                 <div class="mt-8 flex flex-wrap gap-6 text-xs sm:text-sm text-slate-300 font-medium">
-                    <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Tanpa Biaya Tersembunyi</span>
-                    <span class="flex items-center gap-2"><i class="fa-solid fa-car text-emerald-400"></i> Mobil AC Private Clean</span>
-                    <span class="flex items-center gap-2"><i class="fa-brands fa-whatsapp text-emerald-400"></i> Layanan CS 24 Jam</span>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Mobil Privat (Bukan Gabungan)</span>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Waktu Fleksibel Tanpa Buru-Buru</span>
+                    <span class="flex items-center gap-2"><i class="fa-brands fa-whatsapp text-emerald-400"></i> Reservasi Cepat via WhatsApp</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Popular Destinations Showcase -->
+    <!-- 4 Main Trip Tours Showcase -->
     <section class="py-16 bg-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-widest text-emerald-600">Spot Ikonik Bali</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 font-serif-heading mt-1">Destinasi Wisata Populer</h2>
+                    <span class="text-xs font-bold uppercase tracking-widest text-emerald-600">Rute Liburan Terpopuler</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 font-serif-heading mt-1">4 Pilihan Tour Utama Bothrex</h2>
+                    <p class="text-slate-600 text-sm mt-2">Pilihan rute wisata paling diminati wisatawan domestik maupun mancanegara dengan supir privat berpengalaman.</p>
                 </div>
                 <a href="/destinasi" class="mt-4 md:mt-0 inline-flex items-center text-sm font-bold text-emerald-600 hover:text-emerald-700">
                     Lihat Semua Destinasi <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($destinations as $dest)
-                <a href="/destinasi/{{ $dest->slug }}" class="group relative rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 block h-80">
-                    <img src="{{ $dest->image_url }}" alt="{{ $dest->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+                <a href="/destinasi/{{ $dest->slug }}" class="group relative rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 block h-96 bg-slate-900">
+                    <img src="{{ $dest->image_url }}" alt="{{ $dest->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent"></div>
                     <div class="absolute top-4 left-4">
-                        <span class="bg-emerald-600/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full">
+                        <span class="bg-emerald-600/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
                             {{ $dest->category }}
                         </span>
                     </div>
-                    <div class="absolute bottom-6 left-6 right-6 text-white">
+                    <div class="absolute bottom-5 left-5 right-5 text-white">
                         <span class="text-xs text-amber-300 font-semibold block mb-1"><i class="fa-solid fa-location-dot mr-1"></i> {{ $dest->location }}</span>
-                        <h3 class="text-2xl font-bold font-serif-heading group-hover:text-emerald-400 transition-colors">{{ $dest->name }}</h3>
-                        <p class="text-xs text-slate-300 line-clamp-2 mt-2 font-light">{{ $dest->description }}</p>
-                        <div class="mt-4 flex items-center justify-between text-xs font-semibold pt-2 border-t border-white/20">
+                        <h3 class="text-xl font-bold font-serif-heading group-hover:text-emerald-400 transition-colors">{{ $dest->name }}</h3>
+                        <p class="text-xs text-slate-300 line-clamp-2 mt-1.5 font-light">{{ $dest->description }}</p>
+                        
+                        <div class="mt-3 flex items-center justify-between text-xs font-semibold pt-2 border-t border-white/20">
                             <span>{{ $dest->packages->count() }} Paket Tersedia</span>
-                            <span class="text-emerald-400 group-hover:translate-x-1 transition-transform">Eksplor <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i></span>
+                            <span class="text-emerald-400 group-hover:translate-x-1 transition-transform">Lihat Rute <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i></span>
                         </div>
                     </div>
                 </a>
@@ -86,87 +88,73 @@
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-12">
-                <span class="text-xs font-bold uppercase tracking-widest text-emerald-600">Pilihan Terbaik</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 font-serif-heading mt-1">Paket Tour Bali Terfavorit</h2>
-                <p class="text-slate-600 mt-3 text-sm sm:text-base">Pilih paket liburan sesuai keinginan Anda. Harga sudah termasuk mobil private, supir ramah, dan tiket tempat wisata.</p>
-
-                <!-- Category Filters -->
-                <div class="flex flex-wrap justify-center gap-2 mt-8">
-                    <button wire:click="$set('selectedCategory', 'all')" class="px-5 py-2 rounded-full text-xs font-bold transition-all {{ $selectedCategory === 'all' ? 'bg-emerald-600 text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                        Semua Paket
-                    </button>
-                    <button wire:click="$set('selectedCategory', 'Full Day Tour')" class="px-5 py-2 rounded-full text-xs font-bold transition-all {{ $selectedCategory === 'Full Day Tour' ? 'bg-emerald-600 text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                        Full Day Tour
-                    </button>
-                    <button wire:click="$set('selectedCategory', 'Adventure Tour')" class="px-5 py-2 rounded-full text-xs font-bold transition-all {{ $selectedCategory === 'Adventure Tour' ? 'bg-emerald-600 text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                        Jeep & Adventure
-                    </button>
-                    <button wire:click="$set('selectedCategory', 'Sunset Tour')" class="px-5 py-2 rounded-full text-xs font-bold transition-all {{ $selectedCategory === 'Sunset Tour' ? 'bg-emerald-600 text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                        Sunset & Culture
-                    </button>
-                </div>
+                <span class="text-xs font-bold uppercase tracking-widest text-emerald-600">Pilihan Paket Wisata Lengkap</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 font-serif-heading mt-1">Daftar Paket Tour & Itinerary</h2>
+                <p class="text-slate-600 mt-3 text-sm sm:text-base">Seluruh paket sudah termasuk mobil privat ber-AC, bahan bakar, supir ramah yang siap memandu & membantu foto, serta tiket objek wisata.</p>
             </div>
 
             <!-- Package Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
                 @forelse($featuredPackages as $pkg)
                 <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group">
                     <!-- Image & Badge -->
-                    <div class="relative h-60 overflow-hidden">
+                    <div class="relative h-64 overflow-hidden">
                         <img src="{{ $pkg->image_url }}" alt="{{ $pkg->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                         @if($pkg->badge)
-                        <div class="absolute top-4 left-4 bg-gradient-gold text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow-md">
+                        <div class="absolute top-4 left-4 bg-emerald-600 text-white text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-md">
                             {{ $pkg->badge }}
                         </div>
                         @endif
                         <div class="absolute bottom-4 left-4 right-4 flex justify-between items-center text-white text-xs font-medium">
-                            <span class="bg-black/40 backdrop-blur-md px-3 py-1 rounded-full"><i class="fa-solid fa-clock mr-1 text-emerald-400"></i> {{ $pkg->duration }}</span>
-                            <span class="bg-black/40 backdrop-blur-md px-3 py-1 rounded-full text-amber-400 font-bold"><i class="fa-solid fa-star mr-1"></i> {{ $pkg->rating }} ({{ $pkg->review_count }})</span>
+                            <span class="bg-black/50 backdrop-blur-md px-3 py-1 rounded-full"><i class="fa-solid fa-clock mr-1 text-emerald-400"></i> {{ $pkg->duration }}</span>
+                            <span class="bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-amber-400 font-bold"><i class="fa-solid fa-star mr-1"></i> {{ $pkg->rating }} ({{ $pkg->review_count }} ulasan)</span>
                         </div>
                     </div>
 
                     <!-- Content -->
-                    <div class="p-6 flex-grow flex flex-col justify-between">
+                    <div class="p-6 sm:p-8 flex-grow flex flex-col justify-between">
                         <div>
-                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-600 block mb-1">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-600 block mb-1">
                                 {{ $pkg->destination->name ?? 'Bali' }}
                             </span>
-                            <h3 class="text-xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors line-clamp-2 leading-snug">
+                            <h3 class="text-2xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors leading-snug">
                                 {{ $pkg->title }}
                             </h3>
-                            <p class="text-slate-600 text-xs mt-3 line-clamp-3 leading-relaxed">
+                            <p class="text-slate-600 text-xs sm:text-sm mt-3 leading-relaxed">
                                 {{ $pkg->description }}
                             </p>
 
-                            <!-- Inclusions Preview -->
-                            <div class="mt-4 pt-4 border-t border-slate-100">
-                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Fasilitas Termasuk:</span>
-                                <ul class="space-y-1 text-xs text-slate-600">
-                                    @foreach(array_slice($pkg->inclusions ?? [], 0, 3) as $inc)
-                                    <li class="flex items-center gap-2">
-                                        <i class="fa-solid fa-check text-emerald-500 text-xs"></i>
-                                        <span>{{ $inc }}</span>
-                                    </li>
+                            <!-- Itinerary Step Preview -->
+                            <div class="mt-5 pt-4 border-t border-slate-100">
+                                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-2.5">Destinasi & Rute Wisata:</span>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600">
+                                    @foreach(array_slice($pkg->itinerary ?? [], 0, 4) as $idx => $step)
+                                    <div class="flex items-start gap-2 bg-slate-50 p-2 rounded-xl border border-slate-100">
+                                        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                                            {{ $idx + 1 }}
+                                        </span>
+                                        <span class="font-medium text-slate-800 line-clamp-1">{{ $step['title'] }}</span>
+                                    </div>
                                     @endforeach
-                                </ul>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Price & Action -->
-                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <div class="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
-                                <span class="text-[10px] text-slate-400 uppercase font-semibold block">Harga Mulai Dari</span>
+                                <span class="text-[10px] text-slate-400 uppercase font-semibold block">Harga All-In Mulai Dari</span>
                                 <div class="flex items-baseline gap-2">
-                                    <span class="text-xl font-extrabold text-emerald-700">Rp {{ number_format($pkg->price, 0, ',', '.') }}</span>
+                                    <span class="text-2xl font-extrabold text-emerald-700">Rp {{ number_format($pkg->price, 0, ',', '.') }}</span>
                                     @if($pkg->original_price)
                                     <span class="text-xs text-slate-400 line-through">Rp {{ number_format($pkg->original_price, 0, ',', '.') }}</span>
                                     @endif
                                 </div>
-                                <span class="text-[10px] text-slate-500">/ orang (Private Tour)</span>
+                                <span class="text-[11px] text-slate-500">/ orang (Private Tour AC)</span>
                             </div>
-                            <a href="/paket/{{ $pkg->slug }}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md hover:shadow-emerald-600/30 flex items-center gap-1.5">
-                                Detail & Pesan <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            <a href="/paket/{{ $pkg->slug }}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold px-6 py-3 rounded-xl transition-all shadow-md hover:shadow-emerald-600/30 flex items-center justify-center gap-2">
+                                Lihat Rute & Booking <i class="fa-solid fa-arrow-right text-xs"></i>
                             </a>
                         </div>
                     </div>
@@ -174,10 +162,132 @@
                 @empty
                 <div class="col-span-full text-center py-12 bg-slate-50 rounded-3xl border border-dashed border-slate-300">
                     <i class="fa-solid fa-compass text-4xl text-slate-300 mb-3"></i>
-                    <p class="text-slate-600 font-semibold">Tidak ditemukan paket wisata yang sesuai kriteria pencarian.</p>
-                    <button wire:click="$set('search', ''); $set('selectedCategory', 'all')" class="mt-4 text-xs font-bold text-emerald-600 underline">Reset Filter</button>
+                    <p class="text-slate-600 font-semibold">Tidak ditemukan paket wisata yang sesuai.</p>
                 </div>
                 @endforelse
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Highlights: Adventure Activities & Bali Shopping Places -->
+    <section class="py-20 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                
+                <!-- Left Column: Aktivitas Adventure Favorit -->
+                <div class="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-person-snowboarding"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Aktivitas Seru & Adventure</span>
+                            <h3 class="text-2xl font-extrabold text-slate-900 font-serif-heading">Wahana Petualangan di Bali</h3>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-6">
+                        Lengkapi liburan Anda dengan berbagai pilihan aktivitas seru yang dapat digabungkan langsung dengan paket tour kami:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="flex items-center gap-3 p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-emerald-300 transition">
+                            <i class="fa-solid fa-motorcycle text-emerald-600 text-lg"></i>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">ATV Ride Adventure</h4>
+                                <span class="text-[10px] text-slate-500">Trek hutan, sungai & goa Ubud</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-emerald-300 transition">
+                            <i class="fa-solid fa-water text-blue-600 text-lg"></i>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">Ayung Water Rafting</h4>
+                                <span class="text-[10px] text-slate-500">Arung jeram seru jeram kelas II-III</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-emerald-300 transition">
+                            <i class="fa-solid fa-truck-monster text-rose-600 text-lg"></i>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">Sunrise Jeep 4WD Batur</h4>
+                                <span class="text-[10px] text-slate-500">Sunrise & lautan pasir Black Lava</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-emerald-300 transition">
+                            <i class="fa-solid fa-mask-snorkel text-cyan-600 text-lg"></i>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">Tanjung Benoa Watersport</h4>
+                                <span class="text-[10px] text-slate-500">Parasailing, Jet Ski, Diving, Sea Walker</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-emerald-300 transition">
+                            <i class="fa-solid fa-child-reaching text-amber-600 text-lg"></i>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">Ubud Jungle Swing</h4>
+                                <span class="text-[10px] text-slate-500">Ayunan ekstrem & spot foto sarang burung</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-emerald-300 transition">
+                            <i class="fa-solid fa-car text-purple-600 text-lg"></i>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">Buggy Car Offroad</h4>
+                                <span class="text-[10px] text-slate-500">Menyusuri trek alam pedesaan</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Pusat Oleh-Oleh Khas Bali -->
+                <div class="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Shopping & Souvenir</span>
+                            <h3 class="text-2xl font-extrabold text-slate-900 font-serif-heading">Pusat Oleh-Oleh Khas Bali</h3>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-6">
+                        Driver kami siap mengantar Anda berbelanja pie susu, pakaian pantai, kopi, dan cinderamata di pusat oleh-oleh terlengkap dengan harga pasti:
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shrink-0 mt-0.5">
+                                <i class="fa-solid fa-store"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">Krisna Oleh-Oleh Khas Bali</h4>
+                                <p class="text-xs text-slate-500 mt-1">Pusat oleh-oleh terbesar dan terlengkap di Bali dengan harga pas, varian camilan khas, pie susu, dan baju barong.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shrink-0 mt-0.5">
+                                <i class="fa-solid fa-gift"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">Agung Bali Oleh-Oleh</h4>
+                                <p class="text-xs text-slate-500 mt-1">Menyediakan aneka pakaian santai khas Bali, kerajinan kayu, lukisan, dan kain pantai berkualitas tinggi.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shrink-0 mt-0.5">
+                                <i class="fa-solid fa-basket-shopping"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900">The Keranjang Bali</h4>
+                                <p class="text-xs text-slate-500 mt-1">Konsep wisata belanja dan edukasi budaya "Bali dalam Satu Keranjang" dengan arsitektur unik dan spot foto menarik.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -311,7 +421,13 @@
                         <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300" :class="active === 1 ? 'rotate-180 text-emerald-600' : 'text-slate-400'"></i>
                     </button>
                     <div x-show="active === 1" x-collapse class="px-6 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        Paket paling diminati traveler kami antara lain: <strong>One Day Tour Nusa Penida Barat (Kelingking & Diamond Beach)</strong>, <strong>Jeep Sunrise Gunung Batur 4WD Kintamani</strong>, <strong>Ubud Swing & Monkey Forest Waterfall</strong>, serta <strong>Uluwatu Sunset & Pertunjukan Tari Kecak Jimbaran</strong>.
+                        Kami menyediakan 4 paket tour utama terlengkap: 
+                        <ul class="list-disc pl-5 mt-2 space-y-1">
+                            <li><strong>Ubud Tour:</strong> Galeri Batik & Perak, Coffee Plantation Luwak, Lunch Bebek Joni, Tegalalang Rice Terrace, Monkey Forest, Tegenungan Waterfall (+ Wahana ATV/Rafting/Swing/Buggy).</li>
+                            <li><strong>Kintamani Tour:</strong> Panorama Gunung & Danau Batur, Lunch Batur Sari Resto, Kebun Stroberi, Pura Tirta Empul, Desa Penglipuran (+ Sunrise Jeep 4WD Black Lava).</li>
+                            <li><strong>Bedugul Tour:</strong> Pura Ulun Danu Beratan, The Blooms Garden, Handara Gate, dan Lunch Buffet Mentari Resto.</li>
+                            <li><strong>Uluwatu Tour:</strong> Tanjung Benoa Watersport, Pantai Pandawa & Melasti, Pura Uluwatu & Tari Kecak Sunset, Dinner Seafood Jimbaran, serta Pusat Oleh-Oleh (Krisna / Agung Bali / The Keranjang).</li>
+                        </ul>
                     </div>
                 </div>
 

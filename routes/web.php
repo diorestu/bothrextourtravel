@@ -24,7 +24,7 @@ Route::get('/destinasi/{slug}', DestinationDetailPage::class)->name('destination
 Route::get('/sitemap.xml', function() {
     $packages = \App\Models\TourPackage::where('is_active', true)->with('destination')->get();
     $destinations = \App\Models\Destination::where('is_active', true)->get();
-    $baseUrl = config('app.url', url('/'));
+    $baseUrl = rtrim(config('app.url') ?: url('/'), '/');
 
     $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . "\n";
@@ -39,6 +39,10 @@ Route::get('/sitemap.xml', function() {
     $xml .= "    <changefreq>daily</changefreq>\n";
     $xml .= "    <priority>1.0</priority>\n";
     $xml .= "    <image:image>\n";
+    $xml .= "      <image:loc>" . htmlspecialchars($baseUrl . '/images/logo.png', ENT_XML1, 'UTF-8') . "</image:loc>\n";
+    $xml .= "      <image:title>Bothrex Bali Tour &amp; Travel - Logo Resmi</image:title>\n";
+    $xml .= "    </image:image>\n";
+    $xml .= "    <image:image>\n";
     $xml .= "      <image:loc>https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>\n";
     $xml .= "      <image:title>Bothrex Bali Tour &amp; Travel - Paket Liburan Bali</image:title>\n";
     $xml .= "    </image:image>\n";
@@ -46,7 +50,7 @@ Route::get('/sitemap.xml', function() {
 
     // 2. Packages Catalog Page
     $xml .= "  <url>\n";
-    $xml .= "    <loc>" . htmlspecialchars($baseUrl, ENT_XML1, 'UTF-8') . "/paket</loc>\n";
+    $xml .= "    <loc>" . htmlspecialchars($baseUrl . '/paket', ENT_XML1, 'UTF-8') . "</loc>\n";
     $xml .= "    <lastmod>" . date('Y-m-d\TH:i:sP') . "</lastmod>\n";
     $xml .= "    <changefreq>daily</changefreq>\n";
     $xml .= "    <priority>0.9</priority>\n";
@@ -54,7 +58,7 @@ Route::get('/sitemap.xml', function() {
 
     // 3. Destinations Catalog Page
     $xml .= "  <url>\n";
-    $xml .= "    <loc>" . htmlspecialchars($baseUrl, ENT_XML1, 'UTF-8') . "/destinasi</loc>\n";
+    $xml .= "    <loc>" . htmlspecialchars($baseUrl . '/destinasi', ENT_XML1, 'UTF-8') . "</loc>\n";
     $xml .= "    <lastmod>" . date('Y-m-d\TH:i:sP') . "</lastmod>\n";
     $xml .= "    <changefreq>weekly</changefreq>\n";
     $xml .= "    <priority>0.9</priority>\n";
@@ -74,6 +78,16 @@ Route::get('/sitemap.xml', function() {
             $xml .= "      <image:title>" . htmlspecialchars($pkg->title, ENT_XML1, 'UTF-8') . "</image:title>\n";
             $xml .= "      <image:caption>" . htmlspecialchars(Str::limit(strip_tags($pkg->description), 160), ENT_XML1, 'UTF-8') . "</image:caption>\n";
             $xml .= "    </image:image>\n";
+        }
+        if (!empty($pkg->gallery) && is_array($pkg->gallery)) {
+            foreach ($pkg->gallery as $galImg) {
+                if ($galImg !== $pkg->image_url) {
+                    $xml .= "    <image:image>\n";
+                    $xml .= "      <image:loc>" . htmlspecialchars($galImg, ENT_XML1, 'UTF-8') . "</image:loc>\n";
+                    $xml .= "      <image:title>" . htmlspecialchars($pkg->title . ' - Foto Galeri', ENT_XML1, 'UTF-8') . "</image:title>\n";
+                    $xml .= "    </image:image>\n";
+                }
+            }
         }
         $xml .= "  </url>\n";
     }
@@ -99,14 +113,14 @@ Route::get('/sitemap.xml', function() {
     $xml .= '</urlset>';
 
     return response($xml, 200, [
-        'Content-Type' => 'application/xml; charset=utf-8',
-        'X-Robots-Tag' => 'noindex',
+        'Content-Type' => 'text/xml; charset=utf-8',
+        'Cache-Control' => 'public, max-age=3600',
     ]);
 });
 
 // Dynamic robots.txt
 Route::get('/robots.txt', function() {
-    $baseUrl = config('app.url', url('/'));
+    $baseUrl = rtrim(config('app.url') ?: url('/'), '/');
     $robots = "User-agent: *\n";
     $robots .= "Allow: /\n";
     $robots .= "Disallow: /admin/\n";
