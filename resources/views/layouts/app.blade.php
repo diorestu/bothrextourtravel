@@ -24,6 +24,62 @@
         })();
     </script>
 
+    <!-- Currency Store Initializer -->
+    <script>
+        (function() {
+            var defaultCurr = localStorage.getItem('user_currency') || 'USD';
+            if (!localStorage.getItem('user_currency')) {
+                localStorage.setItem('user_currency', defaultCurr);
+            }
+
+            function setupCurrencyStore() {
+                if (window.Alpine && !window.Alpine.store('currency')) {
+                    window.Alpine.store('currency', {
+                        current: localStorage.getItem('user_currency') || 'USD',
+                        currencies: [
+                            { code: 'IDR', name: 'IDR (Rp)', symbol: 'Rp', flag: '🇮🇩', rate: 1, prefix: 'Rp ', suffix: '', decimals: 0, group: '.', dec: ',' },
+                            { code: 'USD', name: 'USD ($)', symbol: '$', flag: '🇺🇸', rate: 1 / 16000, prefix: '$', suffix: '', decimals: 0, group: ',', dec: '.' },
+                            { code: 'MYR', name: 'MYR (RM)', symbol: 'RM', flag: '🇲🇾', rate: 1 / 3650, prefix: 'RM ', suffix: '', decimals: 0, group: ',', dec: '.' },
+                            { code: 'CNY', name: 'CNY (¥)', symbol: '¥', flag: '🇨🇳', rate: 1 / 2250, prefix: '¥', suffix: '', decimals: 0, group: ',', dec: '.' },
+                            { code: 'EUR', name: 'EUR (€)', symbol: '€', flag: '🇪🇺', rate: 1 / 17500, prefix: '€', suffix: '', decimals: 0, group: ',', dec: '.' }
+                        ],
+                        get active() {
+                            var self = this;
+                            return this.currencies.find(function(c) { return c.code === self.current; }) || this.currencies[1];
+                        },
+                        set(code) {
+                            this.current = code;
+                            localStorage.setItem('user_currency', code);
+                            window.dispatchEvent(new CustomEvent('currency-changed', { detail: { currency: code } }));
+                        },
+                        format(amount) {
+                            if (amount === undefined || amount === null || amount === '') return '';
+                            var num = Number(amount);
+                            if (isNaN(num)) return amount;
+                            var curr = this.active;
+                            if (curr.code === 'IDR') {
+                                return curr.prefix + Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + curr.suffix;
+                            }
+                            var converted = Math.round(num * curr.rate);
+                            return curr.prefix + converted.toString().replace(/\B(?=(\d{3})+(?!\d))/g, curr.group) + curr.suffix;
+                        },
+                        convert(amount) {
+                            var num = Number(amount) || 0;
+                            var curr = this.active;
+                            return curr.code === 'IDR' ? num : Math.round(num * curr.rate);
+                        }
+                    });
+                }
+            }
+
+            if (window.Alpine) {
+                setupCurrencyStore();
+            } else {
+                document.addEventListener('alpine:init', setupCurrencyStore);
+            }
+        })();
+    </script>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ6VCG23P9"></script>
     <script>
@@ -235,8 +291,62 @@
                        class="transition-colors py-1">Testimoni</a>
                 </nav>
 
-                <!-- Desktop Action CTA & Language Selector -->
-                <div class="hidden md:flex items-center gap-3">
+                <!-- Desktop Action CTA, Currency & Language Selectors -->
+                <div class="hidden md:flex items-center gap-2.5">
+                    <!-- Currency Selector Dropdown -->
+                    <div x-data="{
+                        currOpen: false,
+                        get active() {
+                            return ($store && $store.currency) ? $store.currency.active : { code: 'USD', symbol: '$', flag: '🇺🇸' };
+                        },
+                        get list() {
+                            return ($store && $store.currency) ? $store.currency.currencies : [];
+                        },
+                        select(code) {
+                            if ($store && $store.currency) $store.currency.set(code);
+                            this.currOpen = false;
+                        }
+                    }" class="relative inline-block text-left">
+                        <button @click="currOpen = !currOpen" 
+                                type="button" 
+                                aria-label="Select Currency"
+                                class="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold transition-all border shadow-sm cursor-pointer"
+                                :class="scrolled ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200' : 'bg-white/15 hover:bg-white/25 text-white border-white/20 backdrop-blur-md'">
+                            <span x-text="active.flag" class="text-sm leading-none"></span>
+                            <span x-text="active.code" class="font-bold tracking-wider leading-none"></span>
+                            <i class="fa-solid fa-chevron-down text-[9px] opacity-70 transition-transform" :class="currOpen ? 'rotate-180' : ''"></i>
+                        </button>
+
+                        <div x-show="currOpen" 
+                             @click.outside="currOpen = false"
+                             x-transition:enter="transition ease-out duration-200 transform"
+                             x-transition:enter-start="opacity-0 scale-95 -translate-y-2"
+                             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-150 transform"
+                             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 scale-95 -translate-y-2"
+                             class="absolute right-0 mt-2 w-48 rounded-2xl bg-white text-slate-800 shadow-2xl ring-1 ring-black/5 p-1.5 z-50 divide-y divide-slate-100 border border-slate-100"
+                             style="display: none;">
+                            <div class="px-3 py-2 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                                Select Currency
+                            </div>
+                            <div class="py-1">
+                                <template x-for="c in list" :key="c.code">
+                                    <button @click="select(c.code)" 
+                                            type="button" 
+                                            class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all hover:bg-slate-100 text-left cursor-pointer"
+                                            :class="($store && $store.currency && $store.currency.current === c.code) ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700'">
+                                        <span class="flex items-center gap-2">
+                                            <span x-text="c.flag" class="text-base"></span>
+                                            <span x-text="c.name"></span>
+                                        </span>
+                                        <i x-show="$store && $store.currency && $store.currency.current === c.code" class="fa-solid fa-check text-emerald-600 text-xs"></i>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Language Selector Dropdown -->
                     <div x-data="{
                         langOpen: false,
@@ -244,6 +354,7 @@
                         languages: [
                             { code: 'en', name: 'English', short: 'EN', flag: '🇬🇧' },
                             { code: 'id', name: 'Bahasa Indonesia', short: 'ID', flag: '🇮🇩' },
+                            { code: 'ms', name: 'Bahasa Melayu', short: 'MY', flag: '🇲🇾' },
                             { code: 'zh-CN', name: '中文 (Mandarin)', short: '中文', flag: '🇨🇳' },
                             { code: 'es', name: 'Español (Spanish)', short: 'ES', flag: '🇪🇸' }
                         ],
@@ -331,35 +442,67 @@
              x-transition:leave-end="opacity-0 -translate-y-4 scale-95"
              class="md:hidden bg-white/95 backdrop-blur-lg border-b border-slate-200 shadow-xl px-4 pt-3 pb-6 space-y-3">
             
-            <!-- Mobile Language Selector Section -->
-            <div x-data="{
-                currentLang: window.getCurrentLang ? window.getCurrentLang() : 'en',
-                languages: [
-                    { code: 'en', name: 'English', short: '🇬🇧 EN' },
-                    { code: 'id', name: 'Bahasa Indonesia', short: '🇮🇩 ID' },
-                    { code: 'zh-CN', name: '中文 Mandarin', short: '🇨🇳 中文' },
-                    { code: 'es', name: 'Español Spanish', short: '🇪🇸 ES' }
-                ],
-                selectLang(code) {
-                    this.currentLang = code;
-                    if (window.changeLanguage) {
-                        window.changeLanguage(code);
+            <!-- Mobile Currency & Language Selectors Section -->
+            <div class="space-y-2.5">
+                <!-- Mobile Currency Selector -->
+                <div x-data="{
+                    get list() {
+                        return ($store && $store.currency) ? $store.currency.currencies : [];
+                    },
+                    select(code) {
+                        if ($store && $store.currency) $store.currency.set(code);
                     }
-                }
-            }" class="p-3 bg-slate-50 rounded-2xl border border-slate-200">
-                <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                    <i class="fa-solid fa-globe text-emerald-600"></i> Select Language:
+                }" class="p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-coins text-emerald-600"></i> Select Currency:
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        <template x-for="c in list" :key="c.code">
+                            <button @click="select(c.code)" 
+                                    type="button" 
+                                    class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all border text-left cursor-pointer"
+                                    :class="($store && $store.currency && $store.currency.current === c.code) ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'">
+                                <span class="flex items-center gap-1.5">
+                                    <span x-text="c.flag"></span>
+                                    <span x-text="c.name"></span>
+                                </span>
+                                <i x-show="$store && $store.currency && $store.currency.current === c.code" class="fa-solid fa-check text-xs"></i>
+                            </button>
+                        </template>
+                    </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <template x-for="lang in languages" :key="lang.code">
-                        <button @click="selectLang(lang.code)" 
-                                type="button" 
-                                class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all border text-left cursor-pointer"
-                                :class="currentLang === lang.code ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'">
-                            <span x-text="lang.short"></span>
-                            <i x-show="currentLang === lang.code" class="fa-solid fa-check text-xs"></i>
-                        </button>
-                    </template>
+
+                <!-- Mobile Language Selector Section -->
+                <div x-data="{
+                    currentLang: window.getCurrentLang ? window.getCurrentLang() : 'en',
+                    languages: [
+                        { code: 'en', name: 'English', short: '🇬🇧 EN' },
+                        { code: 'id', name: 'Bahasa Indonesia', short: '🇮🇩 ID' },
+                        { code: 'ms', name: 'Bahasa Melayu', short: '🇲🇾 MY' },
+                        { code: 'zh-CN', name: '中文 Mandarin', short: '🇨🇳 中文' },
+                        { code: 'es', name: 'Español Spanish', short: '🇪🇸 ES' }
+                    ],
+                    selectLang(code) {
+                        this.currentLang = code;
+                        if (window.changeLanguage) {
+                            window.changeLanguage(code);
+                        }
+                    }
+                }" class="p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-globe text-emerald-600"></i> Select Language:
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        <template x-for="lang in languages" :key="lang.code">
+                            <button @click="selectLang(lang.code)" 
+                                    type="button" 
+                                    class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all border text-left cursor-pointer"
+                                    :class="currentLang === lang.code ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'">
+                                <span x-text="lang.short"></span>
+                                <i x-show="currentLang === lang.code" class="fa-solid fa-check text-xs"></i>
+                            </button>
+                        </template>
+                    </div>
                 </div>
             </div>
 
@@ -554,7 +697,7 @@
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'id',
-                includedLanguages: 'id,en,zh-CN,es',
+                includedLanguages: 'id,en,ms,zh-CN,es',
                 autoDisplay: false
             }, 'google_translate_element');
         }

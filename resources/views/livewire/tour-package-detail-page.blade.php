@@ -123,9 +123,9 @@
                     <div class="pb-6 border-b border-slate-100 mb-6">
                         <span class="text-xs text-slate-400 uppercase font-semibold block">Harga Spesial All-In</span>
                         <div class="flex items-baseline gap-2 mt-1">
-                            <span class="text-3xl font-extrabold text-emerald-700">Rp {{ number_format($package->price, 0, ',', '.') }}</span>
+                            <span class="text-3xl font-extrabold text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$package->price }}) : 'Rp {{ number_format($package->price, 0, ',', '.') }}'">Rp {{ number_format($package->price, 0, ',', '.') }}</span>
                             @if($package->original_price)
-                            <span class="text-sm text-slate-400 line-through">Rp {{ number_format($package->original_price, 0, ',', '.') }}</span>
+                            <span class="text-sm text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$package->original_price }}) : 'Rp {{ number_format($package->original_price, 0, ',', '.') }}'">Rp {{ number_format($package->original_price, 0, ',', '.') }}</span>
                             @endif
                         </div>
                         <span class="text-xs text-slate-500 mt-1 block">/ orang (Private Tour Car & Guide)</span>
@@ -199,11 +199,11 @@
                         <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 my-4">
                             <div class="flex justify-between items-center text-xs text-slate-600 mb-1">
                                 <span>Kalkulasi Total ({{ $number_of_guests ?? 1 }} Orang):</span>
-                                <span>{{ $number_of_guests ?? 1 }} x Rp {{ number_format($package->price, 0, ',', '.') }}</span>
+                                <span x-text="({{ (int)($number_of_guests ?? 1) }}) + ' x ' + ($store.currency ? $store.currency.format({{ (int)$package->price }}) : 'Rp {{ number_format($package->price, 0, ',', '.') }}')">{{ $number_of_guests ?? 1 }} x Rp {{ number_format($package->price, 0, ',', '.') }}</span>
                             </div>
                             <div class="flex justify-between items-center pt-2 border-t border-emerald-200 text-sm font-extrabold text-emerald-900">
                                 <span>Total Pembayaran:</span>
-                                <span class="text-lg text-emerald-700">Rp {{ number_format($this->calculateTotal(), 0, ',', '.') }}</span>
+                                <span class="text-lg text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$this->calculateTotal() }}) : 'Rp {{ number_format($this->calculateTotal(), 0, ',', '.') }}'">Rp {{ number_format($this->calculateTotal(), 0, ',', '.') }}</span>
                             </div>
                         </div>
 
@@ -283,7 +283,7 @@
                 </div>
                 <div class="flex justify-between pt-2 border-t border-slate-200 font-bold text-slate-900">
                     <span>Total Biaya:</span>
-                    <span class="text-emerald-700 text-sm">Rp {{ number_format($createdBooking->total_price, 0, ',', '.') }}</span>
+                    <span class="text-emerald-700 text-sm" x-text="$store.currency ? $store.currency.format({{ (int)$createdBooking->total_price }}) : 'Rp {{ number_format($createdBooking->total_price, 0, ',', '.') }}'">Rp {{ number_format($createdBooking->total_price, 0, ',', '.') }}</span>
                 </div>
             </div>
 

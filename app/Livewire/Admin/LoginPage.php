@@ -13,6 +13,13 @@ class LoginPage extends Component
     public $password = '';
     public $remember = false;
 
+    public function mount()
+    {
+        if (Auth::check()) {
+            return redirect()->route('admin.bookings');
+        }
+    }
+
     public function login()
     {
         $this->validate([
@@ -33,10 +40,6 @@ class LoginPage extends Component
 
     public function render()
     {
-        if (Auth::check()) {
-            return redirect()->route('admin.bookings');
-        }
-
         return view('livewire.admin.login-page')->layout('layouts.app', [
             'title' => 'Login Admin Panel - Bothrex Bali Tour',
             'robots' => 'noindex, nofollow',
