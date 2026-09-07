@@ -70,7 +70,7 @@
 
                     <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
                         <div>
-                            <span class="text-[10px] text-slate-400 block uppercase font-semibold">Mulai Dari</span>
+                            <span class="text-[10px] text-slate-400 block uppercase font-semibold">Mulai Dari / Orang / Hari</span>
                             <span class="text-lg font-extrabold text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->price }}) : 'Rp {{ number_format($pkg->price, 0, ',', '.') }}'">Rp {{ number_format($pkg->price, 0, ',', '.') }}</span>
                         </div>
                         <a href="/paket/{{ $pkg->slug }}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow">

@@ -128,7 +128,7 @@
                             <span class="text-sm text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$package->original_price }}) : 'Rp {{ number_format($package->original_price, 0, ',', '.') }}'">Rp {{ number_format($package->original_price, 0, ',', '.') }}</span>
                             @endif
                         </div>
-                        <span class="text-xs text-slate-500 mt-1 block">/ orang (Private Tour Car & Guide)</span>
+                        <span class="text-xs text-slate-500 mt-1 block">/ orang / hari (Private Tour Car & Guide)</span>
                     </div>
 
                     <!-- Booking Form -->
@@ -160,21 +160,45 @@
                             @error('customer_phone') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
                         </div>
 
-                        <div class="grid grid-cols-2 gap-3">
+                        <!-- Date, Duration & Guests Selection -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Tanggal Tour *</label>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                    <i class="fa-solid fa-calendar text-emerald-600 mr-1"></i> Tgl Tour *
+                                </label>
                                 <input type="date" 
                                        wire:model.live="travel_date" 
-                                       class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                       class="w-full px-2.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
                                 @error('travel_date') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Jumlah Peserta *</label>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                    <i class="fa-solid fa-clock text-emerald-600 mr-1"></i> Durasi *
+                                </label>
+                                <select wire:model.live="duration_days" 
+                                        class="w-full px-2.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium cursor-pointer">
+                                    <option value="1">1 Hari (Full Day)</option>
+                                    <option value="2">2 Hari</option>
+                                    <option value="3">3 Hari</option>
+                                    <option value="4">4 Hari</option>
+                                    <option value="5">5 Hari</option>
+                                    <option value="6">6 Hari</option>
+                                    <option value="7">7 Hari (1 Minggu)</option>
+                                    <option value="10">10 Hari</option>
+                                    <option value="14">14 Hari (2 Minggu)</option>
+                                </select>
+                                @error('duration_days') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                    <i class="fa-solid fa-users text-emerald-600 mr-1"></i> Peserta *
+                                </label>
                                 <input type="number" 
                                        wire:model.live="number_of_guests" 
                                        min="1" max="50" 
-                                       class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                       class="w-full px-2.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
                                 @error('number_of_guests') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -191,19 +215,25 @@
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Catatan Tambahan</label>
                             <textarea wire:model="special_notes" 
                                       rows="2" 
-                                      placeholder="Permintaan khusus / car seat / alergi makanan..." 
+                                      placeholder="Permintaan khusus / car seat / preferensi itinerary..." 
                                       class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
                         </div>
 
-                        <!-- Live Price Summary Box -->
-                        <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 my-4">
-                            <div class="flex justify-between items-center text-xs text-slate-600 mb-1">
-                                <span>Kalkulasi Total ({{ $number_of_guests ?? 1 }} Orang):</span>
-                                <span x-text="({{ (int)($number_of_guests ?? 1) }}) + ' x ' + ($store.currency ? $store.currency.format({{ (int)$package->price }}) : 'Rp {{ number_format($package->price, 0, ',', '.') }}')">{{ $number_of_guests ?? 1 }} x Rp {{ number_format($package->price, 0, ',', '.') }}</span>
+                        <!-- Live Price Breakdown & Total Cost Summary Box -->
+                        <div class="bg-emerald-50/90 p-4 rounded-2xl border border-emerald-200 my-4 space-y-2">
+                            <div class="flex justify-between items-center text-xs text-slate-600">
+                                <span>Rincian Estimasi Biaya:</span>
+                                <span class="font-medium text-slate-800" x-text="({{ (int)($number_of_guests ?? 1) }} + ' Orang') + ' x ' + ({{ (int)($duration_days ?? 1) }} + ' Hari') + ' x ' + ($store.currency ? $store.currency.format({{ (int)$package->price }}) : 'Rp {{ number_format($package->price, 0, ',', '.') }}')">
+                                    {{ $number_of_guests ?? 1 }} Orang x {{ $duration_days ?? 1 }} Hari x Rp {{ number_format($package->price, 0, ',', '.') }}
+                                </span>
                             </div>
-                            <div class="flex justify-between items-center pt-2 border-t border-emerald-200 text-sm font-extrabold text-emerald-900">
-                                <span>Total Pembayaran:</span>
-                                <span class="text-lg text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$this->calculateTotal() }}) : 'Rp {{ number_format($this->calculateTotal(), 0, ',', '.') }}'">Rp {{ number_format($this->calculateTotal(), 0, ',', '.') }}</span>
+                            <div class="flex justify-between items-center pt-2 border-t border-emerald-200 text-sm font-extrabold text-emerald-950">
+                                <span class="flex items-center gap-1.5">
+                                    <i class="fa-solid fa-calculator text-emerald-600"></i> Estimasi Total Biaya Tour:
+                                </span>
+                                <span class="text-xl font-extrabold text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$this->calculateTotal() }}) : 'Rp {{ number_format($this->calculateTotal(), 0, ',', '.') }}'">
+                                    Rp {{ number_format($this->calculateTotal(), 0, ',', '.') }}
+                                </span>
                             </div>
                         </div>
 
@@ -264,7 +294,7 @@
                 📌 {{ $createdBooking->booking_code }}
             </div>
 
-            <div class="bg-slate-50 p-4 rounded-2xl text-left text-xs space-y-1.5 border border-slate-200 my-2">
+            <div class="bg-slate-50 p-4 rounded-2xl text-left text-xs space-y-2 border border-slate-200 my-2">
                 <div class="flex justify-between">
                     <span class="text-slate-500">Paket:</span>
                     <strong class="text-slate-800">{{ $package->title }}</strong>
@@ -274,16 +304,20 @@
                     <strong class="text-slate-800">{{ $createdBooking->customer_name }}</strong>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-slate-500">Tanggal:</span>
+                    <span class="text-slate-500">Tanggal Mulai:</span>
                     <strong class="text-slate-800">{{ $createdBooking->travel_date->format('d M Y') }}</strong>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Durasi Tour:</span>
+                    <strong class="text-emerald-700 font-bold">{{ $createdBooking->duration_days ?? 1 }} Hari</strong>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-slate-500">Jumlah Peserta:</span>
                     <strong class="text-slate-800">{{ $createdBooking->number_of_guests }} Orang</strong>
                 </div>
                 <div class="flex justify-between pt-2 border-t border-slate-200 font-bold text-slate-900">
-                    <span>Total Biaya:</span>
-                    <span class="text-emerald-700 text-sm" x-text="$store.currency ? $store.currency.format({{ (int)$createdBooking->total_price }}) : 'Rp {{ number_format($createdBooking->total_price, 0, ',', '.') }}'">Rp {{ number_format($createdBooking->total_price, 0, ',', '.') }}</span>
+                    <span>Estimasi Total Biaya:</span>
+                    <span class="text-emerald-700 text-sm font-extrabold" x-text="$store.currency ? $store.currency.format({{ (int)$createdBooking->total_price }}) : 'Rp {{ number_format($createdBooking->total_price, 0, ',', '.') }}'">Rp {{ number_format($createdBooking->total_price, 0, ',', '.') }}</span>
                 </div>
             </div>
 

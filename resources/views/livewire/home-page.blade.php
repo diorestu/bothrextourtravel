@@ -151,7 +151,7 @@
                                     <span class="text-xs text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->original_price }}) : 'Rp {{ number_format($pkg->original_price, 0, ',', '.') }}'">Rp {{ number_format($pkg->original_price, 0, ',', '.') }}</span>
                                     @endif
                                 </div>
-                                <span class="text-[11px] text-slate-500">/ orang (Private Tour AC)</span>
+                                <span class="text-[11px] text-slate-500">/ orang / hari (Private Tour AC)</span>
                             </div>
                             <a href="/paket/{{ $pkg->slug }}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold px-6 py-3 rounded-xl transition-all shadow-md hover:shadow-emerald-600/30 flex items-center justify-center gap-2">
                                 Lihat Rute & Booking <i class="fa-solid fa-arrow-right text-xs"></i>

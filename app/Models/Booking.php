@@ -13,6 +13,7 @@ class Booking extends Model
         'customer_email',
         'customer_phone',
         'travel_date',
+        'duration_days',
         'number_of_guests',
         'total_price',
         'pickup_location',
@@ -22,6 +23,7 @@ class Booking extends Model
 
     protected $casts = [
         'travel_date' => 'date',
+        'duration_days' => 'integer',
         'total_price' => 'float',
     ];
 
@@ -40,6 +42,7 @@ class Booking extends Model
         $packageTitle = $this->tourPackage ? $this->tourPackage->title : 'Paket Tour Bali';
         $formattedDate = $this->travel_date ? $this->travel_date->format('d M Y') : '-';
         $totalFormatted = $this->formatted_total_price;
+        $days = $this->duration_days ?: 1;
 
         $packageTag = '[WEB-TOUR]';
         if (preg_match('/\[(WEB-TOUR-[A-Z0-9\-]+?)(?:-[0-9]+-[0-9]+)?\]/', $this->booking_code, $matches)) {
@@ -63,15 +66,16 @@ class Booking extends Model
 
         $message = "{$packageTag}\n\n";
         $message .= "Halo Admin Bothrex Bali Tour! 👋\n\n";
-        $message .= "Saya ingin konfirmasi pembayaran & reservasi tour dengan rincian berikut:\n\n";
+        $message .= "Saya ingin konfirmasi reservasi tour dengan rincian berikut:\n\n";
         $message .= "📌 *Kode Booking:* {$this->booking_code}\n";
         $message .= "🌴 *Paket Tour:* {$packageTitle}\n";
         $message .= "👤 *Nama Pemesan:* {$this->customer_name}\n";
         $message .= "📞 *No. WhatsApp:* {$this->customer_phone}\n";
-        $message .= "📅 *Tanggal Tour:* {$formattedDate}\n";
+        $message .= "📅 *Tanggal Mulai Tour:* {$formattedDate}\n";
+        $message .= "⏱️ *Durasi Tour:* {$days} Hari\n";
         $message .= "👥 *Jumlah Peserta:* {$this->number_of_guests} Orang\n";
         $message .= "📍 *Lokasi Penjemputan:* " . ($this->pickup_location ?: 'Diinfokan kemudian') . "\n";
-        $message .= "💰 *Total Pembayaran:* {$totalFormatted}\n\n";
+        $message .= "💰 *Estimasi Total Biaya:* {$totalFormatted} ({$this->number_of_guests} org x {$days} hari)\n\n";
         if ($this->special_notes) {
             $message .= "📝 *Catatan:* {$this->special_notes}\n\n";
         }

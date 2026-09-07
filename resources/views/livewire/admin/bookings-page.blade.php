@@ -160,10 +160,10 @@
                                 </span>
                             </td>
 
-                            <!-- Travel Date & Guests -->
+                            <!-- Travel Date, Duration & Guests -->
                             <td class="py-4 px-6 whitespace-nowrap">
                                 <div class="font-semibold text-slate-900"><i class="fa-solid fa-calendar text-emerald-600 mr-1"></i> {{ $b->travel_date ? $b->travel_date->format('d M Y') : '-' }}</div>
-                                <div class="text-slate-500 text-[11px] mt-0.5"><i class="fa-solid fa-users text-slate-400 mr-1"></i> {{ $b->number_of_guests }} Orang Peserta</div>
+                                <div class="text-slate-500 text-[11px] mt-0.5"><i class="fa-solid fa-clock text-amber-500 mr-1"></i> {{ $b->duration_days ?? 1 }} Hari | <i class="fa-solid fa-users text-slate-400 mr-1"></i> {{ $b->number_of_guests }} Orang</div>
                             </td>
 
                             <!-- Total Price -->
@@ -197,7 +197,7 @@
                                     if (str_starts_with($cleanPhone, '0')) {
                                         $cleanPhone = '62' . substr($cleanPhone, 1);
                                     }
-                                    $greetingMsg = urlencode("Halo Kak {$b->customer_name}, terima kasih telah melakukan pemesanan paket {$b->tourPackage->title} (Kode Booking: {$b->booking_code}) di Bothrex Bali Tour. Kami ingin mengonfirmasi detail tour Anda.");
+                                    $greetingMsg = urlencode("Halo Kak {$b->customer_name}, terima kasih telah melakukan pemesanan paket {$b->tourPackage->title} (Kode Booking: {$b->booking_code}, Durasi: " . ($b->duration_days ?? 1) . " Hari) di Bothrex Bali Tour. Kami ingin mengonfirmasi detail tour Anda.");
                                 @endphp
 
                                 <a href="https://wa.me/{{ $cleanPhone }}?text={{ $greetingMsg }}" 
@@ -249,7 +249,7 @@
                         <strong class="text-slate-800">{{ $selectedBooking->customer_email }}</strong>
                     </div>
                     <div>
-                        <span class="text-slate-400 block font-semibold">Tanggal Tour</span>
+                        <span class="text-slate-400 block font-semibold">Tanggal Mulai Tour</span>
                         <strong class="text-slate-900">{{ $selectedBooking->travel_date ? $selectedBooking->travel_date->format('d M Y') : '-' }}</strong>
                     </div>
                 </div>
@@ -260,6 +260,10 @@
                         <strong class="text-slate-900">{{ $selectedBooking->tourPackage->title ?? '-' }}</strong>
                     </div>
                     <div class="flex justify-between">
+                        <span class="text-slate-500">Durasi Tour:</span>
+                        <strong class="text-emerald-700 font-bold">{{ $selectedBooking->duration_days ?? 1 }} Hari</strong>
+                    </div>
+                    <div class="flex justify-between">
                         <span class="text-slate-500">Jumlah Peserta:</span>
                         <strong class="text-slate-900">{{ $selectedBooking->number_of_guests }} Orang</strong>
                     </div>
@@ -268,7 +272,7 @@
                         <strong class="text-slate-900">{{ $selectedBooking->pickup_location ?: 'Diinfokan kemudian' }}</strong>
                     </div>
                     <div class="flex justify-between pt-2 border-t border-slate-200 text-sm font-bold">
-                        <span class="text-slate-900">Total Harga:</span>
+                        <span class="text-slate-900">Total Estimasi Harga:</span>
                         <span class="text-emerald-700">Rp {{ number_format($selectedBooking->total_price, 0, ',', '.') }}</span>
                     </div>
                 </div>

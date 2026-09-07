@@ -19,6 +19,7 @@ class TourPackageDetailPage extends Component
     public $customer_email = '';
     public $customer_phone = '';
     public $travel_date = '';
+    public $duration_days = 1;
     public $number_of_guests = 2;
     public $pickup_location = '';
     public $special_notes = '';
@@ -37,7 +38,8 @@ class TourPackageDetailPage extends Component
     public function calculateTotal()
     {
         $guests = max(1, (int)$this->number_of_guests);
-        return $guests * $this->package->price;
+        $days = max(1, (int)$this->duration_days);
+        return $guests * $days * $this->package->price;
     }
 
     public function submitBooking()
@@ -47,6 +49,7 @@ class TourPackageDetailPage extends Component
             'customer_email' => 'required|email|max:100',
             'customer_phone' => 'required|string|min:8|max:20',
             'travel_date' => 'required|date|after_or_equal:today',
+            'duration_days' => 'required|integer|min:1|max:30',
             'number_of_guests' => 'required|integer|min:1|max:50',
             'pickup_location' => 'nullable|string|max:255',
             'special_notes' => 'nullable|string|max:500',
@@ -55,6 +58,7 @@ class TourPackageDetailPage extends Component
             'customer_email.required' => 'Email pemesan wajib diisi.',
             'customer_phone.required' => 'Nomor WhatsApp wajib diisi.',
             'travel_date.required' => 'Tanggal tour wajib dipilih.',
+            'duration_days.min' => 'Durasi tour minimal 1 hari.',
             'number_of_guests.min' => 'Jumlah peserta minimal 1 orang.',
         ]);
 
@@ -92,6 +96,7 @@ class TourPackageDetailPage extends Component
             'customer_email' => $this->customer_email,
             'customer_phone' => $this->customer_phone,
             'travel_date' => $this->travel_date,
+            'duration_days' => $this->duration_days,
             'number_of_guests' => $this->number_of_guests,
             'total_price' => $totalPrice,
             'pickup_location' => $this->pickup_location,
