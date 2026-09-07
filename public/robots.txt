@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /livewire/
 
-Sitemap: https://bothrextourtravel.com/sitemap.xml
+Sitemap: https://bothrextourtravel.my.id/sitemap.xml

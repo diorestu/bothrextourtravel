@@ -17,8 +17,8 @@ class SitemapController extends Controller
     {
         // Dynamic domain detection (ensures exact domain matching in Google Search Console)
         $baseUrl = rtrim($request->getSchemeAndHttpHost(), '/');
-        if (empty($baseUrl) || str_contains($baseUrl, 'localhost')) {
-            $baseUrl = rtrim(config('app.url') ?: url('/'), '/');
+        if (empty($baseUrl) || str_contains($baseUrl, 'localhost') || str_contains($baseUrl, '127.0.0.1')) {
+            $baseUrl = rtrim(config('app.url') ?: 'https://bothrextourtravel.my.id', '/');
         }
 
         $packages = TourPackage::where('is_active', true)->with('destination')->get();
@@ -136,8 +136,8 @@ class SitemapController extends Controller
     public function robots(Request $request)
     {
         $baseUrl = rtrim($request->getSchemeAndHttpHost(), '/');
-        if (empty($baseUrl) || str_contains($baseUrl, 'localhost')) {
-            $baseUrl = rtrim(config('app.url') ?: url('/'), '/');
+        if (empty($baseUrl) || str_contains($baseUrl, 'localhost') || str_contains($baseUrl, '127.0.0.1')) {
+            $baseUrl = rtrim(config('app.url') ?: 'https://bothrextourtravel.my.id', '/');
         }
 
         $robots = "User-agent: *\n";
