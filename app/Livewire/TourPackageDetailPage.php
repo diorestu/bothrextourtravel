@@ -47,7 +47,7 @@ class TourPackageDetailPage extends Component
         $this->validate([
             'customer_name' => 'required|string|min:3|max:100',
             'customer_email' => 'required|email|max:100',
-            'customer_phone' => 'required|string|min:8|max:20',
+            'customer_phone' => 'required|string|min:8|max:30',
             'travel_date' => 'required|date|after_or_equal:today',
             'duration_days' => 'required|integer|min:1|max:30',
             'number_of_guests' => 'required|integer|min:1|max:50',
@@ -55,9 +55,13 @@ class TourPackageDetailPage extends Component
             'special_notes' => 'nullable|string|max:500',
         ], [
             'customer_name.required' => 'Nama pemesan wajib diisi.',
+            'customer_name.min' => 'Nama pemesan minimal 3 karakter.',
             'customer_email.required' => 'Email pemesan wajib diisi.',
+            'customer_email.email' => 'Format email tidak valid.',
             'customer_phone.required' => 'Nomor WhatsApp wajib diisi.',
+            'customer_phone.min' => 'Nomor WhatsApp minimal 8 digit.',
             'travel_date.required' => 'Tanggal tour wajib dipilih.',
+            'travel_date.after_or_equal' => 'Tanggal tour tidak boleh di masa lalu.',
             'duration_days.min' => 'Durasi tour minimal 1 hari.',
             'number_of_guests.min' => 'Jumlah peserta minimal 1 orang.',
         ]);

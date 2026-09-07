@@ -81,13 +81,13 @@
     </script>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ6VCG23P9"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GT-T9WG2WHM"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'G-MQ6VCG23P9');
+      gtag('config', 'GT-T9WG2WHM');
     </script>
 
     <!-- Favicon -->

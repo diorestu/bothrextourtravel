@@ -118,141 +118,263 @@
             </div>
 
             <!-- Right Column: Interactive Booking Form Card -->
-            <div class="lg:col-span-1">
-                <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-200 sticky top-24">
-                    <div class="pb-6 border-b border-slate-100 mb-6">
-                        <span class="text-xs text-slate-400 uppercase font-semibold block">Harga Spesial All-In</span>
-                        <div class="flex items-baseline gap-2 mt-1">
-                            <span class="text-3xl font-extrabold text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$package->price }}) : 'Rp {{ number_format($package->price, 0, ',', '.') }}'">Rp {{ number_format($package->price, 0, ',', '.') }}</span>
+            <div class="lg:col-span-1" 
+                 x-data="{
+                    guests: @entangle('number_of_guests').live,
+                    days: @entangle('duration_days').live,
+                    unitPrice: {{ (int)$package->price }},
+                    get numGuests() {
+                        return Math.max(1, parseInt(this.guests) || 1);
+                    },
+                    get numDays() {
+                        return Math.max(1, parseInt(this.days) || 1);
+                    },
+                    get totalAmount() {
+                        return this.numGuests * this.numDays * this.unitPrice;
+                    },
+                    setDays(d) {
+                        this.days = d;
+                    },
+                    setGuests(g) {
+                        this.guests = g;
+                    },
+                    incGuests() {
+                        if (this.numGuests < 50) this.guests = this.numGuests + 1;
+                    },
+                    decGuests() {
+                        if (this.numGuests > 1) this.guests = this.numGuests - 1;
+                    },
+                    incDays() {
+                        if (this.numDays < 30) this.days = this.numDays + 1;
+                    },
+                    decDays() {
+                        if (this.numDays > 1) this.days = this.numDays - 1;
+                    }
+                 }">
+                <div class="bg-white p-6 sm:p-7 rounded-3xl shadow-xl border border-slate-200 sticky top-24">
+                    <!-- Pricing Header -->
+                    <div class="pb-5 border-b border-slate-100 mb-5">
+                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                            <span class="text-[11px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                                <i class="fa-solid fa-car mr-1"></i> Private Tour AC
+                            </span>
                             @if($package->original_price)
-                            <span class="text-sm text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$package->original_price }}) : 'Rp {{ number_format($package->original_price, 0, ',', '.') }}'">Rp {{ number_format($package->original_price, 0, ',', '.') }}</span>
+                            <span class="text-xs text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded-full">
+                                Hemat {{ round((($package->original_price - $package->price) / $package->original_price) * 100) }}%
+                            </span>
                             @endif
                         </div>
-                        <span class="text-xs text-slate-500 mt-1 block">/ orang / hari (Private Tour Car & Guide)</span>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span class="text-3xl sm:text-4xl font-extrabold text-emerald-700 tracking-tight" x-text="$store.currency ? $store.currency.format({{ (int)$package->price }}) : 'Rp {{ number_format($package->price, 0, ',', '.') }}'">
+                                Rp {{ number_format($package->price, 0, ',', '.') }}
+                            </span>
+                            @if($package->original_price)
+                            <span class="text-sm text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$package->original_price }}) : 'Rp {{ number_format($package->original_price, 0, ',', '.') }}'">
+                                Rp {{ number_format($package->original_price, 0, ',', '.') }}
+                            </span>
+                            @endif
+                        </div>
+                        <span class="text-xs text-slate-500 mt-1 block font-medium">/ orang / hari (All-In Mobil Privat & Supir)</span>
                     </div>
 
                     <!-- Booking Form -->
                     <form wire:submit.prevent="submitBooking" class="space-y-4">
+                        <!-- Customer Name -->
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nama Lengkap Pemesan *</label>
-                            <input type="text" 
-                                   wire:model="customer_name" 
-                                   placeholder="Contoh: Budi Santoso" 
-                                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            @error('customer_name') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                                <span>Nama Pemesan *</span>
+                                <span class="text-[10px] text-slate-400 font-normal lowercase">(sesuai KTP/Passport)</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                    <i class="fa-solid fa-user text-xs"></i>
+                                </div>
+                                <input type="text" 
+                                       wire:model="customer_name" 
+                                       placeholder="Nama Lengkap Anda" 
+                                       class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition">
+                            </div>
+                            @error('customer_name') <span class="text-[11px] text-rose-500 mt-1 block font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</span> @enderror
                         </div>
 
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Email Pemesan *</label>
-                            <input type="email" 
-                                   wire:model="customer_email" 
-                                   placeholder="budi@example.com" 
-                                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            @error('customer_email') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">No. WhatsApp (Aktif) *</label>
-                            <input type="text" 
-                                   wire:model="customer_phone" 
-                                   placeholder="081234567890" 
-                                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                            @error('customer_phone') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
-                        </div>
-
-                        <!-- Date, Duration & Guests Selection -->
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <!-- WhatsApp & Email in 2 columns -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <!-- WhatsApp -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                                    <i class="fa-solid fa-calendar text-emerald-600 mr-1"></i> Tgl Tour *
-                                </label>
-                                <input type="date" 
-                                       wire:model.live="travel_date" 
-                                       class="w-full px-2.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
-                                @error('travel_date') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">No. WhatsApp *</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-emerald-600">
+                                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                                    </div>
+                                    <input type="text" 
+                                           wire:model="customer_phone" 
+                                           placeholder="081234567890" 
+                                           class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition">
+                                </div>
+                                @error('customer_phone') <span class="text-[11px] text-rose-500 mt-1 block font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</span> @enderror
                             </div>
 
+                            <!-- Email -->
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                                    <i class="fa-solid fa-clock text-emerald-600 mr-1"></i> Durasi *
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Email Pemesan *</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                        <i class="fa-solid fa-envelope text-xs"></i>
+                                    </div>
+                                    <input type="email" 
+                                           wire:model="customer_email" 
+                                           placeholder="email@anda.com" 
+                                           class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition">
+                                </div>
+                                @error('customer_email') <span class="text-[11px] text-rose-500 mt-1 block font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</span> @enderror
+                            </div>
+                        </div>
+
+                        <!-- Date Picker -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                                <i class="fa-solid fa-calendar-days text-emerald-600 mr-1"></i> Tanggal Mulai Tour *
+                            </label>
+                            <input type="date" 
+                                   wire:model.live="travel_date" 
+                                   min="{{ date('Y-m-d') }}"
+                                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition">
+                            @error('travel_date') <span class="text-[11px] text-rose-500 mt-1 block font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Duration & Guests Steppers -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                            <!-- Duration Stepper -->
+                            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-2 flex items-center justify-between">
+                                    <span><i class="fa-solid fa-clock text-emerald-600 mr-1"></i> Durasi Tour</span>
+                                    <span class="text-xs font-extrabold text-emerald-700" x-text="numDays + ' Hari'"></span>
                                 </label>
-                                <select wire:model.live="duration_days" 
-                                        class="w-full px-2.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium cursor-pointer">
-                                    <option value="1">1 Hari (Full Day)</option>
-                                    <option value="2">2 Hari</option>
-                                    <option value="3">3 Hari</option>
-                                    <option value="4">4 Hari</option>
-                                    <option value="5">5 Hari</option>
-                                    <option value="6">6 Hari</option>
-                                    <option value="7">7 Hari (1 Minggu)</option>
-                                    <option value="10">10 Hari</option>
-                                    <option value="14">14 Hari (2 Minggu)</option>
-                                </select>
+                                <div class="flex items-center justify-between bg-white rounded-xl border border-slate-200 p-1">
+                                    <button type="button" @click="decDays()" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald-700 flex items-center justify-center font-bold text-base transition active:scale-90 cursor-pointer">
+                                        <i class="fa-solid fa-minus text-xs"></i>
+                                    </button>
+                                    <input type="number" 
+                                           wire:model.live="duration_days" 
+                                           min="1" max="30"
+                                           class="w-12 text-center font-extrabold text-sm text-slate-900 focus:outline-none border-0 p-0">
+                                    <button type="button" @click="incDays()" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald-700 flex items-center justify-center font-bold text-base transition active:scale-90 cursor-pointer">
+                                        <i class="fa-solid fa-plus text-xs"></i>
+                                    </button>
+                                </div>
+                                <div class="flex items-center gap-1.5 mt-2">
+                                    <template x-for="d in [1, 2, 3, 4, 5]" :key="d">
+                                        <button type="button" 
+                                                @click="setDays(d)" 
+                                                class="flex-1 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer"
+                                                :class="numDays === d ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'"
+                                                x-text="d + 'h'"></button>
+                                    </template>
+                                </div>
                                 @error('duration_days') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
                             </div>
 
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                                    <i class="fa-solid fa-users text-emerald-600 mr-1"></i> Peserta *
+                            <!-- Guests Stepper -->
+                            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                                <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-2 flex items-center justify-between">
+                                    <span><i class="fa-solid fa-users text-emerald-600 mr-1"></i> Peserta</span>
+                                    <span class="text-xs font-extrabold text-emerald-700" x-text="numGuests + ' Orang'"></span>
                                 </label>
-                                <input type="number" 
-                                       wire:model.live="number_of_guests" 
-                                       min="1" max="50" 
-                                       class="w-full px-2.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none font-medium">
+                                <div class="flex items-center justify-between bg-white rounded-xl border border-slate-200 p-1">
+                                    <button type="button" @click="decGuests()" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald-700 flex items-center justify-center font-bold text-base transition active:scale-90 cursor-pointer">
+                                        <i class="fa-solid fa-minus text-xs"></i>
+                                    </button>
+                                    <input type="number" 
+                                           wire:model.live="number_of_guests" 
+                                           min="1" max="50"
+                                           class="w-12 text-center font-extrabold text-sm text-slate-900 focus:outline-none border-0 p-0">
+                                    <button type="button" @click="incGuests()" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald-700 flex items-center justify-center font-bold text-base transition active:scale-90 cursor-pointer">
+                                        <i class="fa-solid fa-plus text-xs"></i>
+                                    </button>
+                                </div>
+                                <div class="flex items-center gap-1.5 mt-2">
+                                    <template x-for="g in [2, 4, 6, 8]" :key="g">
+                                        <button type="button" 
+                                                @click="setGuests(g)" 
+                                                class="flex-1 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer"
+                                                :class="numGuests === g ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'"
+                                                x-text="g + 'p'"></button>
+                                    </template>
+                                </div>
                                 @error('number_of_guests') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
+                        <!-- Pickup Location -->
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Lokasi Penjemputan</label>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                                <i class="fa-solid fa-location-dot text-emerald-600 mr-1"></i> Lokasi Penjemputan
+                            </label>
                             <input type="text" 
                                    wire:model="pickup_location" 
-                                   placeholder="Nama Hotel / Bandara Ngurah Rai" 
-                                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                   placeholder="Contoh: Hotel Grand Inna Kuta / Bandara Ngurah Rai" 
+                                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition">
                         </div>
 
+                        <!-- Special Notes -->
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Catatan Tambahan</label>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                                <i class="fa-solid fa-pen-to-square text-emerald-600 mr-1"></i> Permintaan Khusus / Catatan (Opsional)
+                            </label>
                             <textarea wire:model="special_notes" 
                                       rows="2" 
-                                      placeholder="Permintaan khusus / car seat / preferensi itinerary..." 
-                                      class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+                                      placeholder="Contoh: Butuh baby car seat, preferensi jam jemput, makanan halal, dll..." 
+                                      class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition"></textarea>
                         </div>
 
-                        <!-- Live Price Breakdown & Total Cost Summary Box -->
-                        <div class="bg-emerald-50/90 p-4 rounded-2xl border border-emerald-200 my-4 space-y-2">
-                            <div class="flex justify-between items-center text-xs text-slate-600">
-                                <span>Rincian Estimasi Biaya:</span>
-                                <span class="font-medium text-slate-800" x-text="({{ (int)($number_of_guests ?? 1) }} + ' Orang') + ' x ' + ({{ (int)($duration_days ?? 1) }} + ' Hari') + ' x ' + ($store.currency ? $store.currency.format({{ (int)$package->price }}) : 'Rp {{ number_format($package->price, 0, ',', '.') }}')">
-                                    {{ $number_of_guests ?? 1 }} Orang x {{ $duration_days ?? 1 }} Hari x Rp {{ number_format($package->price, 0, ',', '.') }}
+                        <!-- Live Price Breakdown & Estimasi Total Biaya Card -->
+                        <div class="bg-gradient-to-br from-emerald-50 to-teal-50/70 p-4 sm:p-5 rounded-2xl border border-emerald-200/80 my-4 space-y-2.5">
+                            <div class="flex items-center justify-between text-xs text-slate-600 pb-2 border-b border-emerald-200/60">
+                                <span class="font-medium">Kalkulasi Tarif:</span>
+                                <span class="font-bold text-slate-800" x-text="numGuests + ' Peserta × ' + numDays + ' Hari × ' + ($store.currency ? $store.currency.format(unitPrice) : 'Rp ' + unitPrice.toLocaleString('id-ID'))">
+                                    {{ $number_of_guests ?? 2 }} Orang x {{ $duration_days ?? 1 }} Hari x Rp {{ number_format($package->price, 0, ',', '.') }}
                                 </span>
                             </div>
-                            <div class="flex justify-between items-center pt-2 border-t border-emerald-200 text-sm font-extrabold text-emerald-950">
-                                <span class="flex items-center gap-1.5">
-                                    <i class="fa-solid fa-calculator text-emerald-600"></i> Estimasi Total Biaya Tour:
-                                </span>
-                                <span class="text-xl font-extrabold text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$this->calculateTotal() }}) : 'Rp {{ number_format($this->calculateTotal(), 0, ',', '.') }}'">
-                                    Rp {{ number_format($this->calculateTotal(), 0, ',', '.') }}
-                                </span>
+
+                            <div class="flex items-center justify-between pt-1">
+                                <div>
+                                    <span class="text-xs font-extrabold text-slate-800 uppercase tracking-wider block">Estimasi Total Biaya:</span>
+                                    <span class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1 mt-0.5">
+                                        <i class="fa-solid fa-circle-check"></i> Harga All-In (Tanpa Biaya Tersembunyi)
+                                    </span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl sm:text-3xl font-extrabold text-emerald-700 tracking-tight" 
+                                          x-text="$store.currency ? $store.currency.format(totalAmount) : 'Rp ' + totalAmount.toLocaleString('id-ID')">
+                                        Rp {{ number_format($this->calculateTotal(), 0, ',', '.') }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Submit Button -->
+                        <!-- Submit CTA Button -->
                         <button type="submit" 
-                                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl shadow-xl shadow-emerald-600/30 transition-all hover:scale-[1.02] active:scale-95 text-sm flex items-center justify-center gap-2">
-                            <i class="fa-brands fa-whatsapp text-lg"></i>
-                            <span>Pesan Paket & Konfirmasi WA</span>
+                                wire:loading.attr="disabled"
+                                class="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white font-extrabold py-4 px-4 rounded-2xl shadow-xl shadow-emerald-600/30 transition-all hover:scale-[1.01] active:scale-95 text-sm flex items-center justify-center gap-2 cursor-pointer">
+                            <span wire:loading.remove class="inline-flex items-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-xl"></i>
+                                <span>Pesan Paket Sekarang & Chat WA</span>
+                            </span>
+                            <span wire:loading class="inline-flex items-center gap-2">
+                                <i class="fa-solid fa-circle-notch fa-spin text-lg"></i>
+                                <span>Menyimpan Pesanan...</span>
+                            </span>
                         </button>
                     </form>
 
-                    <div class="mt-4 text-center">
-                        <span class="text-[11px] text-slate-400 flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-lock text-emerald-500"></i> Data tersimpan aman & langsung terhubung ke WA CS
-                        </span>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-center gap-4 text-[11px] text-slate-500 font-medium">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-lock text-emerald-600"></i> Data Terenkripsi</span>
+                        <span>•</span>
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-shield-halved text-emerald-600"></i> Agen Resmi Terpercaya</span>
                     </div>
 
                     <!-- Share Package to Social Media Widget -->
-                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
                         <span class="text-xs font-bold text-slate-500">Bagikan Paket Ini:</span>
                         <div class="flex items-center gap-2">
                             <a href="https://api.whatsapp.com/send?text={{ urlencode('Cek paket liburan Bali keren ini: ' . $package->title . ' - ' . url()->current()) }}" 
