@@ -4,6 +4,32 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Plus Jakarta Sans', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Official Bank BCA Blue Brand Palette */
+    --color-bca-50: #f0f7ff;
+    --color-bca-100: #e0effe;
+    --color-bca-200: #b9ddfe;
+    --color-bca-300: #7cc2fd;
+    --color-bca-400: #36a4fa;
+    --color-bca-500: #0077d6;
+    --color-bca-600: #0060af;
+    --color-bca-700: #004d8c;
+    --color-bca-800: #003d79;
+    --color-bca-900: #002b54;
+    --color-bca-950: #001a33;
+
+    /* Override Emerald to Bank BCA Blue Palette for Full Site Consistency */
+    --color-emerald-50: #f0f7ff;
+    --color-emerald-100: #e0effe;
+    --color-emerald-200: #b9ddfe;
+    --color-emerald-300: #7cc2fd;
+    --color-emerald-400: #36a4fa;
+    --color-emerald-500: #0077d6;
+    --color-emerald-600: #0060af;
+    --color-emerald-700: #004d8c;
+    --color-emerald-800: #003d79;
+    --color-emerald-900: #002b54;
+    --color-emerald-950: #001a33;
 }

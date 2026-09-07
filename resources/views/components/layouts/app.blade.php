@@ -21,7 +21,7 @@
     <meta name="keywords" content="{{ $metaKeywords ?? 'paket tour bali murah, agen travel bali terpercaya, tour nusa penida 1 hari, jeep batur sunrise tour, sewa mobil bali dengan supir, paket liburan bali keluarga, paket honeymoon bali romantis, wisata ubud gianyar, kecak dance uluwatu, bothrex bali tour' }}">
     <meta name="robots" content="{{ $robots ?? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' }}">
     <meta name="author" content="{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}">
-    <meta name="theme-color" content="#059669">
+    <meta name="theme-color" content="#0060af">
     <link rel="canonical" href="{{ $canonical ?? url()->current() }}">
 
     <!-- Local Bali SEO Geo Meta Tags -->
