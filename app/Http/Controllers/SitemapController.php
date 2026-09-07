@@ -6,23 +6,23 @@ use Illuminate\Http\Request;
 use App\Models\TourPackage;
 use App\Models\Destination;
 use XMLWriter;
-use Illuminate\Support\Str;
 
 class SitemapController extends Controller
 {
     /**
-     * Generate standard, 100% compliant Google XML Sitemap.
+     * Generate 100% standard Google-compliant XML Sitemap (Sitemaps 0.9 standard).
      */
     public function sitemap(Request $request)
     {
-        // Dynamic domain detection (ensures exact domain matching in Google Search Console)
-        $baseUrl = rtrim($request->getSchemeAndHttpHost(), '/');
-        if (empty($baseUrl) || str_contains($baseUrl, 'localhost') || str_contains($baseUrl, '127.0.0.1')) {
-            $baseUrl = rtrim(config('app.url') ?: 'https://bothrextourtravel.my.id', '/');
+        // Detect domain dynamically or use official production domain
+        $baseUrl = 'https://bothrextourtravel.my.id';
+        if ($request->getHost() && !str_contains($request->getHost(), 'localhost') && !str_contains($request->getHost(), '127.0.0.1')) {
+            $baseUrl = rtrim($request->getSchemeAndHttpHost(), '/');
         }
 
-        $packages = TourPackage::where('is_active', true)->with('destination')->get();
+        $packages = TourPackage::where('is_active', true)->orderBy('is_featured', 'desc')->get();
         $destinations = Destination::where('is_active', true)->get();
+        $today = date('Y-m-d');
 
         $writer = new XMLWriter();
         $writer->openMemory();
@@ -30,29 +30,22 @@ class SitemapController extends Controller
         $writer->setIndent(true);
         $writer->setIndentString('  ');
 
-        // Root urlset element
+        // Standard Sitemaps 0.9 Root Element (Most compatible with Google Search Console)
         $writer->startElement('urlset');
         $writer->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
-        $writer->writeAttribute('xmlns:image', 'http://www.google.com/schemas/sitemap-image/1.1');
 
         // 1. Homepage
         $writer->startElement('url');
         $writer->writeElement('loc', $baseUrl . '/');
-        $writer->writeElement('lastmod', date('c'));
+        $writer->writeElement('lastmod', $today);
         $writer->writeElement('changefreq', 'daily');
         $writer->writeElement('priority', '1.0');
-
-        // Homepage Image
-        $writer->startElement('image:image');
-        $writer->writeElement('image:loc', $baseUrl . '/images/logo.png');
-        $writer->writeElement('image:title', 'Bothrex Bali Tour & Travel');
-        $writer->endElement(); // image:image
         $writer->endElement(); // url
 
-        // 2. Tour Packages Catalog Page
+        // 2. Packages Catalog Page
         $writer->startElement('url');
         $writer->writeElement('loc', $baseUrl . '/paket');
-        $writer->writeElement('lastmod', date('c'));
+        $writer->writeElement('lastmod', $today);
         $writer->writeElement('changefreq', 'daily');
         $writer->writeElement('priority', '0.9');
         $writer->endElement(); // url
@@ -60,59 +53,32 @@ class SitemapController extends Controller
         // 3. Destinations Catalog Page
         $writer->startElement('url');
         $writer->writeElement('loc', $baseUrl . '/destinasi');
-        $writer->writeElement('lastmod', date('c'));
+        $writer->writeElement('lastmod', $today);
         $writer->writeElement('changefreq', 'weekly');
         $writer->writeElement('priority', '0.9');
         $writer->endElement(); // url
 
-        // 4. Tour Package Detail Pages
+        // 4. Active Tour Packages
         foreach ($packages as $pkg) {
-            $lastmod = $pkg->updated_at ? $pkg->updated_at->toAtomString() : date('c');
+            $lastmod = $pkg->updated_at ? $pkg->updated_at->format('Y-m-d') : $today;
 
             $writer->startElement('url');
             $writer->writeElement('loc', $baseUrl . '/paket/' . $pkg->slug);
             $writer->writeElement('lastmod', $lastmod);
             $writer->writeElement('changefreq', 'weekly');
             $writer->writeElement('priority', '0.8');
-
-            if (!empty($pkg->image_url)) {
-                $writer->startElement('image:image');
-                $writer->writeElement('image:loc', $pkg->image_url);
-                $writer->writeElement('image:title', $pkg->title);
-                $writer->endElement();
-            }
-
-            if (!empty($pkg->gallery) && is_array($pkg->gallery)) {
-                foreach ($pkg->gallery as $galImg) {
-                    if ($galImg !== $pkg->image_url) {
-                        $writer->startElement('image:image');
-                        $writer->writeElement('image:loc', $galImg);
-                        $writer->writeElement('image:title', $pkg->title . ' - Foto Galeri');
-                        $writer->endElement();
-                    }
-                }
-            }
-
             $writer->endElement(); // url
         }
 
-        // 5. Destination Detail Pages
+        // 5. Active Destinations
         foreach ($destinations as $dest) {
-            $lastmod = $dest->updated_at ? $dest->updated_at->toAtomString() : date('c');
+            $lastmod = $dest->updated_at ? $dest->updated_at->format('Y-m-d') : $today;
 
             $writer->startElement('url');
             $writer->writeElement('loc', $baseUrl . '/destinasi/' . $dest->slug);
             $writer->writeElement('lastmod', $lastmod);
             $writer->writeElement('changefreq', 'weekly');
             $writer->writeElement('priority', '0.8');
-
-            if (!empty($dest->image_url)) {
-                $writer->startElement('image:image');
-                $writer->writeElement('image:loc', $dest->image_url);
-                $writer->writeElement('image:title', 'Wisata ' . $dest->name);
-                $writer->endElement();
-            }
-
             $writer->endElement(); // url
         }
 
@@ -121,7 +87,7 @@ class SitemapController extends Controller
 
         $xmlContent = $writer->outputMemory();
 
-        // Also save physical static sitemap.xml in public/ for web servers (Nginx/Apache) direct serving
+        // Write physical file to public/sitemap.xml for webservers (Nginx / Apache)
         @file_put_contents(public_path('sitemap.xml'), $xmlContent);
 
         return response($xmlContent, 200, [
@@ -135,9 +101,9 @@ class SitemapController extends Controller
      */
     public function robots(Request $request)
     {
-        $baseUrl = rtrim($request->getSchemeAndHttpHost(), '/');
-        if (empty($baseUrl) || str_contains($baseUrl, 'localhost') || str_contains($baseUrl, '127.0.0.1')) {
-            $baseUrl = rtrim(config('app.url') ?: 'https://bothrextourtravel.my.id', '/');
+        $baseUrl = 'https://bothrextourtravel.my.id';
+        if ($request->getHost() && !str_contains($request->getHost(), 'localhost') && !str_contains($request->getHost(), '127.0.0.1')) {
+            $baseUrl = rtrim($request->getSchemeAndHttpHost(), '/');
         }
 
         $robots = "User-agent: *\n";

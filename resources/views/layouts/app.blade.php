@@ -262,7 +262,8 @@
 
     <!-- Main Content Slot -->
     <main class="flex-grow">
-        {{ $slot }}
+        {{ $slot ?? '' }}
+        @yield('content')
     </main>
 
     <!-- Floating WhatsApp Button -->
