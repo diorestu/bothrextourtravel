@@ -1,9 +1,28 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Default Language Initializer (Default: English) -->
+    <script>
+        (function() {
+            var savedLang = localStorage.getItem('user_lang');
+            var hasTransCookie = document.cookie.indexOf('googtrans=') !== -1;
+            if (!savedLang && !hasTransCookie) {
+                localStorage.setItem('user_lang', 'en');
+                document.cookie = "googtrans=/id/en; path=/;";
+                var host = window.location.hostname;
+                if (host) {
+                    document.cookie = "googtrans=/id/en; path=/; domain=" + host + ";";
+                    if (host.includes('.')) {
+                        document.cookie = "googtrans=/id/en; path=/; domain=." + host.replace(/^www\./, '') + ";";
+                    }
+                }
+            }
+        })();
+    </script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ6VCG23P9"></script>
@@ -140,6 +159,27 @@
         .font-serif-heading {
             font-family: 'Playfair Display', serif;
         }
+        /* Google Translate Styling Cleanup */
+        .goog-te-banner-frame.skiptranslate,
+        .goog-te-banner-frame,
+        #goog-gt-tt,
+        .goog-te-balloon-frame {
+            display: none !important;
+        }
+        body {
+            top: 0px !important;
+        }
+        .goog-text-highlight {
+            background: none !important;
+            box-shadow: none !important;
+        }
+        .skiptranslate iframe {
+            display: none !important;
+        }
+        font font {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
@@ -152,7 +192,7 @@
                 <span class="flex items-center gap-1.5"><i class="fa-solid fa-envelope text-emerald-400"></i> {{ $company->email ?? 'info@bothrexbalitour.com' }}</span>
                 <span class="hidden md:inline-flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-emerald-400"></i> {{ $company->address ?? 'Jl. Raya Kuta No. 88, Badung, Bali' }}</span>
             </div>
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-4">
                 <span class="text-amber-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-star"></i> 4.9/5 (1.500+ Traveler Satisfied)</span>
             </div>
         </div>
@@ -195,16 +235,77 @@
                        class="transition-colors py-1">Testimoni</a>
                 </nav>
 
-                <!-- CTA WhatsApp Button -->
+                <!-- Desktop Action CTA & Language Selector -->
                 <div class="hidden md:flex items-center gap-3">
+                    <!-- Language Selector Dropdown -->
+                    <div x-data="{
+                        langOpen: false,
+                        currentLang: window.getCurrentLang ? window.getCurrentLang() : 'en',
+                        languages: [
+                            { code: 'en', name: 'English', short: 'EN', flag: '🇬🇧' },
+                            { code: 'id', name: 'Bahasa Indonesia', short: 'ID', flag: '🇮🇩' },
+                            { code: 'zh-CN', name: '中文 (Mandarin)', short: '中文', flag: '🇨🇳' },
+                            { code: 'es', name: 'Español (Spanish)', short: 'ES', flag: '🇪🇸' }
+                        ],
+                        get active() {
+                            return this.languages.find(l => l.code === this.currentLang) || this.languages[0];
+                        },
+                        selectLang(code) {
+                            this.currentLang = code;
+                            this.langOpen = false;
+                            if (window.changeLanguage) {
+                                window.changeLanguage(code);
+                            }
+                        }
+                    }" class="relative inline-block text-left">
+                        <button @click="langOpen = !langOpen" 
+                                type="button" 
+                                aria-label="Select Language"
+                                class="inline-flex items-center gap-2 px-3 py-2 rounded-full text-xs font-bold transition-all border shadow-sm cursor-pointer"
+                                :class="scrolled ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200' : 'bg-white/15 hover:bg-white/25 text-white border-white/20 backdrop-blur-md'">
+                            <span x-text="active.flag" class="text-sm leading-none"></span>
+                            <span x-text="active.short" class="font-bold tracking-wider leading-none"></span>
+                            <i class="fa-solid fa-chevron-down text-[9px] opacity-70 transition-transform" :class="langOpen ? 'rotate-180' : ''"></i>
+                        </button>
+
+                        <div x-show="langOpen" 
+                             @click.outside="langOpen = false"
+                             x-transition:enter="transition ease-out duration-200 transform"
+                             x-transition:enter-start="opacity-0 scale-95 -translate-y-2"
+                             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-150 transform"
+                             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 scale-95 -translate-y-2"
+                             class="absolute right-0 mt-2 w-52 rounded-2xl bg-white text-slate-800 shadow-2xl ring-1 ring-black/5 p-1.5 z-50 divide-y divide-slate-100 border border-slate-100"
+                             style="display: none;">
+                            <div class="px-3 py-2 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                                Select Language
+                            </div>
+                            <div class="py-1">
+                                <template x-for="lang in languages" :key="lang.code">
+                                    <button @click="selectLang(lang.code)" 
+                                            type="button" 
+                                            class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all hover:bg-slate-100 text-left cursor-pointer"
+                                            :class="currentLang === lang.code ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700'">
+                                        <span class="flex items-center gap-2.5">
+                                            <span x-text="lang.flag" class="text-base"></span>
+                                            <span x-text="lang.name"></span>
+                                        </span>
+                                        <i x-show="currentLang === lang.code" class="fa-solid fa-check text-emerald-600 text-xs"></i>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
                     <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281338374254' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20ingin%20tanya%20informasi%20paket%20wisata%20Bali" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 rounded-full shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95 text-sm">
                         <i class="fa-brands fa-whatsapp text-lg"></i>
                         <span>Hubungi WA</span>
                     </a>
                 </div>
 
-                <!-- Mobile Hamburger Button (Sisi Kanan Header) -->
-                <div class="flex md:hidden items-center">
+                <!-- Mobile Header Right Actions (Language & Hamburger) -->
+                <div class="flex md:hidden items-center gap-2">
                     <button @click="open = !open" 
                             type="button" 
                             aria-label="Toggle navigation menu"
@@ -228,28 +329,64 @@
              x-transition:leave="transition ease-in duration-200 transform"
              x-transition:leave-start="opacity-100 translate-y-0 scale-100"
              x-transition:leave-end="opacity-0 -translate-y-4 scale-95"
-             class="md:hidden bg-white/95 backdrop-blur-lg border-b border-slate-200 shadow-xl px-4 pt-3 pb-6 space-y-2">
-            <a href="/" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
-                <i class="fa-solid fa-house text-emerald-500 w-5"></i>
-                <span>Beranda</span>
-            </a>
-            <a href="/paket" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
-                <i class="fa-solid fa-compass text-emerald-500 w-5"></i>
-                <span>Paket Wisata</span>
-            </a>
-            <a href="/destinasi" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
-                <i class="fa-solid fa-map-location-dot text-emerald-500 w-5"></i>
-                <span>Tujuan Wisata</span>
-            </a>
-            <a href="/#tentang-kami" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
-                <i class="fa-solid fa-award text-emerald-500 w-5"></i>
-                <span>Mengapa Kami</span>
-            </a>
-            <a href="/#testimoni" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
-                <i class="fa-solid fa-comments text-emerald-500 w-5"></i>
-                <span>Testimoni</span>
-            </a>
-            <div class="pt-2 grid grid-cols-2 gap-2">
+             class="md:hidden bg-white/95 backdrop-blur-lg border-b border-slate-200 shadow-xl px-4 pt-3 pb-6 space-y-3">
+            
+            <!-- Mobile Language Selector Section -->
+            <div x-data="{
+                currentLang: window.getCurrentLang ? window.getCurrentLang() : 'en',
+                languages: [
+                    { code: 'en', name: 'English', short: '🇬🇧 EN' },
+                    { code: 'id', name: 'Bahasa Indonesia', short: '🇮🇩 ID' },
+                    { code: 'zh-CN', name: '中文 Mandarin', short: '🇨🇳 中文' },
+                    { code: 'es', name: 'Español Spanish', short: '🇪🇸 ES' }
+                ],
+                selectLang(code) {
+                    this.currentLang = code;
+                    if (window.changeLanguage) {
+                        window.changeLanguage(code);
+                    }
+                }
+            }" class="p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe text-emerald-600"></i> Select Language:
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <template x-for="lang in languages" :key="lang.code">
+                        <button @click="selectLang(lang.code)" 
+                                type="button" 
+                                class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all border text-left cursor-pointer"
+                                :class="currentLang === lang.code ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'">
+                            <span x-text="lang.short"></span>
+                            <i x-show="currentLang === lang.code" class="fa-solid fa-check text-xs"></i>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <a href="/" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
+                    <i class="fa-solid fa-house text-emerald-500 w-5"></i>
+                    <span>Beranda</span>
+                </a>
+                <a href="/paket" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
+                    <i class="fa-solid fa-compass text-emerald-500 w-5"></i>
+                    <span>Paket Wisata</span>
+                </a>
+                <a href="/destinasi" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
+                    <i class="fa-solid fa-map-location-dot text-emerald-500 w-5"></i>
+                    <span>Tujuan Wisata</span>
+                </a>
+                <a href="/#tentang-kami" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
+                    <i class="fa-solid fa-award text-emerald-500 w-5"></i>
+                    <span>Mengapa Kami</span>
+                </a>
+                <a href="/#testimoni" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
+                    <i class="fa-solid fa-comments text-emerald-500 w-5"></i>
+                    <span>Testimoni</span>
+                </a>
+            </div>
+
+            <div class="pt-2 grid grid-cols-2 gap-2 border-t border-slate-100">
                 <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281338374254' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }}" 
                    target="_blank" 
                    class="flex flex-col items-center justify-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-2 rounded-xl shadow-md text-xs text-center">
@@ -410,6 +547,57 @@
             </div>
         </div>
     </footer>
+
+    <!-- Google Translate Hidden Element & Custom Switcher Logic -->
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'id',
+                includedLanguages: 'id,en,zh-CN,es',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        window.changeLanguage = function(langCode) {
+            if (langCode === 'id') {
+                var host = window.location.hostname;
+                var domainList = ['', '.' + host, host, '.' + host.replace(/^www\./, '')];
+                domainList.forEach(function(d) {
+                    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;" + (d ? " domain=" + d + ";" : "");
+                });
+                localStorage.setItem('user_lang', 'id');
+                window.location.reload();
+                return;
+            }
+
+            var val = '/id/' + langCode;
+            var host = window.location.hostname;
+            document.cookie = "googtrans=" + val + "; path=/;";
+            document.cookie = "googtrans=" + val + "; path=/; domain=" + host + ";";
+            if (host.includes('.')) {
+                document.cookie = "googtrans=" + val + "; path=/; domain=." + host.replace(/^www\./, '') + ";";
+            }
+            localStorage.setItem('user_lang', langCode);
+
+            var select = document.querySelector('.goog-te-combo');
+            if (select) {
+                select.value = langCode;
+                select.dispatchEvent(new Event('change'));
+            } else {
+                window.location.reload();
+            }
+        };
+
+        window.getCurrentLang = function() {
+            var match = document.cookie.match(/googtrans=\/id\/([a-zA-Z\-]+)/);
+            if (match && match[1]) {
+                return match[1];
+            }
+            return localStorage.getItem('user_lang') || 'en';
+        };
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     @livewireScripts
 </body>
