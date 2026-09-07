@@ -15,6 +15,10 @@
       gtag('config', 'G-MQ6VCG23P9');
     </script>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+
     <!-- SEO Meta Title & Description -->
     <title>{{ $title ?? (($company->company_name ?? 'Bothrex Bali Tour & Travel') . ' - ' . ($company->tagline ?? 'Paket Wisata Bali Murah & Terpercaya #1')) }}</title>
     <meta name="description" content="{{ $metaDescription ?? 'Agen Tour & Travel resmi spesialis liburan Pulau Bali. Menyediakan paket tour Nusa Penida 1 hari, Jeep Kintamani Sunrise, Ubud Swing, Uluwatu Kecak, & Sewa Mobil Privat supir ramah. Pesan mudah via WA!' }}">
@@ -36,7 +40,7 @@
     <meta property="og:url" content="{{ $canonical ?? url()->current() }}">
     <meta property="og:title" content="{{ $title ?? (($company->company_name ?? 'Bothrex Bali Tour & Travel') . ' - Paket Wisata Bali Murah') }}">
     <meta property="og:description" content="{{ $metaDescription ?? 'Nikmati liburan seru di Bali dengan mobil privat AC, supir ramah, itinerary hemat, & layanan 24/7. Hubungi WA kami!' }}">
-    <meta property="og:image" content="{{ $ogImage ?? 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80' }}">
+    <meta property="og:image" content="{{ $ogImage ?? url('/images/logo.png') }}">
     <meta property="og:image:alt" content="{{ $title ?? 'Bothrex Bali Tour & Travel' }}">
     <meta property="og:locale" content="id_ID">
 
@@ -44,7 +48,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $title ?? ($company->company_name ?? 'Bothrex Bali Tour & Travel') }}">
     <meta name="twitter:description" content="{{ $metaDescription ?? 'Agen Tour & Travel resmi spesialis paket liburan Bali murah & terpercaya.' }}">
-    <meta name="twitter:image" content="{{ $ogImage ?? 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80' }}">
+    <meta name="twitter:image" content="{{ $ogImage ?? url('/images/logo.png') }}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,8 +68,8 @@
           "{{ '@' }}id": "{{ url('/') }}#agency",
           "name": "{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}",
           "url": "{{ url('/') }}",
-          "logo": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80",
-          "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80",
+          "logo": "{{ url('/images/logo.png') }}",
+          "image": "{{ url('/images/logo.png') }}",
           "description": "{{ $company->about_text ?? 'Agen Tour & Travel resmi spesialis liburan Pulau Bali dengan paket all-in mobil privat dan supir ramah.' }}",
           "telephone": "{{ $company->phone ?? '+62 812-3456-7890' }}",
           "email": "{{ $company->email ?? 'info@bothrexbalitour.com' }}",
@@ -163,9 +167,7 @@
             <div class="flex justify-between items-center h-20">
                 <!-- Brand Logo -->
                 <a href="/" class="flex items-center gap-3 group">
-                    <div class="w-11 h-11 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-600/30 group-hover:scale-105 transition-transform duration-300">
-                        <i class="fa-solid fa-umbrella-beach text-xl"></i>
-                    </div>
+                    <img src="/images/logo.png" alt="{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}" class="w-11 h-11 rounded-2xl object-contain shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-transform duration-300">
                     <div>
                         <span :class="scrolled ? 'text-slate-900' : 'text-white'" class="text-2xl font-extrabold tracking-tight font-serif-heading block leading-none transition-colors">
                             {{ Str::words($company->company_name ?? 'Bothrex Bali Tour', 2, '') }}
@@ -281,9 +283,7 @@
                 <!-- Column 1: Agency Brand & About -->
                 <div class="space-y-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold">
-                            <i class="fa-solid fa-umbrella-beach text-lg"></i>
-                        </div>
+                        <img src="/images/logo.png" alt="{{ $company->company_name ?? 'Bothrex Bali Tour' }}" class="w-10 h-10 rounded-xl object-contain shadow">
                         <span class="text-xl font-extrabold text-white tracking-tight font-serif-heading">{{ $company->company_name ?? 'Bothrex Bali Tour' }}</span>
                     </div>
                     <p class="text-sm text-slate-400 leading-relaxed">

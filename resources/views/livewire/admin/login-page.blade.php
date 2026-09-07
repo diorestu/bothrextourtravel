@@ -1,9 +1,7 @@
 <div class="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-slate-200">
         <div class="text-center mb-8">
-            <div class="w-16 h-16 rounded-2xl bg-emerald-600 flex items-center justify-center text-white text-2xl mx-auto shadow-lg shadow-emerald-600/30 mb-4">
-                <i class="fa-solid fa-lock"></i>
-            </div>
+            <img src="/images/logo.png" alt="Bothrex Bali Tour" class="w-16 h-16 rounded-2xl mx-auto shadow-lg shadow-blue-600/30 mb-4 object-contain">
             <h2 class="text-2xl font-extrabold text-slate-900 font-serif-heading">Masuk Admin Panel</h2>
             <p class="text-slate-500 text-xs mt-1">Silakan masukkan kredensial akun administrator Anda.</p>
         </div>
