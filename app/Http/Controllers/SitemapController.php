@@ -87,13 +87,56 @@ class SitemapController extends Controller
 
         $xmlContent = $writer->outputMemory();
 
-        // Write physical file to public/sitemap.xml for webservers (Nginx / Apache)
+        // Write physical files to public/ for webservers
         @file_put_contents(public_path('sitemap.xml'), $xmlContent);
+        $this->generateTxtSitemap($baseUrl, $packages, $destinations);
 
         return response($xmlContent, 200, [
             'Content-Type' => 'text/xml; charset=utf-8',
             'Cache-Control' => 'public, max-age=3600',
         ]);
+    }
+
+    /**
+     * Generate plain text sitemap (sitemap.txt) supported natively by Google.
+     */
+    public function sitemapTxt(Request $request)
+    {
+        $baseUrl = 'https://bothrextourtravel.my.id';
+        if ($request->getHost() && !str_contains($request->getHost(), 'localhost') && !str_contains($request->getHost(), '127.0.0.1')) {
+            $baseUrl = rtrim($request->getSchemeAndHttpHost(), '/');
+        }
+
+        $packages = TourPackage::where('is_active', true)->orderBy('is_featured', 'desc')->get();
+        $destinations = Destination::where('is_active', true)->get();
+
+        $txtContent = $this->generateTxtSitemap($baseUrl, $packages, $destinations);
+
+        return response($txtContent, 200, [
+            'Content-Type' => 'text/plain; charset=utf-8',
+            'Cache-Control' => 'public, max-age=3600',
+        ]);
+    }
+
+    private function generateTxtSitemap($baseUrl, $packages, $destinations)
+    {
+        $urls = [
+            $baseUrl . '/',
+            $baseUrl . '/paket',
+            $baseUrl . '/destinasi',
+        ];
+
+        foreach ($packages as $pkg) {
+            $urls[] = $baseUrl . '/paket/' . $pkg->slug;
+        }
+
+        foreach ($destinations as $dest) {
+            $urls[] = $baseUrl . '/destinasi/' . $dest->slug;
+        }
+
+        $content = implode("\n", $urls) . "\n";
+        @file_put_contents(public_path('sitemap.txt'), $content);
+        return $content;
     }
 
     /**
@@ -111,6 +154,7 @@ class SitemapController extends Controller
         $robots .= "Disallow: /admin/\n";
         $robots .= "Disallow: /livewire/\n\n";
         $robots .= "Sitemap: " . $baseUrl . "/sitemap.xml\n";
+        $robots .= "Sitemap: " . $baseUrl . "/sitemap.txt\n";
 
         @file_put_contents(public_path('robots.txt'), $robots);
 

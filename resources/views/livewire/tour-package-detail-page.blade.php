@@ -288,15 +288,30 @@
             </div>
 
             <p class="text-xs text-slate-500 my-4">
-                Klik tombol di bawah untuk membuka WhatsApp dan menyelesaikan pembayaran serta verifikasi instruksi rekening admin.
+                Pilih salah satu nomor WhatsApp Customer Service kami di bawah untuk konfirmasi & reservasi:
             </p>
 
-            <a href="{{ $createdBooking->whatsapp_link }}" 
-               target="_blank" 
-               class="w-full inline-flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-4 rounded-2xl shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 text-base">
-                <i class="fa-brands fa-whatsapp text-2xl"></i>
-                <span>Lanjut ke WhatsApp Admin</span>
-            </a>
+            <div class="space-y-2.5">
+                <a href="{{ $createdBooking->whatsapp_link }}" 
+                   target="_blank" 
+                   class="w-full inline-flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-4 rounded-2xl shadow-lg shadow-emerald-600/30 transition-all hover:scale-[1.02] text-sm">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    <div class="text-left">
+                        <div class="font-bold">Chat WhatsApp CS 1</div>
+                        <div class="text-[11px] text-emerald-100 font-normal">0813-3837-4254 (Fast Response)</div>
+                    </div>
+                </a>
+
+                <a href="{{ $createdBooking->whatsapp_link_2 }}" 
+                   target="_blank" 
+                   class="w-full inline-flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-4 rounded-2xl shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] text-sm">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    <div class="text-left">
+                        <div class="font-bold">Chat WhatsApp CS 2</div>
+                        <div class="text-[11px] text-blue-100 font-normal">0812-4637-6329 (Alternatif)</div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
     @endif

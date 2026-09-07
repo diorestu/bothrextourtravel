@@ -71,7 +71,7 @@
           "logo": "{{ url('/images/logo.png') }}",
           "image": "{{ url('/images/logo.png') }}",
           "description": "{{ $company->about_text ?? 'Agen Tour & Travel resmi spesialis liburan Pulau Bali dengan paket all-in mobil privat dan supir ramah.' }}",
-          "telephone": "{{ $company->phone ?? '+62 812-3456-7890' }}",
+          "telephone": "{{ $company->phone ?? '081338374254 / 081246376329' }}",
           "email": "{{ $company->email ?? 'info@bothrexbalitour.com' }}",
           "priceRange": "Rp 350.000 - Rp 1.500.000",
           "currenciesAccepted": "IDR",
@@ -148,7 +148,7 @@
     <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-2">
             <div class="flex items-center space-x-4">
-                <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-emerald-400"></i> {{ $company->phone ?? '+62 812-3456-7890' }}</span>
+                <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-emerald-400"></i> {{ $company->phone ?? '081338374254 / 081246376329' }}</span>
                 <span class="flex items-center gap-1.5"><i class="fa-solid fa-envelope text-emerald-400"></i> {{ $company->email ?? 'info@bothrexbalitour.com' }}</span>
                 <span class="hidden md:inline-flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-emerald-400"></i> {{ $company->address ?? 'Jl. Raya Kuta No. 88, Badung, Bali' }}</span>
             </div>
@@ -197,7 +197,7 @@
 
                 <!-- CTA WhatsApp Button -->
                 <div class="hidden md:flex items-center gap-3">
-                    <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281234567890' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20ingin%20tanya%20informasi%20paket%20wisata%20Bali" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 rounded-full shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95 text-sm">
+                    <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281338374254' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20ingin%20tanya%20informasi%20paket%20wisata%20Bali" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 rounded-full shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95 text-sm">
                         <i class="fa-brands fa-whatsapp text-lg"></i>
                         <span>Hubungi WA</span>
                     </a>
@@ -249,12 +249,18 @@
                 <i class="fa-solid fa-comments text-emerald-500 w-5"></i>
                 <span>Testimoni</span>
             </a>
-            <div class="pt-2">
-                <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281234567890' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }}" 
+            <div class="pt-2 grid grid-cols-2 gap-2">
+                <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281338374254' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }}" 
                    target="_blank" 
-                   class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 rounded-xl shadow-lg shadow-emerald-600/30 transition-all text-sm">
-                    <i class="fa-brands fa-whatsapp text-xl"></i>
-                    <span>Chat WhatsApp CS</span>
+                   class="flex flex-col items-center justify-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-2 rounded-xl shadow-md text-xs text-center">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>CS 1 (081338374254)</span>
+                </a>
+                <a href="https://wa.me/{{ $company->whatsapp_number_2 ?? '6281246376329' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }}" 
+                   target="_blank" 
+                   class="flex flex-col items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-2 rounded-xl shadow-md text-xs text-center">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>CS 2 (081246376329)</span>
                 </a>
             </div>
         </div>
@@ -266,16 +272,63 @@
         @yield('content')
     </main>
 
-    <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281234567890' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20tertarik%20dengan%20paket%20liburan%20di%20Bali" 
-       target="_blank" 
-       title="Chat WhatsApp CS {{ $company->company_name ?? 'Bothrex Bali Tour' }}"
-       class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-2xl shadow-emerald-600/50 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group">
-        <i class="fa-brands fa-whatsapp text-3xl animate-bounce"></i>
-        <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-500 ease-in-out font-bold text-sm ml-0 group-hover:ml-2">
-            Konsultasi Tour Gratis!
-        </span>
-    </a>
+    <!-- Floating WhatsApp Widget (Multi-CS Support) -->
+    <div x-data="{ waOpen: false }" class="fixed bottom-6 right-6 z-50">
+        <div x-show="waOpen" 
+             @click.outside="waOpen = false"
+             x-transition:enter="transition ease-out duration-300 transform"
+             x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+             x-transition:leave="transition ease-in duration-200 transform"
+             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+             x-transition:leave-end="opacity-0 translate-y-4 scale-95"
+             class="mb-3 bg-white rounded-3xl shadow-2xl border border-slate-200 p-4 w-72 text-slate-800"
+             style="display: none;">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                    <span class="font-bold text-xs uppercase tracking-wider text-slate-700">Customer Service Online</span>
+                </div>
+                <button @click="waOpen = false" class="text-slate-400 hover:text-slate-600 text-xs p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-2">
+                <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281338374254' }}?text=Halo%20Admin%20Bothrex%20Bali%20Tour,%20saya%20tertarik%20dengan%20paket%20liburan%20di%20Bali" 
+                   target="_blank" 
+                   class="flex items-center gap-3 p-2.5 bg-emerald-50 hover:bg-emerald-100 rounded-2xl transition-all border border-emerald-100">
+                    <div class="w-9 h-9 bg-emerald-600 text-white rounded-xl flex items-center justify-center text-lg shadow-sm">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div class="text-xs">
+                        <div class="font-extrabold text-slate-900">WhatsApp CS 1</div>
+                        <div class="text-emerald-700 font-semibold text-[11px]">0813-3837-4254</div>
+                    </div>
+                </a>
+                <a href="https://wa.me/{{ $company->whatsapp_number_2 ?? '6281246376329' }}?text=Halo%20Admin%20Bothrex%20Bali%20Tour,%20saya%20tertarik%20dengan%20paket%20liburan%20di%20Bali" 
+                   target="_blank" 
+                   class="flex items-center gap-3 p-2.5 bg-blue-50 hover:bg-blue-100 rounded-2xl transition-all border border-blue-100">
+                    <div class="w-9 h-9 bg-blue-600 text-white rounded-xl flex items-center justify-center text-lg shadow-sm">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div class="text-xs">
+                        <div class="font-extrabold text-slate-900">WhatsApp CS 2</div>
+                        <div class="text-blue-700 font-semibold text-[11px]">0812-4637-6329</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <button @click="waOpen = !waOpen" 
+                type="button" 
+                title="Chat WhatsApp CS {{ $company->company_name ?? 'Bothrex Bali Tour' }}"
+                class="bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-2xl shadow-emerald-600/50 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group cursor-pointer">
+            <i class="fa-brands fa-whatsapp text-3xl animate-bounce"></i>
+            <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-500 ease-in-out font-bold text-sm ml-0 group-hover:ml-2">
+                Konsultasi Tour Gratis!
+            </span>
+        </button>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400 pt-16 pb-12 border-t border-slate-800 mt-20">
@@ -336,9 +389,12 @@
                             <i class="fa-solid fa-map-pin text-emerald-400 mt-1"></i>
                             <span>{{ $company->address ?? 'Jl. Raya Kuta No. 88, Kuta, Kabupaten Badung, Bali 80361' }}</span>
                         </li>
-                        <li class="flex items-center gap-3">
-                            <i class="fa-brands fa-whatsapp text-emerald-400"></i>
-                            <span>{{ $company->phone ?? '+62 812-3456-7890' }}</span>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-brands fa-whatsapp text-emerald-400 mt-1"></i>
+                            <div class="space-y-1">
+                                <div><span class="text-xs text-slate-400">CS 1:</span> <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281338374254' }}" target="_blank" class="text-white hover:text-emerald-400 transition-colors font-medium">0813-3837-4254</a></div>
+                                <div><span class="text-xs text-slate-400">CS 2:</span> <a href="https://wa.me/{{ $company->whatsapp_number_2 ?? '6281246376329' }}" target="_blank" class="text-white hover:text-emerald-400 transition-colors font-medium">0812-4637-6329</a></div>
+                            </div>
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="fa-solid fa-clock text-emerald-400"></i>

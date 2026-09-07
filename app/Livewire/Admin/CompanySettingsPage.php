@@ -13,6 +13,7 @@ class CompanySettingsPage extends Component
     public $tagline;
     public $phone;
     public $whatsapp_number;
+    public $whatsapp_number_2;
     public $email;
     public $address;
     public $operating_hours;
@@ -30,6 +31,7 @@ class CompanySettingsPage extends Component
         $this->tagline = $settings->tagline;
         $this->phone = $settings->phone;
         $this->whatsapp_number = $settings->whatsapp_number;
+        $this->whatsapp_number_2 = $settings->whatsapp_number_2;
         $this->email = $settings->email;
         $this->address = $settings->address;
         $this->operating_hours = $settings->operating_hours;
@@ -45,14 +47,15 @@ class CompanySettingsPage extends Component
     {
         $this->validate([
             'company_name' => 'required|string|max:100',
-            'phone' => 'required|string|max:50',
+            'phone' => 'required|string|max:100',
             'whatsapp_number' => 'required|string|max:50',
+            'whatsapp_number_2' => 'nullable|string|max:50',
             'email' => 'required|email|max:100',
             'address' => 'required|string|max:255',
         ], [
             'company_name.required' => 'Nama perusahaan wajib diisi.',
             'phone.required' => 'Nomor telepon CS wajib diisi.',
-            'whatsapp_number.required' => 'Nomor WhatsApp CS wajib diisi.',
+            'whatsapp_number.required' => 'Nomor WhatsApp CS 1 wajib diisi.',
             'email.required' => 'Email perusahaan wajib diisi.',
             'address.required' => 'Alamat kantor wajib diisi.',
         ]);
@@ -63,6 +66,7 @@ class CompanySettingsPage extends Component
             'tagline' => $this->tagline,
             'phone' => $this->phone,
             'whatsapp_number' => $this->whatsapp_number,
+            'whatsapp_number_2' => $this->whatsapp_number_2,
             'email' => $this->email,
             'address' => $this->address,
             'operating_hours' => $this->operating_hours,

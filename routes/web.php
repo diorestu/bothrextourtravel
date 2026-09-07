@@ -22,8 +22,9 @@ Route::get('/destinasi/{slug}', DestinationDetailPage::class)->name('destination
 
 use App\Http\Controllers\SitemapController;
 
-// Dynamic SEO XML Sitemap & robots.txt (with Google Image Sitemap Extension)
+// Dynamic SEO XML Sitemap, Text Sitemap & robots.txt
 Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
+Route::get('/sitemap.txt', [SitemapController::class, 'sitemapTxt'])->name('sitemap.txt');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
 // Admin Guest Route

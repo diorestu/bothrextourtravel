@@ -88,12 +88,21 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nomor WhatsApp CS (Tanpa +, Cth: 6281234567890) *</label>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nomor WhatsApp CS 1 (Utama, Cth: 6281338374254) *</label>
                         <input type="text" 
                                wire:model="whatsapp_number" 
-                               placeholder="6281234567890" 
+                               placeholder="6281338374254" 
                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                         @error('whatsapp_number') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nomor WhatsApp CS 2 (Cadangan, Cth: 6281246376329)</label>
+                        <input type="text" 
+                               wire:model="whatsapp_number_2" 
+                               placeholder="6281246376329" 
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        @error('whatsapp_number_2') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
