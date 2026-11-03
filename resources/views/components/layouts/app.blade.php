@@ -8,23 +8,24 @@
     <!-- Default Language Initializer (Default: English) -->
     <script>
         (function() {
-            var savedLang = localStorage.getItem('user_lang');
+            var savedLang = localStorage.getItem('user_lang') || 'en';
             var hasTransCookie = document.cookie.indexOf('googtrans=') !== -1;
-            if (!savedLang && !hasTransCookie) {
-                localStorage.setItem('user_lang', 'en');
-                document.cookie = "googtrans=/id/en; path=/;";
+            if (!hasTransCookie || !localStorage.getItem('user_lang')) {
+                localStorage.setItem('user_lang', savedLang);
+                var val = '/id/' + savedLang;
+                document.cookie = "googtrans=" + val + "; path=/;";
                 var host = window.location.hostname;
                 if (host) {
-                    document.cookie = "googtrans=/id/en; path=/; domain=" + host + ";";
+                    document.cookie = "googtrans=" + val + "; path=/; domain=" + host + ";";
                     if (host.includes('.')) {
-                        document.cookie = "googtrans=/id/en; path=/; domain=." + host.replace(/^www\./, '') + ";";
+                        document.cookie = "googtrans=" + val + "; path=/; domain=." + host.replace(/^www\./, '') + ";";
                     }
                 }
             }
         })();
     </script>
 
-    <!-- Currency Store Initializer -->
+    <!-- Currency Store Initializer (Default: USD) -->
     <script>
         (function() {
             var defaultCurr = localStorage.getItem('user_currency') || 'USD';
@@ -37,15 +38,15 @@
                     window.Alpine.store('currency', {
                         current: localStorage.getItem('user_currency') || 'USD',
                         currencies: [
+                            { code: 'USD', name: 'USD ($)', symbol: '$', flag: '🇺🇸', rate: 1 / 18150, prefix: '$', suffix: '', decimals: 0, group: ',', dec: '.' },
                             { code: 'IDR', name: 'IDR (Rp)', symbol: 'Rp', flag: '🇮🇩', rate: 1, prefix: 'Rp ', suffix: '', decimals: 0, group: '.', dec: ',' },
-                            { code: 'USD', name: 'USD ($)', symbol: '$', flag: '🇺🇸', rate: 1 / 16000, prefix: '$', suffix: '', decimals: 0, group: ',', dec: '.' },
-                            { code: 'MYR', name: 'MYR (RM)', symbol: 'RM', flag: '🇲🇾', rate: 1 / 3650, prefix: 'RM ', suffix: '', decimals: 0, group: ',', dec: '.' },
-                            { code: 'CNY', name: 'CNY (¥)', symbol: '¥', flag: '🇨🇳', rate: 1 / 2250, prefix: '¥', suffix: '', decimals: 0, group: ',', dec: '.' },
-                            { code: 'EUR', name: 'EUR (€)', symbol: '€', flag: '🇪🇺', rate: 1 / 17500, prefix: '€', suffix: '', decimals: 0, group: ',', dec: '.' }
+                            { code: 'MYR', name: 'MYR (RM)', symbol: 'RM', flag: '🇲🇾', rate: 1 / 4450, prefix: 'RM ', suffix: '', decimals: 0, group: ',', dec: '.' },
+                            { code: 'CNY', name: 'CNY (¥)', symbol: '¥', flag: '🇨🇳', rate: 1 / 2720, prefix: '¥', suffix: '', decimals: 0, group: ',', dec: '.' },
+                            { code: 'EUR', name: 'EUR (€)', symbol: '€', flag: '🇪🇺', rate: 1 / 20320, prefix: '€', suffix: '', decimals: 0, group: ',', dec: '.' }
                         ],
                         get active() {
                             var self = this;
-                            return this.currencies.find(function(c) { return c.code === self.current; }) || this.currencies[1];
+                            return this.currencies.find(function(c) { return c.code === self.current; }) || this.currencies[0];
                         },
                         set(code) {
                             this.current = code;
@@ -148,8 +149,8 @@
           "description": "{{ $company->about_text ?? 'Agen Tour & Travel resmi spesialis liburan Pulau Bali dengan paket all-in mobil privat dan supir ramah.' }}",
           "telephone": "{{ $company->phone ?? '0851-5643-2635' }}",
           "email": "{{ $company->email ?? 'info@bothrexbalitour.com' }}",
-          "priceRange": "Rp 350.000 - Rp 1.500.000",
-          "currenciesAccepted": "IDR",
+          "priceRange": "$25 - $100",
+          "currenciesAccepted": "USD, IDR, MYR, CNY, EUR",
           "paymentAccepted": "Cash, Bank Transfer",
           "address": {
             "{{ '@' }}type": "PostalAddress",
@@ -241,7 +242,7 @@
 <body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
 
     <!-- Top Bar Contact Info -->
-    <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
+    <div class="hidden md:block bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-2">
             <div class="flex items-center space-x-4">
                 <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-emerald-400"></i> {{ $company->phone ?? '0851-5643-2635' }}</span>
@@ -306,8 +307,8 @@
                                 aria-label="Select Currency"
                                 class="inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold transition-all border shadow-sm cursor-pointer"
                                 :class="scrolled ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200' : 'bg-white/15 hover:bg-white/25 text-white border-white/20 backdrop-blur-md'">
-                            <span x-text="active.flag" class="text-sm leading-none"></span>
-                            <span x-text="active.code" class="font-bold tracking-wider leading-none"></span>
+                            <span x-text="active.flag" class="text-sm leading-none">🇺🇸</span>
+                            <span x-text="active.code" class="font-bold tracking-wider leading-none">USD</span>
                             <i class="fa-solid fa-chevron-down text-[9px] opacity-70 transition-transform" :class="currOpen ? 'rotate-180' : ''"></i>
                         </button>
 
@@ -368,8 +369,8 @@
                                 aria-label="Select Language"
                                 class="inline-flex items-center gap-2 px-3 py-2 rounded-full text-xs font-bold transition-all border shadow-sm cursor-pointer"
                                 :class="scrolled ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200' : 'bg-white/15 hover:bg-white/25 text-white border-white/20 backdrop-blur-md'">
-                            <span x-text="active.flag" class="text-sm leading-none"></span>
-                            <span x-text="active.short" class="font-bold tracking-wider leading-none"></span>
+                            <span x-text="active.flag" class="text-sm leading-none">🇬🇧</span>
+                            <span x-text="active.short" class="font-bold tracking-wider leading-none">EN</span>
                             <i class="fa-solid fa-chevron-down text-[9px] opacity-70 transition-transform" :class="langOpen ? 'rotate-180' : ''"></i>
                         </button>
 
@@ -405,7 +406,7 @@
 
                     <a href="https://wa.me/{{ $company->whatsapp_number ?? '6285156432635' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20ingin%20tanya%20informasi%20paket%20wisata%20Bali" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 rounded-full shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95 text-sm">
                         <i class="fa-brands fa-whatsapp text-lg"></i>
-                        <span>Hubungi WA</span>
+                        <span>Chat WhatsApp</span>
                     </a>
                 </div>
 
@@ -528,7 +529,7 @@
                    target="_blank" 
                    class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-xl shadow-md text-sm text-center">
                     <i class="fa-brands fa-whatsapp text-xl"></i>
-                    <span>Chat WhatsApp (0851-5643-2635)</span>
+                    <span>Chat WhatsApp</span>
                 </a>
             </div>
         </div>

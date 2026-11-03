@@ -146,9 +146,9 @@
                             <div>
                                 <span class="text-[10px] text-slate-400 uppercase font-semibold block">Harga All-In Mulai Dari</span>
                                 <div class="flex items-baseline gap-2">
-                                    <span class="text-2xl font-extrabold text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->published_price }}) : 'Rp {{ number_format($pkg->published_price, 0, ',', '.') }}'">Rp {{ number_format($pkg->published_price, 0, ',', '.') }}</span>
+                                    <span class="text-2xl font-extrabold text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->published_price }}) : '$ {{ number_format($pkg->usd_price, 0) }}'">$ {{ number_format($pkg->usd_price, 0) }}</span>
                                     @if($pkg->published_original_price)
-                                    <span class="text-xs text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->published_original_price }}) : 'Rp {{ number_format($pkg->published_original_price, 0, ',', '.') }}'">Rp {{ number_format($pkg->published_original_price, 0, ',', '.') }}</span>
+                                    <span class="text-xs text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->published_original_price }}) : '$ {{ number_format($pkg->usd_original_price, 0) }}'">$ {{ number_format($pkg->usd_original_price, 0) }}</span>
                                     @endif
                                 </div>
                                 <span class="text-[11px] text-slate-500">/ orang / hari (Private Tour AC)</span>
@@ -502,7 +502,7 @@
                        target="_blank" 
                        class="inline-flex items-center justify-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-8 py-4 rounded-2xl shadow-2xl shadow-emerald-500/40 transition-all hover:scale-105 active:scale-95 text-base border border-emerald-400/40">
                         <i class="fa-brands fa-whatsapp text-2xl"></i>
-                        <span>Chat WhatsApp (0851-5643-2635)</span>
+                        <span>Chat WhatsApp</span>
                     </a>
                 </div>
             </div>

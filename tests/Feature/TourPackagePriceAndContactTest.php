@@ -75,10 +75,14 @@ class TourPackagePriceAndContactTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('0851-5643-2635');
         $response->assertSee('6285156432635');
+        $response->assertSee('Chat WhatsApp');
+        $response->assertDontSee('Chat WhatsApp (0851-5643-2635)');
+        $response->assertSee('hidden md:block bg-slate-900', false);
         $response->assertDontSee('CS 1');
         $response->assertDontSee('CS 2');
         $response->assertDontSee('0813-3837-4254');
         $response->assertDontSee('0812-4637-6329');
+        $response->assertDontSee('+62 812-3456-7890');
     }
 
     public function test_tour_package_detail_page_calculates_and_submits_with_published_price(): void
@@ -112,20 +116,47 @@ class TourPackagePriceAndContactTest extends TestCase
         Livewire::test(TourPackageDetailPage::class, ['slug' => $pkg->slug])
             ->set('number_of_guests', 2)
             ->set('duration_days', 1)
-            ->assertSee('Rp 550.000')
-            ->assertSee('Rp 770.000')
+            ->assertSee('$ 30')
+            ->assertSee('$ 42')
             ->set('customer_name', 'Budi Santoso')
             ->set('customer_email', 'budi@example.com')
             ->set('customer_phone', '08123456789')
             ->set('travel_date', date('Y-m-d', strtotime('+3 days')))
             ->call('submitBooking')
             ->assertHasNoErrors()
-            ->assertSet('showSuccessModal', true);
+            ->assertSet('showSuccessModal', true)
+            ->assertSee('Chat WhatsApp')
+            ->assertDontSee('Lanjut Chat WhatsApp (0851-5643-2635)')
+            ->assertDontSee('+62 812-3456-7890');
 
         $booking = Booking::first();
         $this->assertNotNull($booking);
         $this->assertEquals(1100000, $booking->total_price);
         $this->assertStringContainsString('6285156432635', $booking->whatsapp_link);
         $this->assertNull($booking->whatsapp_link_2);
+    }
+
+    public function test_default_currency_is_usd_and_language_is_english(): void
+    {
+        Destination::create([
+            'name' => 'Ubud',
+            'slug' => 'ubud',
+            'category' => 'Culture',
+            'location' => 'Bali',
+            'image_url' => 'https://example.com/ubud.jpg',
+            'description' => 'Ubud desc',
+            'is_popular' => true,
+            'is_active' => true,
+        ]);
+
+        $response = $this->get('/');
+        $response->assertStatus(200);
+        $response->assertSee('lang="en"', false);
+        $response->assertSee('USD');
+        $response->assertSee('English');
+        $response->assertSee('1 / 18150', false);
+        $response->assertSee('1 / 20320', false);
+        $response->assertSee('1 / 4450', false);
+        $response->assertSee('1 / 2720', false);
     }
 }

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('company_name')->default('Bothrex Bali Tour');
             $table->string('tagline')->nullable()->default('Agen Tour & Travel Resmi Bali #1');
-            $table->string('phone')->nullable()->default('+62 812-3456-7890');
-            $table->string('whatsapp_number')->nullable()->default('6281234567890');
+            $table->string('phone')->nullable()->default('0851-5643-2635');
+            $table->string('whatsapp_number')->nullable()->default('6285156432635');
             $table->string('email')->nullable()->default('info@bothrexbalitour.com');
             $table->string('address')->nullable()->default('Jl. Raya Kuta No. 88, Badung, Bali');
             $table->string('operating_hours')->nullable()->default('Senin - Minggu: 07:00 - 22:00 WITA');

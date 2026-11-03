@@ -127,9 +127,9 @@
                         <div>
                             <span class="text-[10px] text-slate-400 uppercase font-semibold block">Harga per Orang / Hari</span>
                             <div class="flex items-baseline gap-1.5">
-                                <span class="text-xl font-extrabold text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->published_price }}) : 'Rp {{ number_format($pkg->published_price, 0, ',', '.') }}'">Rp {{ number_format($pkg->published_price, 0, ',', '.') }}</span>
+                                <span class="text-xl font-extrabold text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->published_price }}) : '$ {{ number_format($pkg->usd_price, 0) }}'">$ {{ number_format($pkg->usd_price, 0) }}</span>
                                 @if($pkg->published_original_price)
-                                <span class="text-xs text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->published_original_price }}) : 'Rp {{ number_format($pkg->published_original_price, 0, ',', '.') }}'">Rp {{ number_format($pkg->published_original_price, 0, ',', '.') }}</span>
+                                <span class="text-xs text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->published_original_price }}) : '$ {{ number_format($pkg->usd_original_price, 0) }}'">$ {{ number_format($pkg->usd_original_price, 0) }}</span>
                                 @endif
                             </div>
                         </div>

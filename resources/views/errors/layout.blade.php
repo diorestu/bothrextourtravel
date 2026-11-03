@@ -49,7 +49,7 @@
                    target="_blank" 
                    class="inline-flex items-center gap-1.5 text-emerald-600 hover:text-emerald-700 font-bold hover:underline">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
-                    <span>Hubungi WhatsApp (0851-5643-2635)</span>
+                    <span>Chat WhatsApp</span>
                 </a>
             </div>
         </div>

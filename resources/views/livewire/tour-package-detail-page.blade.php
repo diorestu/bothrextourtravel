@@ -165,12 +165,12 @@
                             @endif
                         </div>
                         <div class="flex items-baseline gap-2 mt-1">
-                            <span class="text-3xl sm:text-4xl font-extrabold text-emerald-700 tracking-tight" x-text="$store.currency ? $store.currency.format({{ (int)$package->published_price }}) : 'Rp {{ number_format($package->published_price, 0, ',', '.') }}'">
-                                Rp {{ number_format($package->published_price, 0, ',', '.') }}
+                            <span class="text-3xl sm:text-4xl font-extrabold text-emerald-700 tracking-tight" x-text="$store.currency ? $store.currency.format({{ (int)$package->published_price }}) : '$ {{ number_format($package->usd_price, 0) }}'">
+                                $ {{ number_format($package->usd_price, 0) }}
                             </span>
                             @if($package->published_original_price)
-                            <span class="text-sm text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$package->published_original_price }}) : 'Rp {{ number_format($package->published_original_price, 0, ',', '.') }}'">
-                                Rp {{ number_format($package->published_original_price, 0, ',', '.') }}
+                            <span class="text-sm text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$package->published_original_price }}) : '$ {{ number_format($package->usd_original_price, 0) }}'">
+                                $ {{ number_format($package->usd_original_price, 0) }}
                             </span>
                             @endif
                         </div>
@@ -208,7 +208,7 @@
                                     </div>
                                     <input type="text" 
                                            wire:model="customer_phone" 
-                                           placeholder="081234567890" 
+                                           placeholder="08xxxxxxxxxx" 
                                            class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition">
                                 </div>
                                 @error('customer_phone') <span class="text-[11px] text-rose-500 mt-1 block font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</span> @enderror
@@ -331,8 +331,8 @@
                         <div class="bg-gradient-to-br from-emerald-50 to-teal-50/70 p-4 sm:p-5 rounded-2xl border border-emerald-200/80 my-4 space-y-2.5">
                             <div class="flex items-center justify-between text-xs text-slate-600 pb-2 border-b border-emerald-200/60">
                                 <span class="font-medium">Kalkulasi Tarif:</span>
-                                <span class="font-bold text-slate-800" x-text="numGuests + ' Peserta × ' + numDays + ' Hari × ' + ($store.currency ? $store.currency.format(unitPrice) : 'Rp ' + unitPrice.toLocaleString('id-ID'))">
-                                    {{ $number_of_guests ?? 2 }} Orang x {{ $duration_days ?? 1 }} Hari x Rp {{ number_format($package->published_price, 0, ',', '.') }}
+                                <span class="font-bold text-slate-800" x-text="numGuests + ' Guests × ' + numDays + ' Days × ' + ($store.currency ? $store.currency.format(unitPrice) : '$' + Math.round(unitPrice / 18150))">
+                                    {{ $number_of_guests ?? 2 }} Guests x {{ $duration_days ?? 1 }} Days x $ {{ number_format($package->usd_price, 0) }}
                                 </span>
                             </div>
 
@@ -345,8 +345,8 @@
                                 </div>
                                 <div class="text-right">
                                     <span class="text-2xl sm:text-3xl font-extrabold text-emerald-700 tracking-tight" 
-                                          x-text="$store.currency ? $store.currency.format(totalAmount) : 'Rp ' + totalAmount.toLocaleString('id-ID')">
-                                        Rp {{ number_format($this->calculateTotal(), 0, ',', '.') }}
+                                          x-text="$store.currency ? $store.currency.format(totalAmount) : '$' + Math.round(totalAmount / 18150)">
+                                        $ {{ number_format(round($this->calculateTotal() / 18150), 0) }}
                                     </span>
                                 </div>
                             </div>
@@ -439,7 +439,7 @@
                 </div>
                 <div class="flex justify-between pt-2 border-t border-slate-200 font-bold text-slate-900">
                     <span>Estimasi Total Biaya:</span>
-                    <span class="text-emerald-700 text-sm font-extrabold" x-text="$store.currency ? $store.currency.format({{ (int)$createdBooking->total_price }}) : 'Rp {{ number_format($createdBooking->total_price, 0, ',', '.') }}'">Rp {{ number_format($createdBooking->total_price, 0, ',', '.') }}</span>
+                    <span class="text-emerald-700 text-sm font-extrabold" x-text="$store.currency ? $store.currency.format({{ (int)$createdBooking->total_price }}) : '$ ' + Math.round({{ (int)$createdBooking->total_price }} / 18150)">$ {{ number_format(round($createdBooking->total_price / 18150), 0) }}</span>
                 </div>
             </div>
 
@@ -452,7 +452,7 @@
                class="w-full inline-flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-4 px-4 rounded-2xl shadow-lg shadow-emerald-600/30 transition-all hover:scale-[1.02] text-base">
                 <i class="fa-brands fa-whatsapp text-2xl"></i>
                 <div class="text-left">
-                    <div class="font-bold">Lanjut Chat WhatsApp (0851-5643-2635)</div>
+                    <div class="font-bold">Chat WhatsApp</div>
                     <div class="text-xs text-emerald-100 font-normal">Fast Response & Layanan 24 Jam</div>
                 </div>
             </a>
@@ -493,7 +493,7 @@
         "{{ '@' }}type": "TravelAgency",
         "name": "{{ $company->company_name ?? 'Bothrex Bali Tour & Travel' }}",
         "url": "{{ url('/') }}",
-        "telephone": "{{ $company->phone ?? '+62 812-3456-7890' }}"
+        "telephone": "{{ $company->phone ?? '0851-5643-2635' }}"
       },
       "itinerary": {
         "{{ '@' }}type": "ItemList",

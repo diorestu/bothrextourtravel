@@ -41,6 +41,8 @@ class TourPackage extends Model
     protected $appends = [
         'published_price',
         'published_original_price',
+        'usd_price',
+        'usd_original_price',
     ];
 
     public function destination()
@@ -87,5 +89,30 @@ class TourPackage extends Model
     public function getFormattedPublishedOriginalPriceAttribute(): ?string
     {
         return $this->published_original_price ? 'Rp '.number_format($this->published_original_price, 0, ',', '.') : null;
+    }
+
+    public const USD_EXCHANGE_RATE = 18150;
+
+    /**
+     * Estimated USD Price ($1 = Rp 18,150)
+     */
+    public function getUsdPriceAttribute(): float
+    {
+        return (float) round($this->published_price / self::USD_EXCHANGE_RATE);
+    }
+
+    public function getUsdOriginalPriceAttribute(): ?float
+    {
+        return $this->published_original_price ? (float) round($this->published_original_price / self::USD_EXCHANGE_RATE) : null;
+    }
+
+    public function getFormattedUsdPriceAttribute(): string
+    {
+        return '$ '.number_format($this->usd_price, 0);
+    }
+
+    public function getFormattedUsdOriginalPriceAttribute(): ?string
+    {
+        return $this->usd_original_price ? '$ '.number_format($this->usd_original_price, 0) : null;
     }
 }
