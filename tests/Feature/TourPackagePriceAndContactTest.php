@@ -77,7 +77,8 @@ class TourPackagePriceAndContactTest extends TestCase
         $response->assertSee('6285156432635');
         $response->assertSee('Chat WhatsApp');
         $response->assertDontSee('Chat WhatsApp (0851-5643-2635)');
-        $response->assertSee('hidden md:block bg-slate-900', false);
+        $response->assertDontSee('Top Bar Contact Info');
+        $response->assertDontSee('1.500+ Traveler Satisfied');
         $response->assertDontSee('CS 1');
         $response->assertDontSee('CS 2');
         $response->assertDontSee('0813-3837-4254');

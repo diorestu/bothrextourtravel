@@ -241,20 +241,6 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
 
-    <!-- Top Bar Contact Info -->
-    <div class="hidden md:block bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-2">
-            <div class="flex items-center space-x-4">
-                <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-emerald-400"></i> {{ $company->phone ?? '0851-5643-2635' }}</span>
-                <span class="flex items-center gap-1.5"><i class="fa-solid fa-envelope text-emerald-400"></i> {{ $company->email ?? 'info@bothrexbalitour.com' }}</span>
-                <span class="hidden md:inline-flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-emerald-400"></i> {{ $company->address ?? 'Jl. Raya Kuta No. 88, Badung, Bali' }}</span>
-            </div>
-            <div class="flex items-center space-x-4">
-                <span class="text-amber-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-star"></i> 4.9/5 (1.500+ Traveler Satisfied)</span>
-            </div>
-        </div>
-    </div>
-
     <!-- Main Navigation Bar with Dynamic Scroll Parallax Header Effect -->
     <header x-data="{ open: false, scrolled: false }" 
             @scroll.window="scrolled = (window.pageYOffset > 60)" 
