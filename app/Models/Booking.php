@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Booking extends Model
 {
@@ -34,7 +35,7 @@ class Booking extends Model
 
     public function getFormattedTotalPriceAttribute()
     {
-        return 'Rp ' . number_format($this->total_price, 0, ',', '.');
+        return 'Rp '.number_format($this->total_price, 0, ',', '.');
     }
 
     public function getWhatsappMessageAttribute()
@@ -46,9 +47,9 @@ class Booking extends Model
 
         $packageTag = '[WEB-TOUR]';
         if (preg_match('/\[(WEB-TOUR-[A-Z0-9\-]+?)(?:-[0-9]+-[0-9]+)?\]/', $this->booking_code, $matches)) {
-            $packageTag = '[' . $matches[1] . ']';
+            $packageTag = '['.$matches[1].']';
         } elseif ($this->tourPackage) {
-            $titleLower = strtolower($this->tourPackage->title . ' ' . $this->tourPackage->slug);
+            $titleLower = strtolower($this->tourPackage->title.' '.$this->tourPackage->slug);
             if (str_contains($titleLower, 'kintamani') || str_contains($titleLower, 'batur')) {
                 $packageTag = '[WEB-TOUR-KINTAMANI]';
             } elseif (str_contains($titleLower, 'ubud')) {
@@ -60,7 +61,7 @@ class Booking extends Model
             } elseif (str_contains($titleLower, 'nusa')) {
                 $packageTag = '[WEB-TOUR-NUSA-PENIDA]';
             } else {
-                $packageTag = '[WEB-TOUR-' . strtoupper(\Illuminate\Support\Str::slug($this->tourPackage->title)) . ']';
+                $packageTag = '[WEB-TOUR-'.strtoupper(Str::slug($this->tourPackage->title)).']';
             }
         }
 
@@ -74,12 +75,12 @@ class Booking extends Model
         $message .= "📅 *Tanggal Mulai Tour:* {$formattedDate}\n";
         $message .= "⏱️ *Durasi Tour:* {$days} Hari\n";
         $message .= "👥 *Jumlah Peserta:* {$this->number_of_guests} Orang\n";
-        $message .= "📍 *Lokasi Penjemputan:* " . ($this->pickup_location ?: 'Diinfokan kemudian') . "\n";
+        $message .= '📍 *Lokasi Penjemputan:* '.($this->pickup_location ?: 'Diinfokan kemudian')."\n";
         $message .= "💰 *Estimasi Total Biaya:* {$totalFormatted} ({$this->number_of_guests} org x {$days} hari)\n\n";
         if ($this->special_notes) {
             $message .= "📝 *Catatan:* {$this->special_notes}\n\n";
         }
-        $message .= "Mohon informasi instruksi rekening pembayaran. Terima kasih!";
+        $message .= 'Mohon informasi instruksi rekening pembayaran. Terima kasih!';
 
         return $message;
     }
@@ -87,16 +88,20 @@ class Booking extends Model
     public function getWhatsappLinkAttribute()
     {
         $settings = CompanySetting::getSettings();
-        $adminPhone = $settings->whatsapp_number ?: '6281338374254';
+        $adminPhone = $settings->whatsapp_number ?: '6285156432635';
 
-        return "https://wa.me/{$adminPhone}?text=" . urlencode($this->whatsapp_message);
+        return "https://wa.me/{$adminPhone}?text=".urlencode($this->whatsapp_message);
     }
 
     public function getWhatsappLink2Attribute()
     {
         $settings = CompanySetting::getSettings();
-        $adminPhone2 = $settings->whatsapp_number_2 ?: '6281246376329';
+        $adminPhone2 = $settings->whatsapp_number_2;
 
-        return "https://wa.me/{$adminPhone2}?text=" . urlencode($this->whatsapp_message);
+        if (! $adminPhone2) {
+            return null;
+        }
+
+        return "https://wa.me/{$adminPhone2}?text=".urlencode($this->whatsapp_message);
     }
 }

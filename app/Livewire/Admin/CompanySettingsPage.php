@@ -2,26 +2,39 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
-use Livewire\Attributes\Layout;
 use App\Models\CompanySetting;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout('layouts.app')]
 class CompanySettingsPage extends Component
 {
     public $company_name;
+
     public $tagline;
+
     public $phone;
+
     public $whatsapp_number;
+
     public $whatsapp_number_2;
+
     public $email;
+
     public $address;
+
     public $operating_hours;
+
     public $about_text;
+
     public $instagram_url;
+
     public $facebook_url;
+
     public $tiktok_url;
+
     public $youtube_url;
+
     public $bank_info;
 
     public function mount()
@@ -49,13 +62,12 @@ class CompanySettingsPage extends Component
             'company_name' => 'required|string|max:100',
             'phone' => 'required|string|max:100',
             'whatsapp_number' => 'required|string|max:50',
-            'whatsapp_number_2' => 'nullable|string|max:50',
             'email' => 'required|email|max:100',
             'address' => 'required|string|max:255',
         ], [
             'company_name.required' => 'Nama perusahaan wajib diisi.',
             'phone.required' => 'Nomor telepon CS wajib diisi.',
-            'whatsapp_number.required' => 'Nomor WhatsApp CS 1 wajib diisi.',
+            'whatsapp_number.required' => 'Nomor WhatsApp wajib diisi.',
             'email.required' => 'Email perusahaan wajib diisi.',
             'address.required' => 'Alamat kantor wajib diisi.',
         ]);
@@ -66,7 +78,7 @@ class CompanySettingsPage extends Component
             'tagline' => $this->tagline,
             'phone' => $this->phone,
             'whatsapp_number' => $this->whatsapp_number,
-            'whatsapp_number_2' => $this->whatsapp_number_2,
+            'whatsapp_number_2' => null,
             'email' => $this->email,
             'address' => $this->address,
             'operating_hours' => $this->operating_hours,

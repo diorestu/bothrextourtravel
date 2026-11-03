@@ -146,9 +146,9 @@
                             <div>
                                 <span class="text-[10px] text-slate-400 uppercase font-semibold block">Harga All-In Mulai Dari</span>
                                 <div class="flex items-baseline gap-2">
-                                    <span class="text-2xl font-extrabold text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->price }}) : 'Rp {{ number_format($pkg->price, 0, ',', '.') }}'">Rp {{ number_format($pkg->price, 0, ',', '.') }}</span>
-                                    @if($pkg->original_price)
-                                    <span class="text-xs text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->original_price }}) : 'Rp {{ number_format($pkg->original_price, 0, ',', '.') }}'">Rp {{ number_format($pkg->original_price, 0, ',', '.') }}</span>
+                                    <span class="text-2xl font-extrabold text-emerald-700" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->published_price }}) : 'Rp {{ number_format($pkg->published_price, 0, ',', '.') }}'">Rp {{ number_format($pkg->published_price, 0, ',', '.') }}</span>
+                                    @if($pkg->published_original_price)
+                                    <span class="text-xs text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$pkg->published_original_price }}) : 'Rp {{ number_format($pkg->published_original_price, 0, ',', '.') }}'">Rp {{ number_format($pkg->published_original_price, 0, ',', '.') }}</span>
                                     @endif
                                 </div>
                                 <span class="text-[11px] text-slate-500">/ orang / hari (Private Tour AC)</span>
@@ -497,18 +497,12 @@
                         Konsultasikan rencana liburan Bali Anda secara gratis dengan customer service kami. Kami bantu racik itinerary terbaik sesuai budget Anda!
                     </p>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-3 shrink-0">
-                    <a href="https://wa.me/{{ $company->whatsapp_number ?? '6281338374254' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20mau%20konsultasi%20paket%20tour%20custom" 
+                <div class="shrink-0">
+                    <a href="https://wa.me/{{ $company->whatsapp_number ?? '6285156432635' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20mau%20konsultasi%20paket%20tour%20custom" 
                        target="_blank" 
-                       class="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-6 py-3.5 rounded-2xl shadow-2xl shadow-emerald-500/40 transition-all hover:scale-105 active:scale-95 text-sm border border-emerald-400/40">
-                        <i class="fa-brands fa-whatsapp text-xl"></i>
-                        <span>Chat CS 1 (0813-3837-4254)</span>
-                    </a>
-                    <a href="https://wa.me/{{ $company->whatsapp_number_2 ?? '6281246376329' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20mau%20konsultasi%20paket%20tour%20custom" 
-                       target="_blank" 
-                       class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-extrabold px-6 py-3.5 rounded-2xl shadow-2xl shadow-blue-600/40 transition-all hover:scale-105 active:scale-95 text-sm border border-blue-400/40">
-                        <i class="fa-brands fa-whatsapp text-xl"></i>
-                        <span>Chat CS 2 (0812-4637-6329)</span>
+                       class="inline-flex items-center justify-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-8 py-4 rounded-2xl shadow-2xl shadow-emerald-500/40 transition-all hover:scale-105 active:scale-95 text-base border border-emerald-400/40">
+                        <i class="fa-brands fa-whatsapp text-2xl"></i>
+                        <span>Chat WhatsApp (0851-5643-2635)</span>
                     </a>
                 </div>
             </div>

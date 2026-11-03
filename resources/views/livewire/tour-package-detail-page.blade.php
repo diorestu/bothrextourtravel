@@ -122,7 +122,7 @@
                  x-data="{
                     guests: @entangle('number_of_guests').live,
                     days: @entangle('duration_days').live,
-                    unitPrice: {{ (int)$package->price }},
+                    unitPrice: {{ (int)$package->published_price }},
                     get numGuests() {
                         return Math.max(1, parseInt(this.guests) || 1);
                     },
@@ -158,19 +158,19 @@
                             <span class="text-[11px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full uppercase tracking-wider">
                                 <i class="fa-solid fa-car mr-1"></i> Private Tour AC
                             </span>
-                            @if($package->original_price)
+                            @if($package->published_original_price)
                             <span class="text-xs text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded-full">
-                                Hemat {{ round((($package->original_price - $package->price) / $package->original_price) * 100) }}%
+                                Hemat {{ round((($package->published_original_price - $package->published_price) / $package->published_original_price) * 100) }}%
                             </span>
                             @endif
                         </div>
                         <div class="flex items-baseline gap-2 mt-1">
-                            <span class="text-3xl sm:text-4xl font-extrabold text-emerald-700 tracking-tight" x-text="$store.currency ? $store.currency.format({{ (int)$package->price }}) : 'Rp {{ number_format($package->price, 0, ',', '.') }}'">
-                                Rp {{ number_format($package->price, 0, ',', '.') }}
+                            <span class="text-3xl sm:text-4xl font-extrabold text-emerald-700 tracking-tight" x-text="$store.currency ? $store.currency.format({{ (int)$package->published_price }}) : 'Rp {{ number_format($package->published_price, 0, ',', '.') }}'">
+                                Rp {{ number_format($package->published_price, 0, ',', '.') }}
                             </span>
-                            @if($package->original_price)
-                            <span class="text-sm text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$package->original_price }}) : 'Rp {{ number_format($package->original_price, 0, ',', '.') }}'">
-                                Rp {{ number_format($package->original_price, 0, ',', '.') }}
+                            @if($package->published_original_price)
+                            <span class="text-sm text-slate-400 line-through" x-text="$store.currency ? $store.currency.format({{ (int)$package->published_original_price }}) : 'Rp {{ number_format($package->published_original_price, 0, ',', '.') }}'">
+                                Rp {{ number_format($package->published_original_price, 0, ',', '.') }}
                             </span>
                             @endif
                         </div>
@@ -332,7 +332,7 @@
                             <div class="flex items-center justify-between text-xs text-slate-600 pb-2 border-b border-emerald-200/60">
                                 <span class="font-medium">Kalkulasi Tarif:</span>
                                 <span class="font-bold text-slate-800" x-text="numGuests + ' Peserta × ' + numDays + ' Hari × ' + ($store.currency ? $store.currency.format(unitPrice) : 'Rp ' + unitPrice.toLocaleString('id-ID'))">
-                                    {{ $number_of_guests ?? 2 }} Orang x {{ $duration_days ?? 1 }} Hari x Rp {{ number_format($package->price, 0, ',', '.') }}
+                                    {{ $number_of_guests ?? 2 }} Orang x {{ $duration_days ?? 1 }} Hari x Rp {{ number_format($package->published_price, 0, ',', '.') }}
                                 </span>
                             </div>
 
@@ -444,30 +444,18 @@
             </div>
 
             <p class="text-xs text-slate-500 my-4">
-                Pilih salah satu nomor WhatsApp Customer Service kami di bawah untuk konfirmasi & reservasi:
+                Klik tombol di bawah untuk langsung terhubung dengan WhatsApp Admin kami untuk konfirmasi & instruksi pembayaran:
             </p>
 
-            <div class="space-y-2.5">
-                <a href="{{ $createdBooking->whatsapp_link }}" 
-                   target="_blank" 
-                   class="w-full inline-flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-4 rounded-2xl shadow-lg shadow-emerald-600/30 transition-all hover:scale-[1.02] text-sm">
-                    <i class="fa-brands fa-whatsapp text-2xl"></i>
-                    <div class="text-left">
-                        <div class="font-bold">Chat WhatsApp CS 1</div>
-                        <div class="text-[11px] text-emerald-100 font-normal">0813-3837-4254 (Fast Response)</div>
-                    </div>
-                </a>
-
-                <a href="{{ $createdBooking->whatsapp_link_2 }}" 
-                   target="_blank" 
-                   class="w-full inline-flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-4 rounded-2xl shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] text-sm">
-                    <i class="fa-brands fa-whatsapp text-2xl"></i>
-                    <div class="text-left">
-                        <div class="font-bold">Chat WhatsApp CS 2</div>
-                        <div class="text-[11px] text-blue-100 font-normal">0812-4637-6329 (Alternatif)</div>
-                    </div>
-                </a>
-            </div>
+            <a href="{{ $createdBooking->whatsapp_link }}" 
+               target="_blank" 
+               class="w-full inline-flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-4 px-4 rounded-2xl shadow-lg shadow-emerald-600/30 transition-all hover:scale-[1.02] text-base">
+                <i class="fa-brands fa-whatsapp text-2xl"></i>
+                <div class="text-left">
+                    <div class="font-bold">Lanjut Chat WhatsApp (0851-5643-2635)</div>
+                    <div class="text-xs text-emerald-100 font-normal">Fast Response & Layanan 24 Jam</div>
+                </div>
+            </a>
         </div>
     </div>
     @endif
@@ -487,7 +475,7 @@
       "touristType": ["Family", "Couple", "Solo Traveler", "Group"],
       "offers": {
         "{{ '@' }}type": "Offer",
-        "price": "{{ $package->price }}",
+        "price": "{{ $package->published_price }}",
         "priceCurrency": "IDR",
         "availability": "https://schema.org/InStock",
         "url": "{{ url('/paket/' . $package->slug) }}",

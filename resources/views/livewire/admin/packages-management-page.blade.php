@@ -110,8 +110,13 @@
                                 <div class="text-slate-400 text-[11px]"><i class="fa-solid fa-clock mr-1"></i> {{ $pkg->duration }}</div>
                             </td>
 
-                            <td class="py-4 px-6 font-extrabold text-emerald-700 text-sm whitespace-nowrap">
-                                Rp {{ number_format($pkg->price, 0, ',', '.') }}
+                            <td class="py-4 px-6 whitespace-nowrap">
+                                <div class="font-extrabold text-slate-800 text-sm">
+                                    Rp {{ number_format($pkg->price, 0, ',', '.') }}
+                                </div>
+                                <div class="text-[11px] text-emerald-700 font-semibold mt-0.5">
+                                    Publish (+10%): Rp {{ number_format($pkg->published_price, 0, ',', '.') }}
+                                </div>
                             </td>
 
                             <td class="py-4 px-6 text-center whitespace-nowrap">
@@ -190,12 +195,14 @@
                         <input type="text" wire:model="duration" placeholder="1 Hari (08:00 - 18:00)" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block font-bold text-slate-700 uppercase mb-1">Harga per Orang *</label>
-                        <input type="number" wire:model="price" placeholder="450000" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        <label class="block font-bold text-slate-700 uppercase mb-1">Harga Database (Rp) *</label>
+                        <input type="number" wire:model.live="price" placeholder="450000" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        <span class="text-[11px] text-emerald-700 font-medium mt-1 block">Publish (+10%): Rp {{ number_format(round(((float)($price ?: 0)) * 1.1), 0, ',', '.') }}</span>
                     </div>
                     <div>
-                        <label class="block font-bold text-slate-700 uppercase mb-1">Harga Coret (Diskon)</label>
-                        <input type="number" wire:model="original_price" placeholder="650000" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        <label class="block font-bold text-slate-700 uppercase mb-1">Harga Coret Database (Diskon)</label>
+                        <input type="number" wire:model.live="original_price" placeholder="650000" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        <span class="text-[11px] text-slate-500 font-medium mt-1 block">Publish (+10%): Rp {{ $original_price ? number_format(round(((float)$original_price) * 1.1), 0, ',', '.') : '-' }}</span>
                     </div>
                 </div>
 

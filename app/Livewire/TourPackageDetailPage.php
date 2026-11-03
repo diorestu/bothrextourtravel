@@ -2,30 +2,38 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
-use Livewire\Attributes\Layout;
-use App\Models\TourPackage;
 use App\Models\Booking;
-use Illuminate\Support\Str;
+use App\Models\TourPackage;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout('layouts.app')]
 class TourPackageDetailPage extends Component
 {
     public $slug;
+
     public $package;
 
     // Form fields
     public $customer_name = '';
+
     public $customer_email = '';
+
     public $customer_phone = '';
+
     public $travel_date = '';
+
     public $duration_days = 1;
+
     public $number_of_guests = 2;
+
     public $pickup_location = '';
+
     public $special_notes = '';
 
     // Success modal state
     public $createdBooking = null;
+
     public $showSuccessModal = false;
 
     public function mount($slug)
@@ -37,9 +45,10 @@ class TourPackageDetailPage extends Component
 
     public function calculateTotal()
     {
-        $guests = max(1, (int)$this->number_of_guests);
-        $days = max(1, (int)$this->duration_days);
-        return $guests * $days * $this->package->price;
+        $guests = max(1, (int) $this->number_of_guests);
+        $days = max(1, (int) $this->duration_days);
+
+        return $guests * $days * $this->package->published_price;
     }
 
     public function submitBooking()
@@ -68,7 +77,7 @@ class TourPackageDetailPage extends Component
 
         // Generate Tour Package Tag: [WEB-TOUR-KINTAMANI], [WEB-TOUR-UBUD], [WEB-TOUR-BEDUGUL], [WEB-TOUR-ULUWATU]
         $destName = $this->package->destination->name ?? $this->package->category ?? $this->package->title;
-        $destNameLower = strtolower($destName . ' ' . $this->package->title . ' ' . $this->package->slug);
+        $destNameLower = strtolower($destName.' '.$this->package->title.' '.$this->package->slug);
 
         if (str_contains($destNameLower, 'kintamani') || str_contains($destNameLower, 'batur')) {
             $packageTag = 'KINTAMANI';
@@ -115,7 +124,7 @@ class TourPackageDetailPage extends Component
     public function render()
     {
         $destName = $this->package->destination->name ?? 'Bali';
-        $formattedPrice = number_format($this->package->price, 0, ',', '.');
+        $formattedPrice = number_format($this->package->published_price, 0, ',', '.');
         $title = "Paket {$this->package->title} (All-In Private Tour) | Bothrex Bali Tour";
         $metaDescription = "Pesan paket {$this->package->title} mulai Rp {$formattedPrice}/orang. Termasuk mobil privat AC, supir ramah, tiket masuk & jemput-antar hotel. Booking via WA!";
         $metaKeywords = "paket {$this->package->title}, tour {$destName}, wisata {$destName}, private tour {$destName}, paket liburan bali murah, sewa mobil bali supir, bothrex bali tour";
@@ -126,7 +135,7 @@ class TourPackageDetailPage extends Component
             'metaKeywords' => $metaKeywords,
             'ogImage' => $this->package->image_url,
             'ogType' => 'product',
-            'canonical' => url('/paket/' . $this->package->slug),
+            'canonical' => url('/paket/'.$this->package->slug),
         ]);
     }
 }

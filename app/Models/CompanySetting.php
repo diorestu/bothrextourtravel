@@ -28,9 +28,9 @@ class CompanySetting extends Model
         return static::firstOrCreate([], [
             'company_name' => 'Bothrex Bali Tour & Travel',
             'tagline' => 'Agen Tour & Travel Resmi Bali #1',
-            'phone' => '081338374254 / 081246376329',
-            'whatsapp_number' => '6281338374254',
-            'whatsapp_number_2' => '6281246376329',
+            'phone' => '0851-5643-2635',
+            'whatsapp_number' => '6285156432635',
+            'whatsapp_number_2' => null,
             'email' => 'info@bothrexbalitour.com',
             'address' => 'Jl. Raya Kuta No. 88, Badung, Bali',
             'operating_hours' => 'Senin - Minggu: 07:00 - 22:00 WITA',

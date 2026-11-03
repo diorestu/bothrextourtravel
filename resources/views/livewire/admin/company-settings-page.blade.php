@@ -79,30 +79,21 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nomor Telepon CS *</label>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nomor Telepon CS (Cth: 0851-5643-2635) *</label>
                         <input type="text" 
                                wire:model="phone" 
-                               placeholder="+62 812-3456-7890" 
+                               placeholder="0851-5643-2635" 
                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                         @error('phone') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nomor WhatsApp CS 1 (Utama, Cth: 6281338374254) *</label>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nomor WhatsApp Bisnis (Cth: 6285156432635) *</label>
                         <input type="text" 
                                wire:model="whatsapp_number" 
-                               placeholder="6281338374254" 
+                               placeholder="6285156432635" 
                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                         @error('whatsapp_number') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nomor WhatsApp CS 2 (Cadangan, Cth: 6281246376329)</label>
-                        <input type="text" 
-                               wire:model="whatsapp_number_2" 
-                               placeholder="6281246376329" 
-                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                        @error('whatsapp_number_2') <span class="text-[11px] text-rose-500 mt-1 block font-semibold">{{ $message }}</span> @enderror
                     </div>
 
                     <div>

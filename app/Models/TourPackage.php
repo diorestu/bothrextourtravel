@@ -38,6 +38,11 @@ class TourPackage extends Model
         'original_price' => 'float',
     ];
 
+    protected $appends = [
+        'published_price',
+        'published_original_price',
+    ];
+
     public function destination()
     {
         return $this->belongsTo(Destination::class);
@@ -48,13 +53,39 @@ class TourPackage extends Model
         return $this->hasMany(Booking::class);
     }
 
-    public function getFormattedPriceAttribute()
+    /**
+     * Published price (+10% from database price)
+     */
+    public function getPublishedPriceAttribute(): float
     {
-        return 'Rp ' . number_format($this->price, 0, ',', '.');
+        return (float) round(($this->price ?? 0) * 1.10);
     }
 
-    public function getFormattedOriginalPriceAttribute()
+    /**
+     * Published original price (+10% from database original_price)
+     */
+    public function getPublishedOriginalPriceAttribute(): ?float
     {
-        return $this->original_price ? 'Rp ' . number_format($this->original_price, 0, ',', '.') : null;
+        return $this->original_price ? (float) round($this->original_price * 1.10) : null;
+    }
+
+    public function getFormattedPriceAttribute(): string
+    {
+        return 'Rp '.number_format($this->price, 0, ',', '.');
+    }
+
+    public function getFormattedOriginalPriceAttribute(): ?string
+    {
+        return $this->original_price ? 'Rp '.number_format($this->original_price, 0, ',', '.') : null;
+    }
+
+    public function getFormattedPublishedPriceAttribute(): string
+    {
+        return 'Rp '.number_format($this->published_price, 0, ',', '.');
+    }
+
+    public function getFormattedPublishedOriginalPriceAttribute(): ?string
+    {
+        return $this->published_original_price ? 'Rp '.number_format($this->published_original_price, 0, ',', '.') : null;
     }
 }
