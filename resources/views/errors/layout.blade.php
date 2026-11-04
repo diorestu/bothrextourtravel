@@ -47,6 +47,8 @@
             <div class="flex flex-wrap items-center justify-center gap-3 mt-1">
                 <a href="https://wa.me/{{ $company->whatsapp_number ?? '6285156432635' }}?text=Halo%20Admin%20Bothrex%20Bali%20Tour,%20saya%20mengalami%20kendala%20di%20website%20pada%20halaman%20{{ urlencode(url()->current()) }}" 
                    target="_blank" 
+                   onclick="window.trackWhatsAppLead('error_page_support');" 
+                   data-tracked="true"
                    class="inline-flex items-center gap-1.5 text-emerald-600 hover:text-emerald-700 font-bold hover:underline">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                     <span>Chat WhatsApp</span>

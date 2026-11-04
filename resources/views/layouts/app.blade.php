@@ -89,6 +89,42 @@
       gtag('js', new Date());
 
       gtag('config', 'GT-T9WG2WHM');
+
+      // GA4 Custom Event Tracking Helper for Conversions & Leads
+      window.trackWhatsAppLead = function(location, label, value) {
+          try {
+              var curr = (window.Alpine && window.Alpine.store('currency')) ? window.Alpine.store('currency').current : 'USD';
+              if (typeof window.gtag === 'function') {
+                  window.gtag('event', 'generate_lead', {
+                      event_category: 'conversion',
+                      event_label: location + (label ? ' - ' + label : ''),
+                      method: 'whatsapp',
+                      value: Number(value) || 0,
+                      currency: curr
+                  });
+                  window.gtag('event', 'contact_whatsapp', {
+                      button_location: location,
+                      target_label: label || 'general_chat'
+                  });
+              }
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({
+                  event: 'whatsapp_lead_click',
+                  lead_location: location,
+                  lead_label: label || '',
+                  lead_value: value || 0
+              });
+          } catch (e) {}
+      };
+
+      // Delegated automatic click capture for any WhatsApp links
+      document.addEventListener('click', function(e) {
+          var target = e.target.closest('a[href*="wa.me"], a[href*="whatsapp.com"], a[href*="api.whatsapp.com"]');
+          if (target && !target.hasAttribute('data-tracked')) {
+              var label = target.getAttribute('title') || target.innerText.trim() || 'WhatsApp CTA';
+              window.trackWhatsAppLead('auto_captured_link', label);
+          }
+      });
     </script>
 
     <!-- Favicon -->
@@ -264,6 +300,9 @@
                     <a href="/destinasi" 
                        :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" 
                        class="transition-colors py-1">Tujuan Wisata</a>
+                    <a href="/blog" 
+                       :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" 
+                       class="transition-colors py-1">Blog</a>
                     <a href="/#tentang-kami" 
                        :class="scrolled ? 'text-slate-700 hover:text-emerald-600' : 'text-slate-100 hover:text-emerald-400'" 
                        class="transition-colors py-1">Mengapa Kami</a>
@@ -390,7 +429,11 @@
                         </div>
                     </div>
 
-                    <a href="https://wa.me/{{ $company->whatsapp_number ?? '6285156432635' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20ingin%20tanya%20informasi%20paket%20wisata%20Bali" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 rounded-full shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95 text-sm">
+                    <a href="https://wa.me/{{ $company->whatsapp_number ?? '6285156432635' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20ingin%20tanya%20informasi%20paket%20wisata%20Bali" 
+                       target="_blank" 
+                       onclick="window.trackWhatsAppLead('header_desktop');" 
+                       data-tracked="true"
+                       class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 rounded-full shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 active:scale-95 text-sm">
                         <i class="fa-brands fa-whatsapp text-lg"></i>
                         <span>Chat WhatsApp</span>
                     </a>
@@ -500,6 +543,10 @@
                     <i class="fa-solid fa-map-location-dot text-emerald-500 w-5"></i>
                     <span>Tujuan Wisata</span>
                 </a>
+                <a href="/blog" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
+                    <i class="fa-solid fa-newspaper text-emerald-500 w-5"></i>
+                    <span>Blog & Panduan</span>
+                </a>
                 <a href="/#tentang-kami" @click="open = false" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-800 font-semibold hover:bg-emerald-50 hover:text-emerald-600 transition-all">
                     <i class="fa-solid fa-award text-emerald-500 w-5"></i>
                     <span>Mengapa Kami</span>
@@ -513,6 +560,8 @@
             <div class="pt-2 border-t border-slate-100">
                 <a href="https://wa.me/{{ $company->whatsapp_number ?? '6285156432635' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }}" 
                    target="_blank" 
+                   onclick="window.trackWhatsAppLead('mobile_drawer');" 
+                   data-tracked="true"
                    class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-xl shadow-md text-sm text-center">
                     <i class="fa-brands fa-whatsapp text-xl"></i>
                     <span>Chat WhatsApp</span>
@@ -530,6 +579,8 @@
     <!-- Floating WhatsApp Widget -->
     <a href="https://wa.me/{{ $company->whatsapp_number ?? '6285156432635' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20tertarik%20dengan%20paket%20liburan%20di%20Bali" 
        target="_blank" 
+       onclick="window.trackWhatsAppLead('floating_widget');"
+       data-tracked="true"
        title="Chat WhatsApp {{ $company->company_name ?? 'Bothrex Bali Tour' }}"
        class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-2xl shadow-emerald-600/50 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 group cursor-pointer">
         <i class="fa-brands fa-whatsapp text-3xl animate-bounce"></i>
@@ -573,6 +624,7 @@
                         <li><a href="/" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-angle-right text-emerald-500 mr-2 text-xs"></i> Beranda Utama</a></li>
                         <li><a href="/paket" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-angle-right text-emerald-500 mr-2 text-xs"></i> Semua Paket Tour Bali</a></li>
                         <li><a href="/destinasi" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-angle-right text-emerald-500 mr-2 text-xs"></i> Destinasi Wisata Populer</a></li>
+                        <li><a href="/blog" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-angle-right text-emerald-500 mr-2 text-xs"></i> Panduan Wisata & Blog</a></li>
                         <li><a href="/#tentang-kami" class="hover:text-emerald-400 transition-colors"><i class="fa-solid fa-angle-right text-emerald-500 mr-2 text-xs"></i> Mengapa Memilih Kami</a></li>
                     </ul>
                 </div>
@@ -599,7 +651,11 @@
                         <li class="flex items-start gap-3">
                             <i class="fa-brands fa-whatsapp text-emerald-400 mt-1"></i>
                             <div>
-                                <a href="https://wa.me/{{ $company->whatsapp_number ?? '6285156432635' }}" target="_blank" class="text-white hover:text-emerald-400 transition-colors font-medium">0851-5643-2635</a>
+                                <a href="https://wa.me/{{ $company->whatsapp_number ?? '6285156432635' }}" 
+                                   target="_blank" 
+                                   onclick="window.trackWhatsAppLead('footer_contact');" 
+                                   data-tracked="true"
+                                   class="text-white hover:text-emerald-400 transition-colors font-medium">0851-5643-2635</a>
                             </div>
                         </li>
                         <li class="flex items-center gap-3">

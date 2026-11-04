@@ -22,6 +22,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@bothrex.com',
         ]);
 
-        $this->call(TourSeeder::class);
+        $this->call([
+            TourSeeder::class,
+            ArticleSeeder::class,
+        ]);
     }
 }

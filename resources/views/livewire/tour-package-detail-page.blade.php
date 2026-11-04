@@ -449,6 +449,8 @@
 
             <a href="{{ $createdBooking->whatsapp_link }}" 
                target="_blank" 
+               onclick="window.trackWhatsAppLead('booking_confirmation_modal', '{{ addslashes($package->title ?? '') }}', {{ (int)($createdBooking->total_price ?? 0) }});"
+               data-tracked="true"
                class="w-full inline-flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-4 px-4 rounded-2xl shadow-lg shadow-emerald-600/30 transition-all hover:scale-[1.02] text-base">
                 <i class="fa-brands fa-whatsapp text-2xl"></i>
                 <div class="text-left">

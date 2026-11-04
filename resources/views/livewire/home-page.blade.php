@@ -500,6 +500,8 @@
                 <div class="shrink-0">
                     <a href="https://wa.me/{{ $company->whatsapp_number ?? '6285156432635' }}?text=Halo%20Admin%20{{ urlencode($company->company_name ?? 'Bothrex Bali Tour') }},%20saya%20mau%20konsultasi%20paket%20tour%20custom" 
                        target="_blank" 
+                       onclick="window.trackWhatsAppLead('homepage_bottom_banner');" 
+                       data-tracked="true"
                        class="inline-flex items-center justify-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-8 py-4 rounded-2xl shadow-2xl shadow-emerald-500/40 transition-all hover:scale-105 active:scale-95 text-base border border-emerald-400/40">
                         <i class="fa-brands fa-whatsapp text-2xl"></i>
                         <span>Chat WhatsApp</span>

@@ -39,6 +39,9 @@
             <a href="/admin/attractions" class="py-3 px-5 text-xs font-bold transition flex items-center gap-2 border-b-2 whitespace-nowrap {{ request()->is('admin/attractions*') ? 'text-emerald-700 border-emerald-600' : 'text-slate-500 hover:text-emerald-600 border-transparent' }}">
                 <i class="fa-solid fa-camera-retro"></i> Tempat Wisata & Kategori
             </a>
+            <a href="/admin/articles" class="py-3 px-5 text-xs font-bold transition flex items-center gap-2 border-b-2 whitespace-nowrap {{ request()->is('admin/articles*') ? 'text-emerald-700 border-emerald-600' : 'text-slate-500 hover:text-emerald-600 border-transparent' }}">
+                <i class="fa-solid fa-newspaper"></i> Artikel & Blog SEO
+            </a>
             <a href="/admin/company" class="py-3 px-5 text-xs font-bold transition flex items-center gap-2 border-b-2 whitespace-nowrap {{ request()->is('admin/company*') ? 'text-emerald-700 border-emerald-600' : 'text-slate-500 hover:text-emerald-600 border-transparent' }}">
                 <i class="fa-solid fa-sliders"></i> Profil & Pengaturan PT
             </a>

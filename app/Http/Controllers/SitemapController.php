@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\TourPackage;
+use App\Models\Article;
 use App\Models\Destination;
+use App\Models\TourPackage;
+use Illuminate\Http\Request;
 use XMLWriter;
 
 class SitemapController extends Controller
@@ -16,15 +17,16 @@ class SitemapController extends Controller
     {
         // Detect domain dynamically or use official production domain
         $baseUrl = 'https://bothrextourtravel.my.id';
-        if ($request->getHost() && !str_contains($request->getHost(), 'localhost') && !str_contains($request->getHost(), '127.0.0.1')) {
+        if ($request->getHost() && ! str_contains($request->getHost(), 'localhost') && ! str_contains($request->getHost(), '127.0.0.1')) {
             $baseUrl = rtrim($request->getSchemeAndHttpHost(), '/');
         }
 
         $packages = TourPackage::where('is_active', true)->orderBy('is_featured', 'desc')->get();
         $destinations = Destination::where('is_active', true)->get();
+        $articles = Article::published()->latest('published_at')->get();
         $today = date('Y-m-d');
 
-        $writer = new XMLWriter();
+        $writer = new XMLWriter;
         $writer->openMemory();
         $writer->startDocument('1.0', 'UTF-8');
         $writer->setIndent(true);
@@ -36,7 +38,7 @@ class SitemapController extends Controller
 
         // 1. Homepage
         $writer->startElement('url');
-        $writer->writeElement('loc', $baseUrl . '/');
+        $writer->writeElement('loc', $baseUrl.'/');
         $writer->writeElement('lastmod', $today);
         $writer->writeElement('changefreq', 'daily');
         $writer->writeElement('priority', '1.0');
@@ -44,7 +46,7 @@ class SitemapController extends Controller
 
         // 2. Packages Catalog Page
         $writer->startElement('url');
-        $writer->writeElement('loc', $baseUrl . '/paket');
+        $writer->writeElement('loc', $baseUrl.'/paket');
         $writer->writeElement('lastmod', $today);
         $writer->writeElement('changefreq', 'daily');
         $writer->writeElement('priority', '0.9');
@@ -52,33 +54,53 @@ class SitemapController extends Controller
 
         // 3. Destinations Catalog Page
         $writer->startElement('url');
-        $writer->writeElement('loc', $baseUrl . '/destinasi');
+        $writer->writeElement('loc', $baseUrl.'/destinasi');
         $writer->writeElement('lastmod', $today);
         $writer->writeElement('changefreq', 'weekly');
         $writer->writeElement('priority', '0.9');
         $writer->endElement(); // url
 
-        // 4. Active Tour Packages
+        // 4. Blog & Travel Guides Catalog Page
+        $writer->startElement('url');
+        $writer->writeElement('loc', $baseUrl.'/blog');
+        $writer->writeElement('lastmod', $today);
+        $writer->writeElement('changefreq', 'daily');
+        $writer->writeElement('priority', '0.8');
+        $writer->endElement(); // url
+
+        // 5. Active Tour Packages
         foreach ($packages as $pkg) {
             $lastmod = $pkg->updated_at ? $pkg->updated_at->format('Y-m-d') : $today;
 
             $writer->startElement('url');
-            $writer->writeElement('loc', $baseUrl . '/paket/' . $pkg->slug);
+            $writer->writeElement('loc', $baseUrl.'/paket/'.$pkg->slug);
             $writer->writeElement('lastmod', $lastmod);
             $writer->writeElement('changefreq', 'weekly');
             $writer->writeElement('priority', '0.8');
             $writer->endElement(); // url
         }
 
-        // 5. Active Destinations
+        // 6. Active Destinations
         foreach ($destinations as $dest) {
             $lastmod = $dest->updated_at ? $dest->updated_at->format('Y-m-d') : $today;
 
             $writer->startElement('url');
-            $writer->writeElement('loc', $baseUrl . '/destinasi/' . $dest->slug);
+            $writer->writeElement('loc', $baseUrl.'/destinasi/'.$dest->slug);
             $writer->writeElement('lastmod', $lastmod);
             $writer->writeElement('changefreq', 'weekly');
             $writer->writeElement('priority', '0.8');
+            $writer->endElement(); // url
+        }
+
+        // 7. Published Blog Articles & Travel Guides
+        foreach ($articles as $art) {
+            $lastmod = $art->updated_at ? $art->updated_at->format('Y-m-d') : ($art->published_at ? $art->published_at->format('Y-m-d') : $today);
+
+            $writer->startElement('url');
+            $writer->writeElement('loc', $baseUrl.'/blog/'.$art->slug);
+            $writer->writeElement('lastmod', $lastmod);
+            $writer->writeElement('changefreq', 'weekly');
+            $writer->writeElement('priority', '0.7');
             $writer->endElement(); // url
         }
 
@@ -89,7 +111,7 @@ class SitemapController extends Controller
 
         // Write physical files to public/ for webservers
         @file_put_contents(public_path('sitemap.xml'), $xmlContent);
-        $this->generateTxtSitemap($baseUrl, $packages, $destinations);
+        $this->generateTxtSitemap($baseUrl, $packages, $destinations, $articles);
 
         return response($xmlContent, 200, [
             'Content-Type' => 'text/xml; charset=utf-8',
@@ -103,14 +125,15 @@ class SitemapController extends Controller
     public function sitemapTxt(Request $request)
     {
         $baseUrl = 'https://bothrextourtravel.my.id';
-        if ($request->getHost() && !str_contains($request->getHost(), 'localhost') && !str_contains($request->getHost(), '127.0.0.1')) {
+        if ($request->getHost() && ! str_contains($request->getHost(), 'localhost') && ! str_contains($request->getHost(), '127.0.0.1')) {
             $baseUrl = rtrim($request->getSchemeAndHttpHost(), '/');
         }
 
         $packages = TourPackage::where('is_active', true)->orderBy('is_featured', 'desc')->get();
         $destinations = Destination::where('is_active', true)->get();
+        $articles = Article::published()->latest('published_at')->get();
 
-        $txtContent = $this->generateTxtSitemap($baseUrl, $packages, $destinations);
+        $txtContent = $this->generateTxtSitemap($baseUrl, $packages, $destinations, $articles);
 
         return response($txtContent, 200, [
             'Content-Type' => 'text/plain; charset=utf-8',
@@ -118,24 +141,30 @@ class SitemapController extends Controller
         ]);
     }
 
-    private function generateTxtSitemap($baseUrl, $packages, $destinations)
+    private function generateTxtSitemap($baseUrl, $packages, $destinations, $articles = [])
     {
         $urls = [
-            $baseUrl . '/',
-            $baseUrl . '/paket',
-            $baseUrl . '/destinasi',
+            $baseUrl.'/',
+            $baseUrl.'/paket',
+            $baseUrl.'/destinasi',
+            $baseUrl.'/blog',
         ];
 
         foreach ($packages as $pkg) {
-            $urls[] = $baseUrl . '/paket/' . $pkg->slug;
+            $urls[] = $baseUrl.'/paket/'.$pkg->slug;
         }
 
         foreach ($destinations as $dest) {
-            $urls[] = $baseUrl . '/destinasi/' . $dest->slug;
+            $urls[] = $baseUrl.'/destinasi/'.$dest->slug;
         }
 
-        $content = implode("\n", $urls) . "\n";
+        foreach ($articles as $art) {
+            $urls[] = $baseUrl.'/blog/'.$art->slug;
+        }
+
+        $content = implode("\n", $urls)."\n";
         @file_put_contents(public_path('sitemap.txt'), $content);
+
         return $content;
     }
 
@@ -145,7 +174,7 @@ class SitemapController extends Controller
     public function robots(Request $request)
     {
         $baseUrl = 'https://bothrextourtravel.my.id';
-        if ($request->getHost() && !str_contains($request->getHost(), 'localhost') && !str_contains($request->getHost(), '127.0.0.1')) {
+        if ($request->getHost() && ! str_contains($request->getHost(), 'localhost') && ! str_contains($request->getHost(), '127.0.0.1')) {
             $baseUrl = rtrim($request->getSchemeAndHttpHost(), '/');
         }
 
@@ -153,8 +182,8 @@ class SitemapController extends Controller
         $robots .= "Allow: /\n";
         $robots .= "Disallow: /admin/\n";
         $robots .= "Disallow: /livewire/\n\n";
-        $robots .= "Sitemap: " . $baseUrl . "/sitemap.xml\n";
-        $robots .= "Sitemap: " . $baseUrl . "/sitemap.txt\n";
+        $robots .= 'Sitemap: '.$baseUrl."/sitemap.xml\n";
+        $robots .= 'Sitemap: '.$baseUrl."/sitemap.txt\n";
 
         @file_put_contents(public_path('robots.txt'), $robots);
 

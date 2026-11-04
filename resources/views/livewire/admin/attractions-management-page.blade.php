@@ -48,6 +48,9 @@
             <a href="/admin/attractions" class="py-3 px-5 text-xs font-bold text-emerald-700 border-b-2 border-emerald-600 flex items-center gap-2">
                 <i class="fa-solid fa-camera-retro"></i> Tempat Wisata & Kategori
             </a>
+            <a href="/admin/articles" class="py-3 px-5 text-xs font-bold text-slate-500 hover:text-emerald-600 transition flex items-center gap-2 border-b-2 border-transparent">
+                <i class="fa-solid fa-newspaper"></i> Artikel & Blog SEO
+            </a>
             <a href="/admin/company" class="py-3 px-5 text-xs font-bold text-slate-500 hover:text-emerald-600 transition flex items-center gap-2 border-b-2 border-transparent">
                 <i class="fa-solid fa-building"></i> Profil & Pengaturan PT
             </a>
