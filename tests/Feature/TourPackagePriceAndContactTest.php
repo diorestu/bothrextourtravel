@@ -8,6 +8,7 @@ use App\Models\CompanySetting;
 use App\Models\Destination;
 use App\Models\TourPackage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -84,6 +85,33 @@ class TourPackagePriceAndContactTest extends TestCase
         $response->assertDontSee('0813-3837-4254');
         $response->assertDontSee('0812-4637-6329');
         $response->assertDontSee('+62 812-3456-7890');
+    }
+
+    public function test_company_setting_accessor_and_get_settings_auto_heals_legacy_numbers(): void
+    {
+        DB::table('company_settings')->truncate();
+        DB::table('company_settings')->insert([
+            'company_name' => 'Bothrex Bali Tour',
+            'phone' => '+62 812-3456-7890',
+            'whatsapp_number' => '6281234567890',
+            'whatsapp_number_2' => '6281246376329',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $setting = CompanySetting::first();
+        $this->assertEquals('6285156432635', $setting->whatsapp_number);
+        $this->assertEquals('0851-5643-2635', $setting->phone);
+
+        $healed = CompanySetting::getSettings();
+        $this->assertEquals('6285156432635', $healed->whatsapp_number);
+        $this->assertEquals('0851-5643-2635', $healed->phone);
+        $this->assertNull($healed->whatsapp_number_2);
+
+        $raw = DB::table('company_settings')->first();
+        $this->assertEquals('6285156432635', $raw->whatsapp_number);
+        $this->assertEquals('0851-5643-2635', $raw->phone);
+        $this->assertNull($raw->whatsapp_number_2);
     }
 
     public function test_tour_package_detail_page_calculates_and_submits_with_published_price(): void
